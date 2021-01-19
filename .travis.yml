@@ -8,7 +8,7 @@ matrix:
     - name: "Python 2.7 pyitlib latest"
       python: 2.7
       # env: PYITLIB_VERSION="==0.29"
-    - name: "Python 3.5 pyitlib latest"
+    - name: "Python 3.5 pyitlib latest + GH Docs + GH release + PyPi"
       python: 3.5
       # env: PYITLIB_VERSION=""
     - name: "Python 3.6 pyitlib latest"
@@ -69,7 +69,7 @@ after_success:
   - mv reports/junit docs/  # not in site/ anymore so that we do not need to use --dirty (it breaks client-side search)
   # mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
-  - openssl aes-256-cbc -K $encrypted_b2348f870e1c_key -iv $encrypted_b2348f870e1c_iv -in ci_tools/github_travis_rsa.enc -out ci_tools/github_travis_rsa -d
+  - openssl aes-256-cbc -K $encrypted_12c8071d2874_key -iv $encrypted_12c8071d2874_iv -in ci_tools/github_travis_rsa.enc -out ci_tools/github_travis_rsa -d
   # If the output file does not exist, that is because the secret is invalid. This can happen in forked repos so do not fail the build
   - |
     if [ -s "ci_tools/github_travis_rsa" ]; then
@@ -94,7 +94,7 @@ deploy:
   - provider: pypi
     user: "smarie"
     password:
-      secure: "IEYJ2XGGWlWH311IH4W5vVsvQOMK3Y3zcp7GZpAGMyTS+eLLMZ6o/z6RXJG68hX6nIFqvN4mvM1UIrPZITt+D60f9CjX6OXuJEfgp6Tm8w/HfpbmoI+tJho/9Il23oeSyCo0D4rk2HXWBZePeLGs5WKcg2TO+F7j/1dUw3buAPZx0kDH8EQUixQmm5EmWjdZCDiGp5E/oG3EqStjw09FIBMG1vLTHeyBpmbeg2BTvBRsQgQKfnZACOxY0MtU496D19YZQuV+Hcs2CGgQ7+yH9LfTFSgdb7GIjU58g++V5Yg2nvwaK/8osQ+etF8bbrpZjkI9xOZ79I6SbLOlSgyfSLol8ae1n4QmT8Zejl3s9y7kLzgLY2QQgTetcNX2IRvTtacKhK1DHn6gabOyq4La3elZxd0NqFCrFQQTgbEdm+8IzfN6C1S6ZQK89vhexUw0OOe84BCv7/fBaTKa1pJVDPKgEif4AEsrwlXBQl5ga5AXlJXvtQ8Yizl1olyzJGs/jt78sljWPZ8F4ChRRVsla0u019DWKSxdYsYFdMMKfsqfpO4ACq5I6XgVBy99bZxxvx40ZWePQxfurniPYnlidoI9WjKqZcaGElr6AYjejDhb/EGvt1R3/AfhB1k1eFWny9sjFMo3zz1Ru7kD84OFd+7vuFQ+90MRJhkL9tGLwzw="
+      secure: "jxdkr3MOjEUdXjpijSvSVOSllk6IhNEa348vhPjXXLaX40XOJRQwNEVxseue3eBIjfIacv6F4shhS/c8NQQlNNLcU7v1S3RItqpgyaleB6crTEfQ8Quo8oqUNeElvINeLMXrWejbJpuRBt5qDbjO8Hy777CPJBq/rSsfy/z2JGlgTWwOnxPw5nUM8+Fws6CpFwCWUI8erjwO0Rodf1QBgo2grWKDVwomd/dLkIPGqVeavFeeAKbMJZj+5LvcUy3M7c8i7b3YLnV6FZqFpmJEkp6aWjWwz2mrtTF4Pwu/+y/a+a4X1RtCO7XTNs64RsbYvGquiwuhOgfd49y2PbHT6fbF3LGGKcf/ALWbtYxuD0sDPsodrq/g2Hg0TST3T/Loh+cCTpZKfpqju5vIc1Vu0A363J/HN8Dy5eVP0qUrGFTL2F5n5RFccIcWR2BjoVF0MwadokxjY9NP0Alzo4E+CbojFoaumkSVZmWHmxZnq/L9f+SZ0Y3lmMU9qi9T66LxXFlUVSbs/Iztpmm0w+aR2DbEsw+ZzW0spXzHeqlNvwE04A+hmJru5fRNDPgc5YsxMUDTV6krR1WRnJecLNBCyYac/f/usKM4/KtdtRKV15YCkYjvEGOhA5x+POgtvwa5rVMNac24PmaRsKh5v077yUffO4h4XSKre1ehjYIdkWY="
     on:
       tags: true
       python: 3.5  #only one of the builds have to be deployed
