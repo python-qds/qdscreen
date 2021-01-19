@@ -3,6 +3,7 @@ pytest-runner
 setuptools_scm
 
 # -- to install
+pandas
 #pyitlib$DOIT_VERSION  # on python 2 we need ==0.29
 pyitlib
 
