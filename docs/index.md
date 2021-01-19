@@ -24,7 +24,17 @@ TODO
 
 ## See Also
 
- - TODO
+ - Bayesian Network libraries in python: 
+   
+    - [`pyGOBN`](https://github.com/ncullen93/pyGOBN) (MIT license)
+    - [`pgmpy`](https://github.com/pgmpy/pgmpy) (MIT license)
+    - [`pomegranate`](https://pomegranate.readthedocs.io/en/latest/index.html) (MIT license)
+    - [`bayespy`](http://bayespy.org/) (MIT license)
+
+ - Other libs for probabilistic inference:
+
+    - [`pyjags`](https://github.com/michaelnowotny/pyjags) (GPLv2 license)
+    - [`edward`](http://edwardlib.org/) (Apache License, Version 2.0)
 
 ### Others
 
