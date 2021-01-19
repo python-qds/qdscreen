@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from qdsbnsl.main import get_adjacency_matrix, remove_redundancies, Entropies
-from qdsbnsl import qdeterscreen
+from qdscreen.main import get_adjacency_matrix, remove_redundancies, Entropies
+from qdscreen import qdeterscreen
 
 
 def df_strict1():
