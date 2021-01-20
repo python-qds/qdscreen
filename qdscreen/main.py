@@ -14,17 +14,23 @@ def qdeterscreen(df,                 # type: pd.DataFrame
                  relative_eps=None,  # type: float
                  ):
     """
+    Finds the (quasi-)deterministic relationships between the variables in X, and returns the adjacency matrix of the
+    resulting forest of (quasi-)deterministic trees.
 
-    :param df:
-    :param absolute_eps:
-    :param relative_eps:
+    :param X: the dataset as a pandas DataFrame or a numpy array. Columns represent the features to compare.
+    :param absolute_eps: Absolute entropy threshold. Any feature Y that can be predicted from
+        another feature X in a quasi-deterministic way, that is, where conditional entropy H(Y|X) <= absolute_eps,
+        will be removed. The default value is 0 and corresponds to removing deterministic relationships only.
+    :param relative_eps: Relative entropy threshold. Any feature Y that can be predicted from another feature X in a
+        quasi-deterministic way, that is, where relative conditional entropy H(Y|X)/H(Y) <= relative_eps (between 0
+        and 1), will be removed. Only one of absolute_eps and relative_eps should be provided.
     :return:
     """
     # only work on the categorical features
-    df = get_categorical_features(df)
+    X = get_categorical_features(X)
 
     # sanity check
-    if len(df) == 0:
+    if len(X) == 0:
         raise ValueError("Empty dataset provided")
 
     # parameters check and defaults
@@ -51,18 +57,18 @@ def qdeterscreen(df,                 # type: pd.DataFrame
         raise ValueError("epsilon_relative should be 0=<eps=<1")
 
     # (0) compute conditional entropies or relative conditional entropies
-    A_df_orig, df_stats = get_adjacency_matrix(df, eps_absolute=absolute_eps, eps_relative=relative_eps)
+    A_orig, X_stats = get_adjacency_matrix(X, eps_absolute=absolute_eps, eps_relative=relative_eps)
 
     # (2) identify redundancy
-    A_df_noredundancy = remove_redundancies(A_df_orig, selection_order=None if is_strict else df_stats.entropy_order_desc)
+    A_noredundancy = remove_redundancies(A_orig, selection_order=None if is_strict else X_stats.entropy_order_desc)
 
     # (3) transform into forest: remove extra parents by keeping only the parent with lowest entropy / nb levels ?
     # if X -> Z and X -> Y and Y -> Z then Z has two parents X and Y but only Y should be kept
     # Determinist case: minimize the number of parameters: take the minimal nb of levels
     # Quasi-determinist case: take the lowest entropy
-    entropy_order_inc = (df_stats.H_ar).argsort()
+    entropy_order_inc = (X_stats.H_ar).argsort()
     # parent_order = compute_nb_levels(df) if is_strict else entropy_based_order
-    A_df_forest = to_forest(A_df_noredundancy, entropy_order_inc)
+    A_forest = to_forest(A_noredundancy, entropy_order_inc)
 
     # forestAdjMatList <- FromHToDeterForestAdjMat(H = H, criterion = criterionNlevels, removePerfectMatchingCol = removePerfectMatchingCol)
 
@@ -99,7 +105,7 @@ def qdeterscreen(df,                 # type: pd.DataFrame
     #     print("Final graph computed")
     #   }
 
-    return A_df_forest
+    return A_forest
 
 
 class Entropies(object):
@@ -268,28 +274,31 @@ def get_adjacency_matrix(df,                 # type: Union[np.ndarray, pd.DataFr
     return A, df_stats
 
 
-def remove_redundancies(A_df,
+def remove_redundancies(A,
                         selection_order=None
                         ):
-    """Cleans the arcs in A_df between redundant variables.
+    """Cleans the arcs in A between redundant variables.
 
-    A_df should be a dataframe where index = columns and indicate the node name.
+    A should be a dataframe or numpy array where index = columns and indicate the node name.
     It should contain boolean values where True at (i,j) means there is a directed arc i -> j
 
     When there are redundant variables (arcs between i->j and j->i), only a single node is kept as the parent
     of all other redundant nodes.
 
-    :param A_df: an adjacency matrix where A(i, j) indicates that there is an arc i -> j
+    :param A: an adjacency matrix where A(i, j) indicates that there is an arc i -> j
     :param selection_order: if none (default) the first node in the list will be kept as representant for each
         redundancy class. Otherwise an alternate order (array of indices) can be provided.
     :return:
     """
+    assert_adjacency_matrix(A)
+
     # work on a copy
-    is_nparray = isinstance(A_df, np.ndarray)
+    is_nparray = isinstance(A, np.ndarray)
     if is_nparray:
-        A = A_df.copy()
+        A = A.copy()
+        A_df = None
     else:
-        A_df = A_df.copy(deep=True)
+        A_df = A.copy(deep=True)
         A = A_df.values
 
     # init
@@ -333,27 +342,29 @@ def remove_redundancies(A_df,
         return A_df
 
 
-def to_forest(A_df, selection_order, inplace=False):
-    """ Removes extra arcs in the adjacency matrix Z_df by only keeping the first parent in the given order
+def to_forest(A, selection_order, inplace=False):
+    """ Removes extra arcs in the adjacency matrix A by only keeping the first parent in the given order
 
-    :param A_df:
+    :param A: an adjacency matrix, as a dataframe or numpy array
     :return:
     """
-    is_ndarray = isinstance(A_df, np.ndarray)
+    is_ndarray = isinstance(A, np.ndarray)
+    assert_adjacency_matrix(A)
+
     if not inplace:
-        A_df = A_df.copy()
+        A = A.copy()
 
     # nb_parents = A_df.sum(axis=0)
     # nodes_with_many_parents = np.where(nb_parents.values > 1)[0]
 
     # Probably the fastest: when the cumulative nb of parents is above 1 they need to be removed
     if is_ndarray:
-        mask_parents_over_the_first = A_df[selection_order, :].cumsum(axis=0) > 1
+        mask_parents_over_the_first = A[selection_order, :].cumsum(axis=0) > 1
         mask_parents_over_the_first = mask_parents_over_the_first[selection_order.argsort(), :]
-        A_df[mask_parents_over_the_first] = False
+        A[mask_parents_over_the_first] = False
     else:
-        mask_parents_over_the_first = A_df.iloc[selection_order, :].cumsum(axis=0) > 1
-        A_df[mask_parents_over_the_first] = False
+        mask_parents_over_the_first = A.iloc[selection_order, :].cumsum(axis=0) > 1
+        A[mask_parents_over_the_first] = False
 
     # # Probably slower but easier to understand
     # # for each column we want to only keep one (or zero) row (parent) with True
@@ -362,7 +373,7 @@ def to_forest(A_df, selection_order, inplace=False):
     #     A_df.values[selection_order[first_parent_idx+1:], i] = False
 
     if not inplace:
-        return A_df
+        return A
 
 
 def get_categorical_features(df_or_array):
@@ -397,3 +408,13 @@ def get_categorical_features(df_or_array):
             return df_or_array
     else:
         raise TypeError("Provided data is neither a pd.DataFrame nor a np.ndarray")
+
+
+def assert_adjacency_matrix(A):
+    """Routine to check that A is a proper adjacency matrix"""
+
+    if len(A.shape) != 2:
+        raise ValueError("A is not a 2D adjacency matrix, its shape is %sD" % len(A.shape))
+
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("A is not a 2D adjacency matrix: it is not square: %r" % A.shape)
