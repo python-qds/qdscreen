@@ -2,58 +2,36 @@ This is a reminder on how to grant travis the rights to deploy your site on gith
 
 # PREREQUISITE 
 
-## Get access to a linux machine
+## Install docker desktop 20+
 
-The following does not work on windows as explained [here](https://github.com/travis-ci/travis-ci/issues/4746)
+TODO link
 
-Note: if you get tlsV1 errors below, make sure that you have the latest OpenSSL. If it is not available from you package manager, look at this [compilation sequance](https://github.com/curl/curl/issues/1583#issuecomment-309477196) (replace all versions with the ones you need / the latest). No need to use nghttp2. Dont forget to add `--with-libssh2` to curl compilation step, as mentioned in the [script](https://github.com/dertin/lemp-stack-debian/blob/develop/install.sh)!
+## Test that the travis-cli image works
 
-## Install travis commandline 
-
-You have to be outside of the proxy for everything to work correctly, otherwise you will get strange errors mentioning ipaddr... either here or later in the process.
-
-**1- Install ruby** using RVM : (**DO NOT USE su NOR sudo**)  
+Open a bash prompt (on windows, use git bash. See below if you run into trouble)
 
 ```bash
-> \curl -sSL https://get.rvm.io | bash -s stable --ruby
-> source /home/ubuntu/.rvm/scripts/rvm
-> rvm install 2.5.1 (this installs to /home/ubuntu/.rvm/src/ruby...)
+> docker run -it --rm -v $(pwd):/project --entrypoint=/bin/sh skandyla/travis-cli
 ```
 
-*Note: if you already have an old version of rvm you can update it to see the latest ruby versions*:
-```bash
-> rvm get master
-> rvm list known
-```
-
-*Note: if at some point there is an openssl issue inside ruby it is possible to either make it use the path you like or have it use its own version as explained [here](https://stackoverflow.com/questions/15511943/troubles-with-rvm-and-openssl)*:
- 
-Either
-```bash
-> rvm install 2.5.1 --with-openssl-dir=/usr/local/ssl  or (does not work) /usr/bin/openssl
-```
-
-or
+If it works this should open a `/project #` prompt. You can now exit, we'll come back to this later:
 
 ```bash
-> rvm pkg install openssl
-> rvm install 2.5.1 --with-openssl-dir=$HOME/.rvm/usr
+/project # exit
 ```
 
-**2- install travis commandline** by following [these instructions](https://github.com/travis-ci/travis.rb#installation):
+## Troubleshooting on Windows
 
-```bash
-> gem install travis -v 1.8.8 --no-rdoc --no-ri
+ - if you see a message "" you are probably running docker from a legacy `cmd.exe`. [This should fix your issue](https://github.com/docker/for-win/issues/9770#issuecomment-745106453).
+
+ - if you see a message `stat C:/Program Files/Git/usr/bin/sh: no such file or directory: unknown.` or `not a tty` this is an issue that can be solved by [using winpty](https://github.com/borekb/docker-path-workaround). Warning: the path to your actual winpty should be directly put in the script, as follows:
+
+```
+#!/bin/bash
+"C:\winpty-0.4.3-msys2-2.7.0-x64\bin\winpty.exe" "docker.exe" "$@"
 ```
 
-source: 
- * http://railsapps.github.io/installrubyonrails-ubuntu.html
- * http://sirupsen.com/get-started-right-with-rvm/
-	
-
-## Optional: setup a shared folder between your development machine and the linux machine 
-
-If possible the shared folder should be the git folder, so that travis automatically detects the git project.
+ - Finally note that there are actually two git bash executables ; you should probably not need the second one but just in case.
 
 
 # Generating the access keys for travis
@@ -75,10 +53,11 @@ On the github repository page, `Settings > Deploy Keys > Add deploy key > add` t
 Use travis CLI to encrypt your PRIVATE key:
 
 ```bash
-> cd to the shared folder (/media/...)
-> source /home/ubuntu/.rvm/scripts/rvm
-> travis login
-> travis encrypt-file -r <git-username>/<repo-name> ci_tools/github_travis_rsa   (DO NOT USE --add option since it will remove all comments in your travis.yml file!)
+> cd <your_project_root>
+> docker run -it --rm -v $(pwd):/project --entrypoint=/bin/sh skandyla/travis-cli
+/project # travis login --com --github-token xxxxxxxxxxxxxxxxx
+/project # travis whoami --com
+/project # travis encrypt-file --com -r <git-username>/<repo-name> ci_tools/github_travis_rsa   (DO NOT USE --add option since it will remove all comments in your travis.yml file!)
 ```
 
 Follow the instructions on screen :
@@ -86,7 +65,7 @@ Follow the instructions on screen :
 - modify the relative path to the generated file by adding 'ci_tools/' in front of 'github_travis_rsa_...enc'.
 - git add the generated file 'github_travis_rsa_...enc' but DO NOT ADD the private key
 
-Note: if you find bug 'no implicit conversion of nil intro String' as mentioned [here](https://github.com/travis-ci/travis.rb/issues/190#issuecomment-377823703), [here](https://github.com/travis-ci/travis.rb/issues/585#issuecomment-374307229) and especially [here](https://github.com/travis-ci/travis.rb/issues/586) it can either be a network proxy error (check that http_proxy is not set...) or a ruby/travis cli version issue. Or worse: an openssl version issue (you check check with wireshark). Best is to reinstall at least the gems: `rvm gemset empty` and then `gem install travis ...` (see above). Note that reinstalling ruby takes a *lot* more time than reinstalling the gems :).
+Note: if you find bug 'no implicit conversion of nil intro String' as mentioned [here](https://github.com/travis-ci/travis.rb/issues/190#issuecomment-377823703), [here](https://github.com/travis-ci/travis.rb/issues/585#issuecomment-374307229) and especially [here](https://github.com/travis-ci/travis.rb/issues/586) it can either be a network proxy error (check that http_proxy is not set...) or a ruby/travis cli version issue. Or worse: an openssl version issue (you check check with wireshark). Best is to build the docker container locally to be sure to get the latest version of ruby and travis cli.
 
 source: 
    * https://djw8605.github.io/2017/02/08/deploying-docs-on-github-with-travisci/ (rejecting https://docs.travis-ci.com/user/deployment/pages/ as this would grant full access to travis)
@@ -98,8 +77,8 @@ source:
 Similar procedure to encrypt the PyPi password for deployments:
 
 ```bash
-> (cd, source, travis login)
-> travis encrypt -r <git-username>/<repo-name> <pypi_password>
+> (same as above)
+/project # travis encrypt --com -r <git-username>/<repo-name> <pypi_password>
 ```
 Copy the resulting string in the `travis.yml` file under deploy > provider: pypi > password > secure
 
@@ -111,9 +90,8 @@ source: https://docs.travis-ci.com/user/deployment/pypi/
 Similar procedure to encrypt the OAuth password for github releases. **WARNING** unlike 'travis encrypt', this WILL modify your `travis.yml` file. Therefore you should make a backup of it beforehand, and then execute this command with the '--force' option.
 
 ```bash
-> (cd, source, travis login)
-> travis login
-> travis setup releases
+> (same as above)
+/project # travis setup releases --com
 ```
 
 Copy the string in the `travis.yml` file under deploy > provider: releases > api-key > secure
