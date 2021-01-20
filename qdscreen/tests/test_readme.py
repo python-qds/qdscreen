@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 from qdscreen.main import Entropies
 from qdscreen import qdeterscreen
@@ -22,29 +23,53 @@ def df_mix1():
     return df
 
 
-def test_readme():
+@pytest.mark.parametrize("input_type", ["pandas", "numpy_unstructured", "numpy_structured", "numpy_recarray"])
+def test_readme(input_type):
     """A test with a complete scenario of what is implemented so far"""
 
-    df = df_mix1()
-    var_names = list(df.columns)
+    if input_type == "pandas":
+        data = df_mix1()
+        var_names = list(data.columns)
+    elif input_type == "numpy_unstructured":
+        df_orig = df_mix1()
+        var_names = list(df_orig.columns)
+        data = df_orig.to_numpy(copy=True)
+    elif input_type == "numpy_structured":
+        df_orig = df_mix1()
+        var_names = list(df_orig.columns)
+        data = df_orig.to_records()
+        data = data.view(data.dtype.fields or data.dtype, np.ndarray)
+    elif input_type == "numpy_recarray":
+        df_orig = df_mix1()
+        var_names = list(df_orig.columns)
+        data = df_orig.to_records()
+    else:
+        raise ValueError(input_type)
+
     nb_vars = len(var_names)
 
     # check the stats, for debug
-    df_stats = Entropies(df)
+    df_stats = Entropies(data)
 
     # strict
-    adj_mat = qdeterscreen(df)
     ref = pd.DataFrame(data=np.zeros((nb_vars, nb_vars), dtype=bool), index=var_names, columns=var_names)
     ref.loc['U', 'V'] = True
     ref.loc['V', 'W'] = True
     ref.loc['X', 'Y'] = True
+    adj_mat = qdeterscreen(data)
+    if input_type != "pandas":
+        adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
 
     # quasi
     ref.loc['X', 'Z'] = True
     # Z si threshold qd > 0.28 (absolu) ou 0.29 (relatif)
-    adj_mat = qdeterscreen(df, epsilon_absolute=0.28)
+    adj_mat = qdeterscreen(data, absolute_eps=0.28)
+    if input_type != "pandas":
+        adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
 
-    adj_mat = qdeterscreen(df, epsilon_relative=0.29)
+    adj_mat = qdeterscreen(data, relative_eps=0.29)
+    if input_type != "pandas":
+        adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
