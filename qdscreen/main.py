@@ -469,11 +469,11 @@ def to_forest_parents_index(A, selection_order=None):
     if is_np_array:
         mask = A[selection_order, :] if selection_order else A
     else:
-        mask = A.iloc[selection_order, :].values if selection_order else A.values
+        mask = A.iloc[selection_order, :].values if selection_order is not None else A.values
 
     # return a list containing for each feature, the index of its parent or -1 if it is a root
     indices = np.where(mask.any(axis=0),
-                       selection_order[mask.argmax(axis=0)] if selection_order else mask.argmax(axis=0),
+                       selection_order[mask.argmax(axis=0)] if selection_order is not None else mask.argmax(axis=0),
                        -1)
     if not is_np_array:
         indices = pd.Series(indices, index=A.columns)
