@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from qdscreen.main import Entropies
-from qdscreen import qdeterscreen
+from qdscreen import qdeterscreen, Entropies
 
 
 def df_mix1():
@@ -56,20 +55,33 @@ def test_readme(input_type):
     ref.loc['U', 'V'] = True
     ref.loc['V', 'W'] = True
     ref.loc['X', 'Y'] = True
-    adj_mat = qdeterscreen(data)
+    qd_forest = qdeterscreen(data)
+    adj_mat = qd_forest.adjmat
     if input_type != "pandas":
         adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
+
+    # TODO check that this works now - dataframe backed by sparse array
+    # sel = QDSSelector()
+    # sel_data = sel.fit_transform(data.values)
+    # data2 = sel.inverse_transform(sel_data)
 
     # quasi
     ref.loc['X', 'Z'] = True
     # Z si threshold qd > 0.28 (absolu) ou 0.29 (relatif)
-    adj_mat = qdeterscreen(data, absolute_eps=0.28)
+    qd_forest = qdeterscreen(data, absolute_eps=0.28)
+    adj_mat = qd_forest.adjmat
     if input_type != "pandas":
         adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
 
-    adj_mat = qdeterscreen(data, relative_eps=0.29)
+    qd_forest = qdeterscreen(data, relative_eps=0.29)
+    adj_mat = qd_forest.adjmat
     if input_type != "pandas":
+        assert isinstance(qd_forest.parents, np.ndarray)
+        assert isinstance(adj_mat, np.ndarray)
         adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
+    else:
+        assert isinstance(qd_forest.parents, pd.Series)
+        assert list(qd_forest.parents.columns) == var_names
     pd.testing.assert_frame_equal(adj_mat, ref)

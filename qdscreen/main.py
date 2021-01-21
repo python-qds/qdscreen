@@ -9,10 +9,113 @@ except:  # noqa
     pass
 
 
-def qdeterscreen(df,                 # type: pd.DataFrame
+class QDForest(object):
+    """A quasi-deterministic forest returned by `qdeterscreen`"""
+    __slots__ = ('_adjmat', '_parents', 'is_nparray', '_roots_mask')
+
+    def __init__(self,
+                 adjmat=None,   # type: Union[np.ndarray, pd.DataFrame]
+                 parents=None   # type: Union[np.ndarray, pd.Series]
+                 ):
+        """
+
+        :param adjmat:
+        :param parents:
+        """
+        self._adjmat = adjmat
+        self._parents = parents
+        self.is_nparray = isinstance(adjmat if adjmat is not None else parents, np.ndarray)
+        self._roots_mask = None
+
+    @property
+    def nb_vars(self):
+        return self._parents.shape[0] if self._parents is not None else self._adjmat.shape[0]
+
+    @property
+    def varnames(self):
+        if self.is_nparray:
+            raise ValueError("Variable names not available")
+        return list(self._adjmat.columns) if self._adjmat is not None else list(self._parents.index)
+
+    @property
+    def adjmat_ar(self):
+        if self.is_nparray:
+            return self.adjmat
+        else:
+            return self.adjmat.values
+
+    @property
+    def adjmat(self):
+        if self._adjmat is None:
+            # compute adjmat from parents.
+            n = self.nb_vars
+            adjmat = np.zeros((n, n), dtype=bool)
+            # from https://stackoverflow.com/a/46018613/7262247
+            childs_mask = self.parents_ar >= 0
+            index_array = [self.parents_ar[childs_mask], np.arange(n)[childs_mask]]
+            flat_index_array = np.ravel_multi_index(index_array, adjmat.shape)
+            np.ravel(adjmat)[flat_index_array] = True
+            if self.is_nparray:
+                self._adjmat = adjmat
+            else:
+                self._adjmat = pd.DataFrame(adjmat, index=self.varnames, columns=self.varnames)
+        return self._adjmat
+
+    @property
+    def parents_ar(self):
+        if self.is_nparray:
+            return self.parents
+        else:
+            return self.parents.values
+
+    @property
+    def parents(self):
+        if self._parents is None:
+            # compute parents from adjmat, whether a dataframe or an array
+            self._parents = to_forest_parents_index(self._adjmat)
+
+        return self._parents
+
+    @property
+    def roots(self):
+        """"""
+        return self.roots_mask
+
+    @property
+    def roots_mask(self):
+        """Lazily computed roots"""
+        if self._roots_mask is None:
+            # TODO use parents rather
+            self._roots_mask = ~self.adjmat.any(axis=0)
+        return self._roots_mask
+
+    def fit(self, X):
+        """Fits the maps able to predict determined features from others"""
+        A = self.adjmat
+        maps = dict()
+        if self.is_nparray:
+            for parent, child in get_arcs(A, names=False):
+                assert child not in maps, "child has two parents !"
+                parent_levels = np.unique(X[:, parent])
+                for lev in parent_levels:
+                    values, counts = np.unique(X[X[:, parent] == lev, child], return_counts=True)
+
+                ind = np.argmax(counts)
+                # TODO create a dict where
+                maps[child] = {p: c for p in parent_levels}
+        else:
+            for parent, child in get_arcs(A, names=False):
+                child_col = A.columns[child]
+                assert child_col not in maps, "child has two parents !"
+                maps[child_col] = X.iloc[:, [parent, child]].groupby(by=X.columns[parent]) \
+                    .agg(lambda x: x.value_counts().index[0])
+
+
+def qdeterscreen(X,                  # type: Union[pd.DataFrame, np.ndarray]
                  absolute_eps=None,  # type: float
                  relative_eps=None,  # type: float
                  ):
+    # type: (...) -> QDForest
     """
     Finds the (quasi-)deterministic relationships between the variables in X, and returns the adjacency matrix of the
     resulting forest of (quasi-)deterministic trees.
@@ -68,7 +171,12 @@ def qdeterscreen(df,                 # type: pd.DataFrame
     # Quasi-determinist case: take the lowest entropy
     entropy_order_inc = (X_stats.H_ar).argsort()
     # parent_order = compute_nb_levels(df) if is_strict else entropy_based_order
-    A_forest = to_forest(A_noredundancy, entropy_order_inc)
+    # A_forest = to_forest_adjmat(A_noredundancy, entropy_order_inc)
+    # qd_forest = QDForest(adjmat=A_forest)
+    parents = to_forest_parents_index(A_noredundancy, entropy_order_inc)
+    if not X_stats.is_nparray:
+        parents = pd.Series(parents, index=A_noredundancy.columns)
+    qd_forest = QDForest(parents=parents)
 
     # forestAdjMatList <- FromHToDeterForestAdjMat(H = H, criterion = criterionNlevels, removePerfectMatchingCol = removePerfectMatchingCol)
 
@@ -105,7 +213,7 @@ def qdeterscreen(df,                 # type: pd.DataFrame
     #     print("Final graph computed")
     #   }
 
-    return A_forest
+    return qd_forest
 
 
 class Entropies(object):
@@ -139,6 +247,10 @@ class Entropies(object):
             return self._dataset_df
         else:
             return self.dataset
+
+    @property
+    def nb_vars(self):
+        return self.dataset.shape[1]
 
     @property
     def varnames(self):
@@ -342,7 +454,33 @@ def remove_redundancies(A,
         return A_df
 
 
-def to_forest(A, selection_order, inplace=False):
+def to_forest_parents_index(A, selection_order=None):
+    """ Removes extra arcs in the adjacency matrix A by only keeping the first parent in the given order
+
+    Returns a 1D array of parent index or -1 if root
+
+    :param A: an adjacency matrix, as a dataframe or numpy array
+    :return:
+    """
+    assert_adjacency_matrix(A)
+    is_np_array = isinstance(A, np.ndarray)
+
+    # From https://stackoverflow.com/a/47269413/7262247
+    if is_np_array:
+        mask = A[selection_order, :] if selection_order else A
+    else:
+        mask = A.iloc[selection_order, :].values if selection_order else A.values
+
+    # return a list containing for each feature, the index of its parent or -1 if it is a root
+    indices = np.where(mask.any(axis=0),
+                       selection_order[mask.argmax(axis=0)] if selection_order else mask.argmax(axis=0),
+                       -1)
+    if not is_np_array:
+        indices = pd.Series(indices, index=A.columns)
+    return indices
+
+
+def to_forest_adjmat(A, selection_order, inplace=False):
     """ Removes extra arcs in the adjacency matrix A by only keeping the first parent in the given order
 
     :param A: an adjacency matrix, as a dataframe or numpy array
@@ -363,6 +501,7 @@ def to_forest(A, selection_order, inplace=False):
         mask_parents_over_the_first = mask_parents_over_the_first[selection_order.argsort(), :]
         A[mask_parents_over_the_first] = False
     else:
+        # From https://stackoverflow.com/a/47269413/7262247
         mask_parents_over_the_first = A.iloc[selection_order, :].cumsum(axis=0) > 1
         A[mask_parents_over_the_first] = False
 
@@ -374,6 +513,24 @@ def to_forest(A, selection_order, inplace=False):
 
     if not inplace:
         return A
+
+
+def get_arcs(A, names=False):
+    """Utility method to return the arcs of an adjacency matrix, an iterable of (parent, child)
+
+    :param A:
+    :param names: if False, indices are returned. Otherwise feature names are returned if any
+    :return:
+    """
+    if not names:
+        return zip(*np.where(A))
+    else:
+        is_np_array = isinstance(A, np.ndarray)
+        if is_np_array:
+            raise NotImplementedError()
+        else:
+            cols = A.columns
+            return ((cols[i], cols[j]) for i, j in zip(*np.where(A)))
 
 
 def get_categorical_features(df_or_array):

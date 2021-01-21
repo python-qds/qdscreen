@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from qdscreen import QDForest
 from qdscreen.main import get_adjacency_matrix, remove_redundancies
 
 
@@ -106,3 +107,34 @@ def test_remove_redundancies():
 #
 #     adj_df = get_adjacency_matrix(df)
 #     df2 = identify_redundancy(adj_df)
+
+
+@pytest.mark.parametrize("is_np", [True, False])
+def test_qd_forest(is_np):
+    """Tests that QDForest works correctly whether created from adj matrix or parents list"""
+
+    # reference matrices: a forest with two trees 3->5 and 9->(1,7)
+    adjmat_ar = adjmat = np.zeros((10, 10), dtype=bool)
+    adjmat[3, 5] = True
+    adjmat[9, 1] = True
+    adjmat[9, 7] = True
+    parents_ar = parents = -np.ones((10,), dtype=np.int64)  # indeed computing parents from adjmat with np.where returns this dtype
+    parents[5] = 3
+    parents[1] = 9
+    parents[7] = 9
+    if not is_np:
+        varnames = list("abcdefghij")
+        adjmat = pd.DataFrame(adjmat_ar, columns=varnames, index=varnames)
+        parents = pd.Series(parents_ar, index=varnames)
+
+    # a forest created from the adj matrix
+    qd1 = QDForest(adjmat=adjmat)
+    np.testing.assert_array_equal(qd1.parents_ar, parents_ar)
+    if not is_np:
+        pd.testing.assert_series_equal(qd1.parents, parents)
+
+    # a forest created from the parents coordinates
+    qd2 = QDForest(parents=parents)
+    np.testing.assert_array_equal(qd2.adjmat_ar, adjmat_ar)
+    if not is_np:
+        pd.testing.assert_frame_equal(qd1.adjmat, adjmat)

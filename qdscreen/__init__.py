@@ -1,4 +1,4 @@
-from qdscreen.main import qdeterscreen
+from qdscreen.main import Entropies, qdeterscreen, QDForest
 
 try:
     # -- Distribution mode --
@@ -16,5 +16,5 @@ __all__ = [
     # submodules
     'main',
     # symbols
-    'qdeterscreen',
+    'Entropies', 'qdeterscreen', 'QDForest'
 ]
