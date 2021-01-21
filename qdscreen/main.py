@@ -467,7 +467,7 @@ def to_forest_parents_index(A, selection_order=None):
 
     # From https://stackoverflow.com/a/47269413/7262247
     if is_np_array:
-        mask = A[selection_order, :] if selection_order else A
+        mask = A[selection_order, :] if selection_order is not None else A
     else:
         mask = A.iloc[selection_order, :].values if selection_order is not None else A.values
 
