@@ -1,7 +1,10 @@
+from functools import partial
+
 import numpy as np
 import pandas as pd
 
 from pyitlib import discrete_random_variable as drv
+from scipy import sparse
 
 try:
     from typing import Union
@@ -9,9 +12,31 @@ except:  # noqa
     pass
 
 
+# TODO
+# Cramer's V + Theil's U:
+#    https://towardsdatascience.com/the-search-for-categorical-correlation-a1cf7f1888c9
+#    https://stackoverflow.com/questions/46498455/categorical-features-correlation
+#    https://stackoverflow.com/questions/20892799/using-pandas-calculate-cram%C3%A9rs-coefficient-matrix (+ corrected version)
+#    https://stackoverflow.com/questions/61236715/correlation-between-categorical-variables-within-a-dataset
+#
+# https://stackoverflow.com/questions/48035381/correlation-among-multiple-categorical-variables-pandas
+# https://stackoverflow.com/questions/44694228/how-to-check-for-correlation-among-continuous-and-categorical-variables-in-pytho
+#
+
+def _add_names_to_parents_idx_series(parents):
+    parents = pd.DataFrame(parents, columns=('idx',))
+    parents['name'] = parents.index[parents['idx']].where(parents['idx'] >= 0, None)
+    return parents
+
+
 class QDForest(object):
     """A quasi-deterministic forest returned by `qdeterscreen`"""
-    __slots__ = ('_adjmat', '_parents', 'is_nparray', '_roots_mask')
+    __slots__ = ('_adjmat',   # a square numpy array or pandas DataFrame containing the adjacency matrix (parent->child)
+                 '_parents',  # a 1d np array or a pandas Series relating each child to its parent index or -1 if a root
+                 'is_nparray',  # a boolean indicating if this was built from numpy array (and not pandas dataframe)
+                 '_roots_mask', # a 1d np array or pd Series containing a boolean mask for root variables
+                 '_maps'  # a sparse square array (parent, child): mapping_dct with index in the order of self.varnames
+                 )
 
     def __init__(self,
                  adjmat=None,   # type: Union[np.ndarray, pd.DataFrame]
@@ -23,9 +48,17 @@ class QDForest(object):
         :param parents:
         """
         self._adjmat = adjmat
-        self._parents = parents
-        self.is_nparray = isinstance(adjmat if adjmat is not None else parents, np.ndarray)
+        self.is_nparray = isinstance((adjmat if adjmat is not None else parents), np.ndarray)
+        if parents is not None:
+            if not self.is_nparray:
+                # create a df with two columns: indices and names
+                parents = _add_names_to_parents_idx_series(parents)
+            self._parents = parents
+        else:
+            self._parents = None
+
         self._roots_mask = None
+        self._maps = None
 
     @property
     def nb_vars(self):
@@ -35,14 +68,44 @@ class QDForest(object):
     def varnames(self):
         if self.is_nparray:
             raise ValueError("Variable names not available")
-        return list(self._adjmat.columns) if self._adjmat is not None else list(self._parents.index)
+        return np.array(self._adjmat.columns) if self._adjmat is not None else np.array(self._parents.index)
+
+    def get_children(self, node, is_node_idx=None, return_names=None):
+        """
+
+        :param node: if n
+        :return: an array containing indices of the child nodes
+        """
+        if is_node_idx is None:
+            is_node_idx = self.is_nparray
+        if return_names is None:
+            return_names = not self.is_nparray
+
+        if self.is_nparray:
+            return np.where(self.parents == node)[0]
+        else:
+            qcol = 'idx' if is_node_idx else 'name'
+            if not return_names:
+                return np.where(self.parents[qcol] == node)[0]
+            else:
+                return self.parents[self.parents[qcol] == node].index.values
+
+    def get_arcs(self, multiindex=False, names=None):
+        """
+
+        :param names:
+        :return:
+        """
+        if names is None:
+            names = not self.is_nparray
+        if self._adjmat is not None:
+            return get_arcs_from_adjmat(self._adjmat, multiindex=multiindex, names=names)
+        else:
+            return get_arcs_from_parents_indices(self._parents, multiindex=multiindex, names=names)
 
     @property
     def adjmat_ar(self):
-        if self.is_nparray:
-            return self.adjmat
-        else:
-            return self.adjmat.values
+        return self.adjmat if self.is_nparray else  self.adjmat.values
 
     @property
     def adjmat(self):
@@ -51,8 +114,7 @@ class QDForest(object):
             n = self.nb_vars
             adjmat = np.zeros((n, n), dtype=bool)
             # from https://stackoverflow.com/a/46018613/7262247
-            childs_mask = self.parents_ar >= 0
-            index_array = [self.parents_ar[childs_mask], np.arange(n)[childs_mask]]
+            index_array = get_arcs_from_parents_indices(self.parents_indices_ar, multiindex=True)
             flat_index_array = np.ravel_multi_index(index_array, adjmat.shape)
             np.ravel(adjmat)[flat_index_array] = True
             if self.is_nparray:
@@ -62,53 +124,211 @@ class QDForest(object):
         return self._adjmat
 
     @property
-    def parents_ar(self):
-        if self.is_nparray:
-            return self.parents
-        else:
-            return self.parents.values
+    def parents_indices_ar(self):
+        return self.parents if self.is_nparray else self.parents['idx'].values
 
     @property
     def parents(self):
         if self._parents is None:
             # compute parents from adjmat, whether a dataframe or an array
-            self._parents = to_forest_parents_index(self._adjmat)
-
+            # TODO maybe use a sparse array here?
+            parents = to_forest_parents_indices(self._adjmat)
+            if not self.is_nparray:
+                # create a df with two columns: indices and names
+                parents = _add_names_to_parents_idx_series(parents)
+            self._parents = parents
         return self._parents
+
+    @property
+    def roots_ar(self):
+        return np.where(self.roots_mask_ar)[0]
 
     @property
     def roots(self):
         """"""
-        return self.roots_mask
+        if self.is_nparray:
+            return self.roots_ar
+        else:
+            return self.roots_mask.index[self.roots_mask]
+
+    @property
+    def roots_mask_ar(self):
+        return self.roots_mask if self.is_nparray else self.roots_mask.values
 
     @property
     def roots_mask(self):
         """Lazily computed roots"""
         if self._roots_mask is None:
-            # TODO use parents rather
-            self._roots_mask = ~self.adjmat.any(axis=0)
+            if self._adjmat is not None:
+                self._roots_mask = ~self.adjmat.any(axis=0)
+            else:
+                self._roots_mask = self.parents < 0
         return self._roots_mask
 
     def fit(self, X):
         """Fits the maps able to predict determined features from others"""
-        A = self.adjmat
-        maps = dict()
-        if self.is_nparray:
-            for parent, child in get_arcs(A, names=False):
-                assert child not in maps, "child has two parents !"
-                parent_levels = np.unique(X[:, parent])
-                for lev in parent_levels:
-                    values, counts = np.unique(X[X[:, parent] == lev, child], return_counts=True)
 
-                ind = np.argmax(counts)
-                # TODO create a dict where
-                maps[child] = {p: c for p in parent_levels}
+        # we will create a sparse coordinate representation of maps
+        n = self.nb_vars
+
+        if self.is_nparray:
+            assert isinstance(X, np.ndarray)
+
+            # detect numpy structured arrays
+            is_struct_array = X.dtype.names is not None
+            if is_struct_array:
+                # names = X.dtype.names
+                # assert len(names) == n
+                raise NotImplementedError("structured numpy arrays are not supported. Please convert your array to an "
+                                          "unstructured array")
+            else:
+                assert X.shape[1] == n
+
+            # self._maps = maps = sparse.coo_matrix((n, n), dtype=object)  # not convenient for incremental
+            self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
+
+            for parent, child in self.get_arcs():
+                # todo maybe remove this check later for efficiency
+                assert (parent, child) not in maps, "Error: edge already exists"
+
+                # create a dictionary mapping each parent level to most frequent child level
+                # -- seems suboptimal with numpy...
+                # map_dct = dict()
+                # for parent_lev in np.unique(X[:, parent]):
+                #     values, counts = np.unique(X[X[:, parent] == parent_lev, child], return_counts=True)
+                #     map_dct[parent_lev] = values[np.argmax(counts)]
+                # -- same with pandas groupby
+                # if is_struct_array:
+                #     pc_df = pd.DataFrame(X[[names[parent], names[child]]])
+                #     pc_df.columns = [0, 1]  # forget the names
+                # else:
+                pc_df = pd.DataFrame(X[:, (parent, child)])
+                levels_mapping_df = pc_df.groupby(0).agg(lambda x: x.value_counts().index[0])
+                maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
+
         else:
-            for parent, child in get_arcs(A, names=False):
-                child_col = A.columns[child]
-                assert child_col not in maps, "child has two parents !"
-                maps[child_col] = X.iloc[:, [parent, child]].groupby(by=X.columns[parent]) \
-                    .agg(lambda x: x.value_counts().index[0])
+            assert isinstance(X, pd.DataFrame)
+
+            # unfortunately pandas dataframe sparse do not allow item assignment :( so we need to work on numpy array
+            # first get the numpy array in correct order
+            varnames = self.varnames
+            X_ar = X.loc[:, varnames].values
+            self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
+
+            for parent, child in self.get_arcs(names=False):
+                # todo maybe remove this check later for efficiency
+                assert (parent, child) not in maps, "Error: edge already exists"
+                # levels_mapping_df = X.loc[:, (parent, child)].groupby(parent).agg(lambda x: x.value_counts().index[0])
+                # maps[parent, child] = levels_mapping_df[child].to_dict()
+                levels_mapping_df = pd.DataFrame(X_ar[:, (parent, child)]).groupby(0).agg(lambda x: x.value_counts().index[0])
+                maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
+
+    def select_qd_roots(self, X, inplace=False):
+        """
+        Removes from X the features that can be
+        This returns a copy
+
+        :param X:
+        :param inplace: if this is set to True,
+        :return:
+        """
+        is_x_nparray = isinstance(X, np.ndarray)
+        assert is_x_nparray == self.is_nparray
+
+        if is_x_nparray:
+            is_structured = X.dtype.names is not None
+            if is_structured:
+                raise NotImplementedError("structured numpy arrays are not supported. Please convert your array to an "
+                                          "unstructured array")
+            if inplace:
+                np.delete(X, self.roots_mask_ar, axis=1)
+            else:
+                # for structured: return X[np.array(X.dtype.names)[self.roots_mask_ar]]
+                return X[:, self.roots_mask_ar]
+        else:
+            # pandas dataframe
+            if inplace:
+                del X[self.roots]
+            else:
+                return X.loc[:, self.roots_mask]
+
+
+    def walk_arcs(self, return_names=None):
+        """yields a sequence of (parent, child) indices or names"""
+
+        if return_names is None:
+            return_names = not self.is_nparray
+
+        get_children = partial(self.get_children, is_node_idx=not return_names, return_names=return_names)
+
+        def _walk(from_node):
+            for child in get_children(from_node):
+                yield from_node, child
+                for i, j in _walk(child):
+                    yield i, j
+
+        for n in (self.roots if return_names else self.roots_ar):
+            # walk the subtree
+            for i, j in _walk(n):
+                yield i, j
+
+    def predict_qd_features_from_roots(self, X, inplace=False):
+        """
+        Adds columns to X corresponding to the features that can be determined from the roots.
+        By default,
+
+        :param X:
+        :param inplace: if `True` and X is a dataframe, predicted columns will be added inplace. Note that the order
+            may differ from the initial trainin
+        :return:
+        """
+        # if inplace is None:
+        #     inplace = not self.is_nparray
+
+        is_x_nparray = isinstance(X, np.ndarray)
+        assert is_x_nparray == self.is_nparray
+
+        if is_x_nparray:
+            is_structured = X.dtype.names is not None
+            if is_structured:
+                raise NotImplementedError("structured numpy arrays are not supported. Please convert your array to an "
+                                          "unstructured array")
+            if not inplace:
+                # Same as in sklearn inverse_transform: create the missing columns in X first
+                X_in = X
+                support = self.roots_mask_ar
+                # X = check_array(X, dtype=None)
+                nbcols_received = X_in.shape[1]
+                if support.sum() != nbcols_received:
+                    raise ValueError("X has a different nb columns than the number of roots found during fitting.")
+                # if a single column, make sure this is 2d
+                if X_in.ndim == 1:
+                    X_in = X_in[None, :]
+                # create a copy with the extra columns
+                X = np.zeros((X_in.shape[0], support.size), dtype=X_in.dtype)
+                X[:, support] = X_in
+            else:
+                if X.shape[1] != self.nb_vars:
+                    raise ValueError("If `inplace=True`, `predict` expects an X input with the correct number of "
+                                     "columns. Use `inplace=False` to pass only the array of roots. Note that this"
+                                     "is the default behaviour of inplace.")
+
+            # walk the tree from the roots
+            for parent, child in self.walk_arcs():
+                # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
+                X[:, child] = np.vectorize(self._maps[parent, child].__getitem__)(X[:, parent])
+        else:
+            if not inplace:
+                X = X.copy()
+
+            # walk the tree from the roots
+            varnames = self.varnames
+            for parent, child in self.walk_arcs(return_names=False):
+                # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
+                X.loc[:, varnames[child]] = np.vectorize(self._maps[parent, child].__getitem__)(X.loc[:, varnames[parent]])
+
+        if not inplace:
+            return X
 
 
 def qdeterscreen(X,                  # type: Union[pd.DataFrame, np.ndarray]
@@ -173,9 +393,9 @@ def qdeterscreen(X,                  # type: Union[pd.DataFrame, np.ndarray]
     # parent_order = compute_nb_levels(df) if is_strict else entropy_based_order
     # A_forest = to_forest_adjmat(A_noredundancy, entropy_order_inc)
     # qd_forest = QDForest(adjmat=A_forest)
-    parents = to_forest_parents_index(A_noredundancy, entropy_order_inc)
-    if not X_stats.is_nparray:
-        parents = pd.Series(parents, index=A_noredundancy.columns)
+    parents = to_forest_parents_indices(A_noredundancy, entropy_order_inc)
+    # if not X_stats.is_nparray:
+    #     parents = pd.Series(parents, index=A_noredundancy.columns)
     qd_forest = QDForest(parents=parents)
 
     # forestAdjMatList <- FromHToDeterForestAdjMat(H = H, criterion = criterionNlevels, removePerfectMatchingCol = removePerfectMatchingCol)
@@ -454,7 +674,7 @@ def remove_redundancies(A,
         return A_df
 
 
-def to_forest_parents_index(A, selection_order=None):
+def to_forest_parents_indices(A, selection_order=None):
     """ Removes extra arcs in the adjacency matrix A by only keeping the first parent in the given order
 
     Returns a 1D array of parent index or -1 if root
@@ -515,22 +735,53 @@ def to_forest_adjmat(A, selection_order, inplace=False):
         return A
 
 
-def get_arcs(A, names=False):
+def get_arcs_from_parents_indices(parents, multiindex=False, names=False):
+    """
+    if multiindex = False ; returns a sequence of pairs : (9, 1), (3, 5), (9, 7)
+    if multiindex = True ; returns two sequences of indices: (9, 3, 9), (1, 5, 7)
+
+    :param parents:
+    :param multiindex:
+    :param names:
+    :return:
+    """
+    if not names:
+        n = len(parents)
+        childs_mask = parents >= 0
+        res = parents[childs_mask], np.arange(n)[childs_mask]
+        return res if multiindex else zip(*res)
+    else:
+        # is_np_array = isinstance(A, np.ndarray)
+        # if is_np_array:
+        #     raise NotImplementedError()
+        # else:
+        #     cols = A.columns
+        #     return ((cols[i], cols[j]) for i, j in zip(*np.where(A)))
+        raise NotImplementedError()
+
+
+def get_arcs_from_adjmat(A, multiindex=False, names=False):
     """Utility method to return the arcs of an adjacency matrix, an iterable of (parent, child)
 
     :param A:
+    :param multiindex:
     :param names: if False, indices are returned. Otherwise feature names are returned if any
     :return:
     """
     if not names:
-        return zip(*np.where(A))
+        res = np.where(A)
+        return res if multiindex else zip(*res)
     else:
         is_np_array = isinstance(A, np.ndarray)
         if is_np_array:
             raise NotImplementedError()
         else:
             cols = A.columns
-            return ((cols[i], cols[j]) for i, j in zip(*np.where(A)))
+            res_ar = np.where(A)
+            if multiindex:
+                return ((cols[i] for i in l) for l in res_ar)
+            else:
+                return ((cols[i], cols[j]) for i, j in zip(*res_ar))
 
 
 def get_categorical_features(df_or_array):

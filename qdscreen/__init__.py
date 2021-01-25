@@ -1,4 +1,5 @@
-from qdscreen.main import Entropies, qdeterscreen, QDForest
+from .main import Entropies, qdeterscreen, QDForest
+from .selector import QDSSelector
 
 try:
     # -- Distribution mode --
@@ -14,7 +15,7 @@ except ImportError:
 __all__ = [
     '__version__',
     # submodules
-    'main',
+    'main', 'selector',
     # symbols
-    'Entropies', 'qdeterscreen', 'QDForest'
+    'Entropies', 'qdeterscreen', 'QDSSelector', 'QDForest'
 ]

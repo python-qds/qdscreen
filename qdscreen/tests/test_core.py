@@ -125,13 +125,14 @@ def test_qd_forest(is_np):
     if not is_np:
         varnames = list("abcdefghij")
         adjmat = pd.DataFrame(adjmat_ar, columns=varnames, index=varnames)
-        parents = pd.Series(parents_ar, index=varnames)
+        parents = pd.DataFrame(parents_ar, index=varnames, columns=('idx',))
+        parents['name'] = parents.index[parents['idx']].where(parents['idx'] >= 0, None)
 
     # a forest created from the adj matrix
     qd1 = QDForest(adjmat=adjmat)
-    np.testing.assert_array_equal(qd1.parents_ar, parents_ar)
+    np.testing.assert_array_equal(qd1.parents_indices_ar, parents_ar)
     if not is_np:
-        pd.testing.assert_series_equal(qd1.parents, parents)
+        pd.testing.assert_frame_equal(qd1.parents, parents)
 
     # a forest created from the parents coordinates
     qd2 = QDForest(parents=parents)
