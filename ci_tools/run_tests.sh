@@ -12,7 +12,7 @@ cleanup() {
 
 trap "cleanup" INT TERM EXIT
 
-if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
+if [ "${DEPLOY_ENV}" = "true" ]; then
    # full
    # Run tests with "python -m pytest" to use the correct version of pytest
    echo -e "\n\n****** Running tests with coverage ******\n\n"

@@ -14,9 +14,9 @@ matrix:
     - name: "Python 3.6 pyitlib latest"
       python: 3.6
       # env: PYITLIB_VERSION=""
-    - name: "Python 3.7 pyitlib latest"
+    - name: "Python 3.7 pyitlib latest - DEPLOY WebSite+Coverage+PyPi"
       python: 3.7
-      # env: PYITLIB_VERSION=""
+      env: DEPLOY_ENV="true"
       dist: xenial
       sudo: true
     - name: "Python 3.8 pyitlib latest"
@@ -40,7 +40,7 @@ install:
   - pip install six setuptools_scm  # apparently python 2 requires this done beforehand
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
   # mkdocs requirements: this does not work anymore on python 2 so lets only do it when needed
-  - if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then pip install mkdocs-material mkdocs; fi;
+  - if [ "${DEPLOY_ENV}" = "true" ]; then pip install mkdocs-material mkdocs pymdown-extensions pygments; fi;
   - if [ ! "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then pip install doit; fi;
   # travis-specific installs
   - pip install PyGithub  # for ci_tools/github_release.py
@@ -82,7 +82,7 @@ after_success:
       git fetch gh-remote && git fetch gh-remote gh-pages:gh-pages;  # make sure we have the latest gh-remote
       # push but only if this is not a build triggered by a pull request
       # note: do not use the --dirty flag as it breaks client-side search
-      if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; PYTHONPATH=qdscreen/ mkdocs gh-deploy -v -f docs/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
+      if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${DEPLOY_ENV}" = "true" ]; then echo "Pushing to github"; PYTHONPATH=qdscreen/ mkdocs gh-deploy -v -f docs/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
     else
       echo "File 'ci_tools/github_travis_rsa' has not been created, please check your encrypted repo token in .travis.yml, on the line starting with 'openssl aes-256-cbc...'"
     fi
@@ -97,8 +97,8 @@ deploy:
       secure: "jxdkr3MOjEUdXjpijSvSVOSllk6IhNEa348vhPjXXLaX40XOJRQwNEVxseue3eBIjfIacv6F4shhS/c8NQQlNNLcU7v1S3RItqpgyaleB6crTEfQ8Quo8oqUNeElvINeLMXrWejbJpuRBt5qDbjO8Hy777CPJBq/rSsfy/z2JGlgTWwOnxPw5nUM8+Fws6CpFwCWUI8erjwO0Rodf1QBgo2grWKDVwomd/dLkIPGqVeavFeeAKbMJZj+5LvcUy3M7c8i7b3YLnV6FZqFpmJEkp6aWjWwz2mrtTF4Pwu/+y/a+a4X1RtCO7XTNs64RsbYvGquiwuhOgfd49y2PbHT6fbF3LGGKcf/ALWbtYxuD0sDPsodrq/g2Hg0TST3T/Loh+cCTpZKfpqju5vIc1Vu0A363J/HN8Dy5eVP0qUrGFTL2F5n5RFccIcWR2BjoVF0MwadokxjY9NP0Alzo4E+CbojFoaumkSVZmWHmxZnq/L9f+SZ0Y3lmMU9qi9T66LxXFlUVSbs/Iztpmm0w+aR2DbEsw+ZzW0spXzHeqlNvwE04A+hmJru5fRNDPgc5YsxMUDTV6krR1WRnJecLNBCyYac/f/usKM4/KtdtRKV15YCkYjvEGOhA5x+POgtvwa5rVMNac24PmaRsKh5v077yUffO4h4XSKre1ehjYIdkWY="
     on:
       tags: true
-      python: 3.5  #only one of the builds have to be deployed
-      # condition: $PYTEST_VERSION = "<3"
+      # python: 3.5  #only one of the builds have to be deployed
+      condition: $DEPLOY_ENV = "true"
     # server: https://test.pypi.org/legacy/
     distributions: "sdist bdist_wheel"
 
@@ -108,8 +108,10 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      python: 3.5  #only one of the builds have to be deployed
-      # condition: $PYTEST_VERSION = "<3"
+      # only one of the builds have to be deployed
+      condition: $DEPLOY_ENV = "true"
+
+  # TODO update zenodo record
 
 notifications:
   email:
