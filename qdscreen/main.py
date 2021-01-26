@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 
 from pyitlib import discrete_random_variable as drv
-from scipy import sparse
 
 try:
     from typing import Union
@@ -35,7 +34,6 @@ class QDForest(object):
                  '_parents',  # a 1d np array or a pandas Series relating each child to its parent index or -1 if a root
                  'is_nparray',  # a boolean indicating if this was built from numpy array (and not pandas dataframe)
                  '_roots_mask', # a 1d np array or pd Series containing a boolean mask for root variables
-                 '_maps'  # a sparse square array (parent, child): mapping_dct with index in the order of self.varnames
                  )
 
     def __init__(self,
@@ -58,7 +56,6 @@ class QDForest(object):
             self._parents = None
 
         self._roots_mask = None
-        self._maps = None
 
     @property
     def nb_vars(self):
@@ -165,94 +162,6 @@ class QDForest(object):
                 self._roots_mask = self.parents < 0
         return self._roots_mask
 
-    def fit(self, X):
-        """Fits the maps able to predict determined features from others"""
-
-        # we will create a sparse coordinate representation of maps
-        n = self.nb_vars
-
-        if self.is_nparray:
-            assert isinstance(X, np.ndarray)
-
-            # detect numpy structured arrays
-            is_struct_array = X.dtype.names is not None
-            if is_struct_array:
-                # names = X.dtype.names
-                # assert len(names) == n
-                raise NotImplementedError("structured numpy arrays are not supported. Please convert your array to an "
-                                          "unstructured array")
-            else:
-                assert X.shape[1] == n
-
-            # self._maps = maps = sparse.coo_matrix((n, n), dtype=object)  # not convenient for incremental
-            self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
-
-            for parent, child in self.get_arcs():
-                # todo maybe remove this check later for efficiency
-                assert (parent, child) not in maps, "Error: edge already exists"
-
-                # create a dictionary mapping each parent level to most frequent child level
-                # -- seems suboptimal with numpy...
-                # map_dct = dict()
-                # for parent_lev in np.unique(X[:, parent]):
-                #     values, counts = np.unique(X[X[:, parent] == parent_lev, child], return_counts=True)
-                #     map_dct[parent_lev] = values[np.argmax(counts)]
-                # -- same with pandas groupby
-                # if is_struct_array:
-                #     pc_df = pd.DataFrame(X[[names[parent], names[child]]])
-                #     pc_df.columns = [0, 1]  # forget the names
-                # else:
-                pc_df = pd.DataFrame(X[:, (parent, child)])
-                levels_mapping_df = pc_df.groupby(0).agg(lambda x: x.value_counts().index[0])
-                maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
-
-        else:
-            assert isinstance(X, pd.DataFrame)
-
-            # unfortunately pandas dataframe sparse do not allow item assignment :( so we need to work on numpy array
-            # first get the numpy array in correct order
-            varnames = self.varnames
-            X_ar = X.loc[:, varnames].values
-            self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
-
-            for parent, child in self.get_arcs(names=False):
-                # todo maybe remove this check later for efficiency
-                assert (parent, child) not in maps, "Error: edge already exists"
-                # levels_mapping_df = X.loc[:, (parent, child)].groupby(parent).agg(lambda x: x.value_counts().index[0])
-                # maps[parent, child] = levels_mapping_df[child].to_dict()
-                levels_mapping_df = pd.DataFrame(X_ar[:, (parent, child)]).groupby(0).agg(lambda x: x.value_counts().index[0])
-                maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
-
-    def select_qd_roots(self, X, inplace=False):
-        """
-        Removes from X the features that can be
-        This returns a copy
-
-        :param X:
-        :param inplace: if this is set to True,
-        :return:
-        """
-        is_x_nparray = isinstance(X, np.ndarray)
-        assert is_x_nparray == self.is_nparray
-
-        if is_x_nparray:
-            is_structured = X.dtype.names is not None
-            if is_structured:
-                raise NotImplementedError("structured numpy arrays are not supported. Please convert your array to an "
-                                          "unstructured array")
-            if inplace:
-                np.delete(X, self.roots_mask_ar, axis=1)
-            else:
-                # for structured: return X[np.array(X.dtype.names)[self.roots_mask_ar]]
-                return X[:, self.roots_mask_ar]
-        else:
-            # pandas dataframe
-            if inplace:
-                del X[self.roots]
-            else:
-                return X.loc[:, self.roots_mask]
-
-
     def walk_arcs(self, return_names=None):
         """yields a sequence of (parent, child) indices or names"""
 
@@ -272,63 +181,20 @@ class QDForest(object):
             for i, j in _walk(n):
                 yield i, j
 
-    def predict_qd_features_from_roots(self, X, inplace=False):
+    def fit_selector_model(self,
+                           X  # type: Union[np.ndarray, pd.DataFrame]
+                           ):
+        # type: (...) -> QDSelectorModel
         """
-        Adds columns to X corresponding to the features that can be determined from the roots.
-        By default,
+        Returns a new instance of `QDSelectorModel` fit with the data in `X`
 
         :param X:
-        :param inplace: if `True` and X is a dataframe, predicted columns will be added inplace. Note that the order
-            may differ from the initial trainin
         :return:
         """
-        # if inplace is None:
-        #     inplace = not self.is_nparray
-
-        is_x_nparray = isinstance(X, np.ndarray)
-        assert is_x_nparray == self.is_nparray
-
-        if is_x_nparray:
-            is_structured = X.dtype.names is not None
-            if is_structured:
-                raise NotImplementedError("structured numpy arrays are not supported. Please convert your array to an "
-                                          "unstructured array")
-            if not inplace:
-                # Same as in sklearn inverse_transform: create the missing columns in X first
-                X_in = X
-                support = self.roots_mask_ar
-                # X = check_array(X, dtype=None)
-                nbcols_received = X_in.shape[1]
-                if support.sum() != nbcols_received:
-                    raise ValueError("X has a different nb columns than the number of roots found during fitting.")
-                # if a single column, make sure this is 2d
-                if X_in.ndim == 1:
-                    X_in = X_in[None, :]
-                # create a copy with the extra columns
-                X = np.zeros((X_in.shape[0], support.size), dtype=X_in.dtype)
-                X[:, support] = X_in
-            else:
-                if X.shape[1] != self.nb_vars:
-                    raise ValueError("If `inplace=True`, `predict` expects an X input with the correct number of "
-                                     "columns. Use `inplace=False` to pass only the array of roots. Note that this"
-                                     "is the default behaviour of inplace.")
-
-            # walk the tree from the roots
-            for parent, child in self.walk_arcs():
-                # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
-                X[:, child] = np.vectorize(self._maps[parent, child].__getitem__)(X[:, parent])
-        else:
-            if not inplace:
-                X = X.copy()
-
-            # walk the tree from the roots
-            varnames = self.varnames
-            for parent, child in self.walk_arcs(return_names=False):
-                # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
-                X.loc[:, varnames[child]] = np.vectorize(self._maps[parent, child].__getitem__)(X.loc[:, varnames[parent]])
-
-        if not inplace:
-            return X
+        from .selector import QDSelectorModel
+        model = QDSelectorModel(self)
+        model.fit(X)
+        return model
 
 
 def qdeterscreen(X,                  # type: Union[pd.DataFrame, np.ndarray]

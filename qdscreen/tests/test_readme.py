@@ -93,7 +93,8 @@ def test_readme(input_type):
         np.testing.assert_array_equal(data2, data_ar)
 
     # qdscreen full use case
-    # --strict
+    # (1) strict
+    # -- (a) forest
     ref = pd.DataFrame(data=np.zeros((nb_vars, nb_vars), dtype=bool), index=var_names, columns=var_names)
     ref.loc['U', 'V'] = True
     ref.loc['V', 'W'] = True
@@ -103,7 +104,7 @@ def test_readme(input_type):
     if input_type != "pandas":
         adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
-
+    # -- (b) feature selector
     if input_type == "pandas":
         # Note: this should be also tested with numpy structured & records input type
         # we can test that randomized column order still works
@@ -114,8 +115,8 @@ def test_readme(input_type):
     else:
         # numpy: index has meaning, no randomization possible
         data_randcol = data
-    qd_forest.fit(data_randcol)
-    sel2 = qd_forest.select_qd_roots(data_randcol)
+    selector_model = qd_forest.fit_selector_model(data_randcol)
+    sel2 = selector_model.remove_qd(data_randcol)
     if input_type == "pandas":
         pd.testing.assert_frame_equal(sel2, data_roots_df[new_roots_order])
     # elif input_type == "numpy_structured":
@@ -123,8 +124,7 @@ def test_readme(input_type):
     #     np.testing.assert_array_equal(sel2u, data_roots_ar)
     else:
         np.testing.assert_array_equal(sel2, data_roots_ar)
-
-    data2 = qd_forest.predict_qd_features_from_roots(sel2)
+    data2 = selector_model.predict_qd(sel2)
     if input_type == "pandas":
         pd.testing.assert_frame_equal(data2[data.columns], data)
     # elif input_type == "numpy_structured":
@@ -132,7 +132,8 @@ def test_readme(input_type):
     else:
         np.testing.assert_array_equal(data2, data_ar)
 
-    # quasi
+    # (2) quasi
+    # -- (a) forest
     ref.loc['X', 'Z'] = True
     # Z si threshold qd > 0.28 (absolu) ou 0.29 (relatif)
     qd_forest = qdeterscreen(data, absolute_eps=0.28)
@@ -151,3 +152,29 @@ def test_readme(input_type):
         assert isinstance(qd_forest.parents, pd.DataFrame)
         assert list(qd_forest.parents.index) == var_names
     pd.testing.assert_frame_equal(adj_mat, ref)
+
+    # -- (b) feature selector
+
+    selector_model = qd_forest.fit_selector_model(data_randcol)
+    sel2 = selector_model.remove_qd(data_randcol)
+    if input_type == "pandas":
+        new_roots_order_quasi = [r for r in new_roots_order if r != 'Z']
+        pd.testing.assert_frame_equal(sel2, data_roots_df[new_roots_order_quasi])
+    # elif input_type == "numpy_structured":
+    #     sel2u = np.array(sel2.tolist(), dtype=object)
+    #     np.testing.assert_array_equal(sel2u, data_roots_ar)
+    else:
+        np.testing.assert_array_equal(sel2, data_roots_quasi_ar)
+    data2 = selector_model.predict_qd(sel2)
+    if input_type == "pandas":
+        # the prediction is incorrect since this is "quasi". Fix the single element that differs from input
+        assert data2.loc[2, "Z"] == "a"
+        data2.loc[2, "Z"] = "b"
+        pd.testing.assert_frame_equal(data2[data.columns], data)
+    # elif input_type == "numpy_structured":
+    #     np.testing.assert_array_equal(data2, data_ar)
+    else:
+        # the prediction is incorrect since this is "quasi". Fix the single element that differs from input
+        assert data2[2, 5] == "a"
+        data2[2, 5] = "b"
+        np.testing.assert_array_equal(data2, data_ar)
