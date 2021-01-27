@@ -159,7 +159,7 @@ class QDForest(object):
             if self._adjmat is not None:
                 self._roots_mask = ~self.adjmat.any(axis=0)
             else:
-                self._roots_mask = self.parents < 0
+                self._roots_mask = (self.parents if self.is_nparray else self.parents['idx']) < 0
         return self._roots_mask
 
     def walk_arcs(self, return_names=None):
