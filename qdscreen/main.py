@@ -6,7 +6,7 @@ import pandas as pd
 from pyitlib import discrete_random_variable as drv
 
 try:
-    from typing import Union
+    from typing import Union, Iterable, Tuple
 except:  # noqa
     pass
 
@@ -472,8 +472,8 @@ def get_adjacency_matrix(df,                 # type: Union[np.ndarray, pd.DataFr
     return A, df_stats
 
 
-def remove_redundancies(A,
-                        selection_order=None
+def remove_redundancies(A,                    # type: Union[np.ndarray, pd.DataFrame]
+                        selection_order=None  # type: np.ndarray
                         ):
     """Cleans the arcs in A between redundant variables.
 
@@ -540,12 +540,17 @@ def remove_redundancies(A,
         return A_df
 
 
-def to_forest_parents_indices(A, selection_order=None):
+def to_forest_parents_indices(A,                    # type: Union[np.ndarray, pd.DataFrame]
+                              selection_order=None  # type: np.ndarray
+                              ):
+    # type: (...) -> Union[np.ndarray, pd.DataFrame]
     """ Removes extra arcs in the adjacency matrix A by only keeping the first parent in the given order
 
     Returns a 1D array of parent index or -1 if root
 
     :param A: an adjacency matrix, as a dataframe or numpy array
+    :param selection_order: an optional order for parent selection. If not provided, the first in the list of columns
+        of A will be used
     :return:
     """
     assert_adjacency_matrix(A)
@@ -566,7 +571,11 @@ def to_forest_parents_indices(A, selection_order=None):
     return indices
 
 
-def to_forest_adjmat(A, selection_order, inplace=False):
+def to_forest_adjmat(A,                # type: Union[np.ndarray, pd.DataFrame]
+                     selection_order,  # type: np.ndarray
+                     inplace=False     # type: bool
+                     ):
+    # type: (...) -> Union[np.ndarray, pd.DataFrame]
     """ Removes extra arcs in the adjacency matrix A by only keeping the first parent in the given order
 
     :param A: an adjacency matrix, as a dataframe or numpy array
@@ -601,7 +610,11 @@ def to_forest_adjmat(A, selection_order, inplace=False):
         return A
 
 
-def get_arcs_from_parents_indices(parents, multiindex=False, names=False):
+def get_arcs_from_parents_indices(parents,           # type: Union[np.ndarray, pd.DataFrame]
+                                  multiindex=False,  # type: bool
+                                  names=False        # type: bool
+                                  ):
+    # type: (...) -> Union[Iterable[Tuple[int, int]], Iterable[Tuple[str, str]], Tuple[Iterable[int], Iterable[int]], Tuple[Iterable[str], Iterable[str]]]
     """
     if multiindex = False ; returns a sequence of pairs : (9, 1), (3, 5), (9, 7)
     if multiindex = True ; returns two sequences of indices: (9, 3, 9), (1, 5, 7)
@@ -626,11 +639,19 @@ def get_arcs_from_parents_indices(parents, multiindex=False, names=False):
         raise NotImplementedError()
 
 
-def get_arcs_from_adjmat(A, multiindex=False, names=False):
-    """Utility method to return the arcs of an adjacency matrix, an iterable of (parent, child)
+def get_arcs_from_adjmat(A,                 # type: Union[np.ndarray, pd.DataFrame]
+                         multiindex=False,  # type: bool
+                         names=False        # type: bool
+                         ):
+    # type: (...) -> Union[Iterable[Tuple[int, int]], Iterable[Tuple[str, str]], Tuple[Iterable[int], Iterable[int]], Tuple[Iterable[str], Iterable[str]]]
+    """
+    Return the arcs of an adjacency matrix, an iterable of (parent, child) indices or names
+
+    If 'multiindex' is True instead of returning an iterable of (parent, child), it returns a tuple of iterables
+    (all the parents, all the childs).
 
     :param A:
-    :param multiindex:
+    :param multiindex: if this is True, a 2-tuple of iterable is returned instead of an iterable of 2-tuples
     :param names: if False, indices are returned. Otherwise feature names are returned if any
     :return:
     """
@@ -650,7 +671,9 @@ def get_arcs_from_adjmat(A, multiindex=False, names=False):
                 return ((cols[i], cols[j]) for i, j in zip(*res_ar))
 
 
-def get_categorical_features(df_or_array):
+def get_categorical_features(df_or_array  # type: Union[np.ndarray, pd.DataFrame]
+                             ):
+    # type: (...) -> Union[np.ndarray, pd.DataFrame]
     """
 
     :param df_or_array:
@@ -684,7 +707,8 @@ def get_categorical_features(df_or_array):
         raise TypeError("Provided data is neither a pd.DataFrame nor a np.ndarray")
 
 
-def assert_adjacency_matrix(A):
+def assert_adjacency_matrix(A  # type: Union[np.ndarray, pd.DataFrame]
+                            ):
     """Routine to check that A is a proper adjacency matrix"""
 
     if len(A.shape) != 2:
