@@ -37,14 +37,16 @@ class QDForest(object):
                  )
 
     def __init__(self,
-                 adjmat=None,   # type: Union[np.ndarray, pd.DataFrame]
-                 parents=None   # type: Union[np.ndarray, pd.Series]
+                 adjmat=None,    # type: Union[np.ndarray, pd.DataFrame]
+                 parents=None,   # type: Union[np.ndarray, pd.Series]
+                 stats=None      # type: Entropies
                  ):
         """
 
         :param adjmat:
         :param parents:
         """
+        self.stats = stats
         self._adjmat = adjmat
         self.is_nparray = isinstance((adjmat if adjmat is not None else parents), np.ndarray)
         if parents is not None:

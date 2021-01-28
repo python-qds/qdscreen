@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from qdscreen import qdeterscreen, Entropies, QDSSelector
+from qdscreen import qd_screen, Entropies, QDSSelector
 
 
 def df_mix1():
+    """The dataset for reuse"""
     df = pd.DataFrame({
         'U': ["a", "b", "d", "a", "b", "c", "a", "b", "d", "c"],
         'V': ["a", "b", "c", "a", "b", "c", "a", "b", "c", "c"],
@@ -22,12 +23,107 @@ def df_mix1():
     return df
 
 
+def test_readme_simple(capsys):
+    """The exact scenario showed in the readme"""
+
+    df = df_mix1()
+
+    # detect strict deterministic relationships
+    qd_forest = qd_screen(df)
+    print(qd_forest)
+    captured = capsys.readouterr()
+    with capsys.disabled():
+        assert "\n" + captured.out == """
+QDForest (6 vars):
+ - 3 roots (1+2*): U*, X*, Z
+ - 3 other nodes: V, W, Y
+
+U
+└─ V
+   └─ W
+
+X
+└─ Y
+
+"""
+    print("Columns in df: %s" % list(df.columns))
+
+    # fit a feature selection model
+    feat_selector = qd_forest.fit_selector_model(df)
+
+    # use it to filter...
+    only_important_features = feat_selector.remove_qd(df)
+    print("Columns in only_important_features: %s" % list(only_important_features.columns))
+
+    # or to restore/predict
+    restored_full_df = feat_selector.predict_qd(only_important_features)
+    print("Columns in restored_full_df: %s" % list(restored_full_df.columns))
+
+    # note that the order of columns differs frmo origin
+    pd.testing.assert_frame_equal(df, restored_full_df[df.columns])
+
+    captured = capsys.readouterr()
+    with capsys.disabled():
+        assert "\n" + captured.out == """
+Columns in df: ['U', 'V', 'W', 'X', 'Y', 'Z']
+Columns in only_important_features: ['U', 'X', 'Z']
+Columns in restored_full_df: ['U', 'X', 'Z', 'V', 'W', 'Y']
+"""
+
+
+def test_readme_quasi(capsys):
+    df = df_mix1()
+
+    # keep stats at the end of the screening
+    qd_forest = qd_screen(df, keep_stats=True)
+    print(qd_forest.stats)
+
+    captured = capsys.readouterr()
+    with capsys.disabled():
+        print(captured.out)
+        assert "\n" + captured.out == """
+Statistics computed for dataset:
+   U  V  W  X  Y  Z
+0  a  a  a  a  b  a
+1  b  b  b  a  b  a
+...(10 rows)
+
+Entropies (H):
+U    1.970951
+V    1.570951
+W    0.881291
+X    1.570951
+Y    1.570951
+Z    0.970951
+dtype: float64
+
+Conditional entropies (Hcond = H(row|col)):
+          U         V         W         X         Y         Z
+U  0.000000  0.400000  1.089660  0.875489  0.875489  1.475489
+V  0.000000  0.000000  0.689660  0.875489  0.875489  1.200000
+W  0.000000  0.000000  0.000000  0.875489  0.875489  0.875489
+X  0.475489  0.875489  1.565148  0.000000  0.000000  0.875489
+Y  0.475489  0.875489  1.565148  0.000000  0.000000  0.875489
+Z  0.475489  0.600000  0.965148  0.275489  0.275489  0.000000
+
+Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
+          U         V         W         X         Y         Z
+U  0.000000  0.202948  0.552860  0.444196  0.444196  0.748618
+V  0.000000  0.000000  0.439008  0.557299  0.557299  0.763869
+W  0.000000  0.000000  0.000000  0.993416  0.993416  0.993416
+X  0.302676  0.557299  0.996307  0.000000  0.000000  0.557299
+Y  0.302676  0.557299  0.996307  0.000000  0.000000  0.557299
+Z  0.489715  0.617951  0.994024  0.283731  0.283731  0.000000
+
+"""
+
+
 @pytest.mark.parametrize("input_type", ["pandas",
                                         "numpy_unstructured",
                                         # "numpy_structured", "numpy_recarray"
                                         ])
 def test_readme(input_type):
-    """A test with a complete scenario of what is implemented so far"""
+    """All variants that exist around the nominal scenario from the readme"""
 
     if input_type == "pandas":
         df_orig = data = df_mix1()
@@ -62,7 +158,7 @@ def test_readme(input_type):
     nb_vars = len(var_names)
 
     # check the stats, for debug
-    df_stats = Entropies(data)
+    # df_stats = Entropies(data)
 
     # Sklearn use case
     if input_type not in ("numpy_structured", "numpy_recarray"):
@@ -99,7 +195,7 @@ def test_readme(input_type):
     ref.loc['U', 'V'] = True
     ref.loc['V', 'W'] = True
     ref.loc['X', 'Y'] = True
-    qd_forest = qdeterscreen(data)
+    qd_forest = qd_screen(data)
     adj_mat = qd_forest.adjmat
     if input_type != "pandas":
         adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
@@ -136,13 +232,13 @@ def test_readme(input_type):
     # -- (a) forest
     ref.loc['X', 'Z'] = True
     # Z si threshold qd > 0.28 (absolu) ou 0.29 (relatif)
-    qd_forest = qdeterscreen(data, absolute_eps=0.28)
+    qd_forest = qd_screen(data, absolute_eps=0.28)
     adj_mat = qd_forest.adjmat
     if input_type != "pandas":
         adj_mat = pd.DataFrame(adj_mat, columns=var_names, index=var_names)
     pd.testing.assert_frame_equal(adj_mat, ref)
 
-    qd_forest = qdeterscreen(data, relative_eps=0.29)
+    qd_forest = qd_screen(data, relative_eps=0.29)
     adj_mat = qd_forest.adjmat
     if input_type != "pandas":
         assert isinstance(qd_forest.parents, np.ndarray)
