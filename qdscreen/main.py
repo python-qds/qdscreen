@@ -1,5 +1,3 @@
-from functools import partial
-
 import numpy as np
 import pandas as pd
 
@@ -102,10 +100,12 @@ class QDForest(object):
 
     @property
     def adjmat_ar(self):
+        """The adjacency matrix as a 2D numpy array"""
         return self.adjmat if self.is_nparray else  self.adjmat.values
 
     @property
     def adjmat(self):
+        """The adjacency matrix as a pandas DataFrame or a 2D numpy array"""
         if self._adjmat is None:
             # compute adjmat from parents.
             n = self.nb_vars
@@ -122,10 +122,12 @@ class QDForest(object):
 
     @property
     def parents_indices_ar(self):
+        """A numpy array containing the indices of all parent nodes"""
         return self.parents if self.is_nparray else self.parents['idx'].values
 
     @property
     def parents(self):
+        """A numpy array containing the indices of all parent nodes, or a pandas DataFrame containing 'idx' and 'name'"""
         if self._parents is None:
             # compute parents from adjmat, whether a dataframe or an array
             # TODO maybe use a sparse array here?
@@ -150,11 +152,12 @@ class QDForest(object):
 
     @property
     def roots_mask_ar(self):
+        """A 1D numpy mask array indicating if a node is a root node"""
         return self.roots_mask if self.is_nparray else self.roots_mask.values
 
     @property
     def roots_mask(self):
-        """Lazily computed roots"""
+        """A pandas Series or a 1D numpy mask array indicating if a node is a root node"""
         if self._roots_mask is None:
             if self._adjmat is not None:
                 self._roots_mask = ~self.adjmat.any(axis=0)
