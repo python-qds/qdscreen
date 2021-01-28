@@ -1,4 +1,4 @@
-from .main import Entropies, qdeterscreen, QDForest
+from .main import Entropies, qd_screen, QDForest
 from .selector import QDSSelector
 
 try:
@@ -17,5 +17,5 @@ __all__ = [
     # submodules
     'main', 'selector',
     # symbols
-    'Entropies', 'qdeterscreen', 'QDSSelector', 'QDForest'
+    'Entropies', 'qd_screen', 'QDSSelector', 'QDForest'
 ]

@@ -27,11 +27,13 @@ def _add_names_to_parents_idx_series(parents):
 
 
 class QDForest(object):
-    """A quasi-deterministic forest returned by `qdeterscreen`"""
-    __slots__ = ('_adjmat',   # a square numpy array or pandas DataFrame containing the adjacency matrix (parent->child)
-                 '_parents',  # a 1d np array or a pandas Series relating each child to its parent index or -1 if a root
-                 'is_nparray',  # a boolean indicating if this was built from numpy array (and not pandas dataframe)
-                 '_roots_mask', # a 1d np array or pd Series containing a boolean mask for root variables
+    """A quasi-deterministic forest returned by `qd_screen`"""
+    __slots__ = ('_adjmat',         # a square numpy array or pandas DataFrame containing the adjacency matrix (parent->child)
+                 '_parents',        # a 1d np array or a pandas Series relating each child to its parent index or -1 if a root
+                 'is_nparray',      # a boolean indicating if this was built from numpy array (and not pandas dataframe)
+                 '_roots_mask',     # a 1d np array or pd Series containing a boolean mask for root variables
+                 '_roots_wc_mask',  # a 1d np array or pd Series containing a boolean mask for root with children
+                 'stats'           # an optional `Entropies` object stored for debug
                  )
 
     def __init__(self,
@@ -54,6 +56,26 @@ class QDForest(object):
             self._parents = None
 
         self._roots_mask = None
+        self._roots_wc_mask = None
+
+    def assert_pandas_capable(self):
+        """Utility method to assert that "not self.is_nparray" """
+        if self.is_nparray:
+            raise ValueError("This QDForest instance was built with numpy arrays, it is not pandas compliant")
+
+    def assert_names_available(self):
+        """"""
+        if self.is_nparray:
+            raise ValueError("Variable names are not available")
+
+    def _validate_names_arg(self,
+                            names):
+        """Utility method to validate and set default value of the `names` argument used in most methods"""
+        if names is None:
+            names = not self.is_nparray
+        if names:
+            self.assert_names_available()
+        return names
 
     @property
     def nb_vars(self):
@@ -61,42 +83,35 @@ class QDForest(object):
 
     @property
     def varnames(self):
-        if self.is_nparray:
-            raise ValueError("Variable names not available")
+        self.assert_names_available()
         return np.array(self._adjmat.columns) if self._adjmat is not None else np.array(self._parents.index)
 
-    def get_children(self, node, is_node_idx=None, return_names=None):
-        """
-
-        :param node: if n
-        :return: an array containing indices of the child nodes
-        """
-        if is_node_idx is None:
-            is_node_idx = self.is_nparray
-        if return_names is None:
-            return_names = not self.is_nparray
-
-        if self.is_nparray:
-            return np.where(self.parents == node)[0]
+    def indices_to_mask(self,
+                        indices,
+                        in_names=None,
+                        out_names=None,
+                        ):
+        """Utility to convert a list of indices to a numpy or pandas mask"""
+        in_names = self._validate_names_arg(in_names)
+        out_names = self._validate_names_arg(out_names)
+        mask = np.zeros((self.nb_vars,), dtype=bool)
+        if out_names:
+            mask = pd.Series(mask, index=self.varnames, dtype=bool)
+        if in_names and not out_names:
+            # TODO
+            mask[self.varnames] = True
+        elif not in_names and out_names:
+            mask.iloc[indices] = True
         else:
-            qcol = 'idx' if is_node_idx else 'name'
-            if not return_names:
-                return np.where(self.parents[qcol] == node)[0]
-            else:
-                return self.parents[self.parents[qcol] == node].index.values
+            mask[indices] = True
+        return mask
 
-    def get_arcs(self, multiindex=False, names=None):
-        """
-
-        :param names:
-        :return:
-        """
-        if names is None:
-            names = not self.is_nparray
-        if self._adjmat is not None:
-            return get_arcs_from_adjmat(self._adjmat, multiindex=multiindex, names=names)
+    def mask_to_indices(self, mask):
+        """Utili"""
+        if isinstance(mask, np.ndarray):
+            return np.where(mask)
         else:
-            return get_arcs_from_parents_indices(self._parents, multiindex=multiindex, names=names)
+            return mask[mask].index
 
     @property
     def adjmat_ar(self):
@@ -139,18 +154,6 @@ class QDForest(object):
         return self._parents
 
     @property
-    def roots_ar(self):
-        return np.where(self.roots_mask_ar)[0]
-
-    @property
-    def roots(self):
-        """"""
-        if self.is_nparray:
-            return self.roots_ar
-        else:
-            return self.roots_mask.index[self.roots_mask]
-
-    @property
     def roots_mask_ar(self):
         """A 1D numpy mask array indicating if a node is a root node"""
         return self.roots_mask if self.is_nparray else self.roots_mask.values
@@ -163,26 +166,332 @@ class QDForest(object):
                 self._roots_mask = ~self.adjmat.any(axis=0)
             else:
                 self._roots_mask = (self.parents if self.is_nparray else self.parents['idx']) < 0
+                if not self.is_nparray:
+                    # remove the name of the series
+                    self._roots_mask.name = None
         return self._roots_mask
 
-    def walk_arcs(self, return_names=None):
-        """yields a sequence of (parent, child) indices or names"""
+    @property
+    def roots_ar(self):
+        """A 1D numpy array of root indices"""
+        return np.where(self.roots_mask_ar)[0]
 
-        if return_names is None:
-            return_names = not self.is_nparray
+    @property
+    def roots(self):
+        """A pandas Series of root names or 1D numpy array of root indices"""
+        if self.is_nparray:
+            return self.roots_ar
+        else:
+            return self.roots_mask.index[self.roots_mask]
 
-        get_children = partial(self.get_children, is_node_idx=not return_names, return_names=return_names)
+    def get_roots(self,
+                  names=None  # type: bool
+                  ):
+        """
+        Returns the list of root indices or root names
 
-        def _walk(from_node):
+        :param names: an optional boolean indicating if this method should return names instead of indices. By
+            default `names` is set to `not self.is_np`
+        :return:
+        """
+        names = self._validate_names_arg(names)
+        return list(self.roots) if names else list(self.roots_ar)
+
+    @property
+    def non_roots_ar(self):
+        """A 1D numpy array of non-root indices"""
+        return np.where(~self.roots_mask_ar)[0]
+
+    @property
+    def non_roots(self):
+        """A pandas Series of non-root names or 1D numpy array of non-root indices"""
+        if self.is_nparray:
+            return self.non_roots_ar
+        else:
+            return self.roots_mask.index[~self.roots_mask]
+
+    def get_non_roots(self,
+                      names=None  # type: bool
+                      ):
+        """
+        Returns the list of non-root indices or names
+
+        :param names: an optional boolean indicating if this method should return names instead of indices. By
+            default `names` is set to `not self.is_np`
+        :return:
+        """
+        names = self._validate_names_arg(names)
+        return list(self.non_roots) if names else list(self.non_roots_ar)
+
+    @property
+    def nodes_with_children_mask_ar(self):
+        """A 1D numpy mask array indicating nodes that have at least 1 child"""
+        return self.nodes_with_children_mask if self.is_nparray else self.nodes_with_children_mask.values
+
+    @property
+    def nodes_with_children_mask(self):
+        """A pandas Series or 1D numpy array indicating nodes that have at least 1 child"""
+        if self._adjmat is not None:
+            return self._adjmat.any(axis=1)
+        else:
+            nwc_idx = np.unique(self.parents_indices_ar[self.parents_indices_ar >= 0])
+            return self.indices_to_mask(nwc_idx)
+
+    @property
+    def roots_with_children_mask_ar(self):
+        """A 1D numpy mask array indicating root nodes that have at least 1 child"""
+        return self.roots_with_children_mask if self.is_nparray else self.roots_with_children_mask.values
+
+    @property
+    def roots_with_children_mask(self):
+        """A pandas Series or 1D numpy mask array indicating root nodes that have at least 1 child"""
+        if self._roots_wc_mask is None:
+            if self._adjmat is not None:
+                # a root with children = a root AND a node with children
+                self._roots_wc_mask = self._roots_mask & self.nodes_with_children_mask
+            else:
+                # a root with children = a parent of a level 1 child node
+                level_1_nodes_mask = ((self.parents_indices_ar >= 0)
+                                      & (self.parents_indices_ar[self.parents_indices_ar] == -1))
+                rwc_indices = np.unique(self.parents_indices_ar[level_1_nodes_mask])
+                self._roots_wc_mask = self.indices_to_mask(rwc_indices, in_names=False, out_names=not self.is_nparray)
+        return self._roots_wc_mask
+
+    @property
+    def roots_with_children_ar(self):
+        """A 1D numpy array with the indices of root nodes that have at least 1 child"""
+        return np.where(self.roots_with_children_mask_ar)[0]
+
+    @property
+    def roots_with_children(self):
+        """A pandas Series or 1D numpy array with names/indices of root nodes that have at least 1 child"""
+        if self.is_nparray:
+            return self.roots_with_children_ar
+        else:
+            return self.roots_with_children_mask.index[self.roots_with_children_mask]
+
+    def get_roots_with_children(self,
+                                names=None  # type: bool
+                                ):
+        """
+        Returns the list of root with children
+
+        :param names: an optional boolean indicating if this method should return names instead of indices. By
+            default `names` is set to `not self.is_np`
+        :return:
+        """
+        names = self._validate_names_arg(names)
+        return list(self.roots_with_children) if names else list(self.roots_with_children_ar)
+
+    def get_children(self,
+                     parent_idx=None,   # type: int
+                     parent_name=None,  # type: str
+                     names=None         # type: bool
+                     ):
+        """
+        Returns the list of children of a node
+
+        :param parent_idx: the index of the node to query for
+        :param parent_name: the name of the node to query for
+        :param names: a boolean to indicate if the returned children should be identified by their names (`True`) or
+            indices (`False`). By default if the parent is identified with `parent_idx` indices will be returned (`False`),
+            and if the parent is identified with parent_name names will be returned (`True`)
+        :return: an array containing indices of the child nodes
+        """
+
+        if parent_idx is not None:
+            if parent_name is not None:
+                raise ValueError("Only one of `parent_idx` and `parent_name` should be provided")
+            node = parent_idx
+            if names is None:
+                names = False
+        elif parent_name is not None:
+            node = parent_name
+            if names is None:
+                names = True
+            self.assert_names_available()
+        else:
+            raise ValueError("You should provide a non-None `parent_idx` or `parent_name`")
+
+        if self.is_nparray:
+            return np.where(self.parents == node)[0]
+        else:
+            qcol = 'idx' if parent_idx is not None else 'name'
+            if not names:
+                return np.where(self.parents[qcol] == node)[0]
+            else:
+                return self.parents[self.parents[qcol] == node].index.values
+
+    def get_arcs(self,
+                 multiindex=False,  # type: bool
+                 names=None         # type: bool
+                 ):
+        # type: (...) -> Union[Iterable[Tuple[int, int]], Iterable[Tuple[str, str]], Tuple[Iterable[int], Iterable[int]], Tuple[Iterable[str], Iterable[str]]]
+        """
+        Return the arcs of an adjacency matrix, an iterable of (parent, child) indices or names
+
+        If 'multiindex' is True instead of returning an iterable of (parent, child), it returns a tuple of iterables
+        (all the parents, all the childs).
+
+        :param A:
+        :param multiindex: if this is True, a 2-tuple of iterable is returned instead of an iterable of 2-tuples
+        :param names: an optional boolean indicating if this method should return names instead of indices. By
+            default `names` is set to `not self.is_np`
+        :return:
+        """
+        names = self._validate_names_arg(names)
+        if self._adjmat is not None:
+            return get_arcs_from_adjmat(self._adjmat, multiindex=multiindex, names=names)
+        else:
+            return get_arcs_from_parents_indices(self._parents, multiindex=multiindex, names=names)
+
+    def walk_arcs(self,
+                  parent_idx=None,     # type: int
+                  parent_name=None,    # type: str
+                  names=None           # type: bool
+                  ):
+        """
+        Yields a sequence of (parent, child) indices or names. As opposed to `get_arcs` the sequence follows the tree
+        order: starting from the list of root nodes, for every node, it is returned first and then all of its children.
+        (depth first, not breadth first)
+
+        :param parent_idx: the optional index of a node. If provided, only the subtree behind this node will be walked
+        :param parent_name: the optional name of a node. If provided, only the subtree behind this node will be walked
+        :param names: an optional boolean indicating if this method should return names instead of indices. By
+            default `names` is set to `not self.is_np`
+        :return: yields a sequence of (level, i, j)
+        """
+        names = self._validate_names_arg(names)
+        if names:
+            get_children = lambda node: self.get_children(parent_name=node)
+        else:
+            get_children = lambda node: self.get_children(parent_idx=node)
+
+        def _walk(from_node, level):
             for child in get_children(from_node):
-                yield from_node, child
-                for i, j in _walk(child):
-                    yield i, j
+                yield level, from_node, child
+                for l, i, j in _walk(child, level+1):
+                    yield l, i, j
 
-        for n in (self.roots if return_names else self.roots_ar):
+        if parent_idx is not None:
+            if parent_name is not None:
+                raise ValueError("Only one of `parent_idx` and `parent_name` should be provided")
+            root_nodes = (parent_idx,) if not names else (self.parents.index[parent_idx],)
+        elif parent_name is not None:
+            root_nodes = (parent_name,)
+        else:
+            root_nodes = (self.roots if names else self.roots_ar)
+
+        for n in root_nodes:
             # walk the subtree
-            for i, j in _walk(n):
-                yield i, j
+            for level, i, j in _walk(n, level=0):
+                yield level, i, j
+
+    # ------- display methods
+
+    def to_str(self,
+               names=None,  # type: bool
+               mode="headers"  # type: str
+               ):
+        """
+        Provides a string representation of this forest.
+
+        :param names: an optional boolean indicating if this method should return names instead of indices. By
+            default `names` is set to `not self.is_np`
+        :param mode: one of "compact", "headers", and "full" (displays the trees)
+        :return:
+        """
+        names = self._validate_names_arg(names)
+        nb_vars = self.nb_vars
+        roots = self.get_roots(names)
+        non_roots = self.get_non_roots(names)
+        nb_roots = len(roots)
+        nb_arcs = nb_vars - nb_roots
+
+        roots_with_children = self.get_roots_with_children(names)
+        nb_roots_with_children = len(roots_with_children)
+
+        nb_sole_roots = (nb_roots - nb_roots_with_children)
+
+        if mode == "compact":
+            return "QDForest (%s vars = %s roots + %s determined by %s of the roots)" \
+                   % (nb_vars, nb_roots, nb_arcs, nb_roots_with_children)
+
+        # list of root node indice/name with a star when they have children
+        roots_str = [("%s*" if r in roots_with_children else "%s") % r for r in roots]
+        # list of
+        non_roots_str = ["%s" % r for r in non_roots]
+
+        headers = "\n".join((
+                "QDForest (%s vars):" % nb_vars,
+                " - %s roots (%s+%s*): %s" % (nb_roots, nb_sole_roots, nb_roots_with_children, ", ".join(roots_str)),
+                " - %s other nodes: %s" % (nb_arcs, ", ".join(non_roots_str)),
+        ))
+        if mode == "headers":
+            return headers
+        elif mode == "full":
+            tree_str = "\n".join(self.get_trees_str_list())
+            return "%s\n\n%s" % (headers, tree_str)
+        else:
+            raise ValueError("Unknown mode: %r" % mode)
+
+    def __str__(self):
+        return repr(self)
+
+    def __repr__(self):
+        """ String representation, listing all useful information when available """
+        if self.nb_vars > 30:
+            return self.to_str(mode="headers")
+        else:
+            return self.to_str(mode="full")
+
+    def print_arcs(self,
+                   names=None  # type: bool
+                   ):
+        """ Prints the various deterministic arcs in this forest """
+        print("\n".join(self.get_arcs_str_list(names=names)))
+
+    def get_arcs_str_list(self,
+                          names=None  # type: bool
+                          ):
+        """ Returns a list of string representation of the various deterministic arcs in this forest """
+        res_str_list = []
+        for parent, child in self.get_arcs(names=names):
+            res_str_list.append("%s -> %s" % (parent, child))
+        return res_str_list
+
+    def get_trees_str_list(self,
+                           all=False,
+                           names=None  # type: bool
+                           ):
+        """
+        Returns a list of string representation of the various trees in this forest
+        TODO maybe use https://github.com/caesar0301/treelib ? Or networkX ?
+
+        :param all: if True, this will return also the trees that are consistuted of one node
+        :param names:
+        :return:
+        """
+        names = self._validate_names_arg(names)
+        res_str_list = []
+        if all:
+            roots = self.get_roots(names)
+        else:
+            roots = self.get_roots_with_children(names)
+
+        if names:
+            walk_arcs = lambda n: self.walk_arcs(parent_name=n)
+        else:
+            walk_arcs = lambda n: self.walk_arcs(parent_idx=n)
+
+        for r in roots:
+            subtree_str = "%s" % r
+            for level, _, j in walk_arcs(r):
+                subtree_str += "\n%s└─ %s" % ("   " * level, j)
+            res_str_list.append(subtree_str + "\n")
+        return res_str_list
+
+    # -----------
 
     def fit_selector_model(self,
                            X  # type: Union[np.ndarray, pd.DataFrame]
@@ -200,10 +509,11 @@ class QDForest(object):
         return model
 
 
-def qdeterscreen(X,                  # type: Union[pd.DataFrame, np.ndarray]
-                 absolute_eps=None,  # type: float
-                 relative_eps=None,  # type: float
-                 ):
+def qd_screen(X,  # type: Union[pd.DataFrame, np.ndarray]
+              absolute_eps=None,  # type: float
+              relative_eps=None,  # type: float
+              keep_stats=False
+              ):
     # type: (...) -> QDForest
     """
     Finds the (quasi-)deterministic relationships between the variables in X, and returns the adjacency matrix of the
@@ -265,7 +575,7 @@ def qdeterscreen(X,                  # type: Union[pd.DataFrame, np.ndarray]
     parents = to_forest_parents_indices(A_noredundancy, entropy_order_inc)
     # if not X_stats.is_nparray:
     #     parents = pd.Series(parents, index=A_noredundancy.columns)
-    qd_forest = QDForest(parents=parents)
+    qd_forest = QDForest(parents=parents, stats=X_stats if keep_stats else None)
 
     # forestAdjMatList <- FromHToDeterForestAdjMat(H = H, criterion = criterionNlevels, removePerfectMatchingCol = removePerfectMatchingCol)
 
@@ -322,6 +632,25 @@ class Entropies(object):
         self._Hcond_rel = None   # type: Union[np.ndarray, pd.DataFrame]
         self._dataset_df = None  # type: pd.DataFrame
 
+    def __str__(self):
+        return repr(self)
+
+    def __repr__(self):
+        res = """Statistics computed for dataset:
+%s
+...(%s rows)
+
+Entropies (H):
+%s
+
+Conditional entropies (Hcond = H(row|col)):
+%s
+
+Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
+%s
+""" % (self.dataset.head(2), len(self.dataset), self.H.T, self.Hcond, self.Hcond_rel)
+        return res
+
     @property
     def dataset_df(self):
         """The dataset as a pandas DataFrame, if pandas is available"""
@@ -331,7 +660,7 @@ class Entropies(object):
                 # structured array
                 self._dataset_df = pd.DataFrame(self.dataset)
             else:
-                # unstructured array
+                # unstructured array... same ?
                 self._dataset_df = pd.DataFrame(self.dataset)
             return self._dataset_df
         else:
@@ -627,19 +956,24 @@ def get_arcs_from_parents_indices(parents,           # type: Union[np.ndarray, p
     :param names:
     :return:
     """
+    is_np_array = isinstance(parents, np.ndarray)
     if not names:
+        if not is_np_array:
+            # assume a dataframe with an 'idx' column as in QDForest class
+            parents = parents['idx'].values
         n = len(parents)
         childs_mask = parents >= 0
         res = parents[childs_mask], np.arange(n)[childs_mask]
         return res if multiindex else zip(*res)
     else:
-        # is_np_array = isinstance(A, np.ndarray)
-        # if is_np_array:
-        #     raise NotImplementedError()
-        # else:
-        #     cols = A.columns
-        #     return ((cols[i], cols[j]) for i, j in zip(*np.where(A)))
-        raise NotImplementedError()
+        if is_np_array:
+            raise ValueError("Names are not available, this is a numpy array")
+        else:
+            #     cols = A.columns
+            #     return ((cols[i], cols[j]) for i, j in zip(*np.where(A)))
+            res = parents.loc[parents['name'].notna(), 'name']
+            res = res.values, res.index
+            return res if multiindex else zip(*res)
 
 
 def get_arcs_from_adjmat(A,                 # type: Union[np.ndarray, pd.DataFrame]
@@ -664,12 +998,12 @@ def get_arcs_from_adjmat(A,                 # type: Union[np.ndarray, pd.DataFra
     else:
         is_np_array = isinstance(A, np.ndarray)
         if is_np_array:
-            raise NotImplementedError()
+            raise ValueError("Names are not available, this is a numpy array")
         else:
             cols = A.columns
             res_ar = np.where(A)
             if multiindex:
-                return ((cols[i] for i in l) for l in res_ar)
+                return ((cols[i] for i in l) for l in res_ar)  # noqa
             else:
                 return ((cols[i], cols[j]) for i, j in zip(*res_ar))
 
