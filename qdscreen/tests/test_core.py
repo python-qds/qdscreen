@@ -109,33 +109,151 @@ def test_remove_redundancies():
 #     df2 = identify_redundancy(adj_df)
 
 
-@pytest.mark.parametrize("is_np", [True, False])
-def test_qd_forest(is_np):
-    """Tests that QDForest works correctly whether created from adj matrix or parents list"""
+def get_qd_forest1(is_np):
+    """
+    Created a forest with two trees 3->5 and 9->(1,7)
 
-    # reference matrices: a forest with two trees 3->5 and 9->(1,7)
+    :param is_np: if true
+    :return:
+    """
     adjmat_ar = adjmat = np.zeros((10, 10), dtype=bool)
+    adjmat[1, 8] = True
     adjmat[3, 5] = True
     adjmat[9, 1] = True
     adjmat[9, 7] = True
-    parents_ar = parents = -np.ones((10,), dtype=np.int64)  # indeed computing parents from adjmat with np.where returns this dtype
+
+    parents_ar = parents = -np.ones((10,),
+                                    dtype=np.int64)  # indeed computing parents from adjmat with np.where returns this dtype
     parents[5] = 3
     parents[1] = 9
     parents[7] = 9
+    parents[8] = 1
+
+    roots_ar = roots = np.array([0, 2, 3, 4, 6, 9])
+    roots_wc_ar = roots_wc = np.array([3, 9])
+
     if not is_np:
         varnames = list("abcdefghij")
         adjmat = pd.DataFrame(adjmat_ar, columns=varnames, index=varnames)
         parents = pd.DataFrame(parents_ar, index=varnames, columns=('idx',))
         parents['name'] = parents.index[parents['idx']].where(parents['idx'] >= 0, None)
+        roots = np.array(varnames)[roots_ar]
+        roots_wc = np.array(varnames)[roots_wc_ar]
 
-    # a forest created from the adj matrix
-    qd1 = QDForest(adjmat=adjmat)
+    return adjmat, adjmat_ar, parents, parents_ar, roots, roots_ar, roots_wc, roots_wc_ar
+
+
+@pytest.mark.parametrize("from_adjmat", [True, False], ids="from_adjmat={}".format)
+@pytest.mark.parametrize("is_np", [True, False], ids="is_np={}".format)
+def test_qd_forest(is_np, from_adjmat):
+    """Tests that QDForest works correctly whether created from adj matrix or parents list"""
+
+    adjmat, adjmat_ar, parents, parents_ar, roots, roots_ar, roots_wc, roots_wc_ar = get_qd_forest1(is_np)
+
+    if from_adjmat:
+        qd1 = QDForest(adjmat=adjmat)  # a forest created from the adj matrix
+    else:
+        qd1 = QDForest(parents=parents)  # a forest created from the parents coordinates
+
+    # roots
+    assert qd1.get_roots(names=False) == list(roots_ar)
+    np.testing.assert_array_equal(qd1.indices_to_mask(roots_ar), qd1.roots_mask_ar)
+    assert qd1.get_roots_with_children(names=False) == list(roots_wc_ar)
+    if not is_np:
+        pd.testing.assert_series_equal(qd1.indices_to_mask(roots), qd1.roots_mask)
+        assert qd1.get_roots(names=True) == list(roots)
+        assert qd1.get_roots_with_children(names=True) == list(roots_wc)
+    else:
+        with pytest.raises(ValueError):
+            qd1.get_roots(names=True)
+        with pytest.raises(ValueError):
+            qd1.get_roots_with_children(names=True)
+    # default
+    assert qd1.get_roots() == qd1.get_roots(names=not is_np)
+    assert qd1.get_roots_with_children() == qd1.get_roots_with_children(names=not is_np)
+
+    # string representation of arcs
+    # -- indices
+    if from_adjmat:
+        assert qd1.get_arcs_str_list(names=False) == ['1 -> 8', '3 -> 5', '9 -> 1', '9 -> 7']
+    else:
+        # make sure the adj matrix was not computed automatically, to test the right method
+        assert qd1._adjmat is None
+        # TODO order is not the same as above, see https://github.com/python-qds/qdscreen/issues/9
+        assert qd1.get_arcs_str_list(names=False) == ['9 -> 1', '3 -> 5', '9 -> 7', '1 -> 8']
+    # -- names
+    if not is_np:
+        if from_adjmat:
+            assert qd1.get_arcs_str_list(names=True) == ['b -> i', 'd -> f', 'j -> b', 'j -> h']
+        else:
+            # make sure the adj matrix was not computed automatically, to test the right method
+            assert qd1._adjmat is None
+            # TODO order is not the same as above, see https://github.com/python-qds/qdscreen/issues/9
+            assert qd1.get_arcs_str_list(names=True) == ['j -> b', 'd -> f', 'j -> h', 'b -> i']
+    else:
+        with pytest.raises(ValueError):
+            qd1.get_arcs_str_list(names=True)
+    # check the default value of `names`
+    assert qd1.get_arcs_str_list() == qd1.get_arcs_str_list(names=not is_np)
+
+    # equivalent adjmat and parents computation, to be sure
     np.testing.assert_array_equal(qd1.parents_indices_ar, parents_ar)
     if not is_np:
         pd.testing.assert_frame_equal(qd1.parents, parents)
 
-    # a forest created from the parents coordinates
-    qd2 = QDForest(parents=parents)
-    np.testing.assert_array_equal(qd2.adjmat_ar, adjmat_ar)
+    # equivalent adjmat computation, to be sure
+    np.testing.assert_array_equal(qd1.adjmat_ar, adjmat_ar)
     if not is_np:
         pd.testing.assert_frame_equal(qd1.adjmat, adjmat)
+
+
+@pytest.mark.parametrize("from_adjmat", [True, False])
+@pytest.mark.parametrize("is_np", [True, False])
+def test_qd_forest_str(is_np, from_adjmat):
+    """Tests the string representation """
+
+    adjmat, adjmat_ar, parents, parents_ar, roots, roots_ar, roots_wc, roots_wc_ar = get_qd_forest1(is_np)
+
+    if from_adjmat:
+        qd1 = QDForest(adjmat=adjmat)  # a forest created from the adj matrix
+    else:
+        qd1 = QDForest(parents=parents)  # a forest created from the parents coordinates
+
+    # string representation
+    compact_str = qd1.to_str(mode="compact")
+    assert compact_str == "QDForest (10 vars = 6 roots + 4 determined by 2 of the roots)"
+
+    roots_str = "0, 2, 3*, 4, 6, 9*" if is_np else "a, c, d*, e, g, j*"
+    others_str = "1, 5, 7, 8" if is_np else "b, f, h, i"
+    headers_str = qd1.to_str(mode="headers")
+    assert headers_str == """QDForest (10 vars):
+ - 6 roots (4+2*): %s
+ - 4 other nodes: %s""" % (roots_str, others_str)
+    # this should be the default
+    assert qd1.to_str() == headers_str
+
+    trees_str = "\n" + "\n".join(qd1.get_trees_str_list())
+    if is_np:
+        assert trees_str == """
+3
+└─ 5
+
+9
+└─ 1
+   └─ 8
+└─ 7
+"""
+    else:
+        assert trees_str == """
+d
+└─ f
+
+j
+└─ b
+   └─ i
+└─ h
+"""
+    full_str = qd1.to_str(mode="full")
+    assert full_str == headers_str + "\n" + trees_str
+    # this should be the default string representation if the nb vars is small enough
+    assert full_str == str(qd1)
