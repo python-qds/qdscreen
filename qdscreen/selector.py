@@ -8,7 +8,7 @@ except:  # noqa
     pass
 
 from .compat import SelectorMixin, BaseEstimator, NotFittedError
-from .main import qdeterscreen, QDForest
+from .main import qd_screen, QDForest
 
 
 class QDSelectorModel(object):
@@ -174,7 +174,7 @@ class QDSelectorModel(object):
                                      "is the default behaviour of inplace.")
 
             # walk the tree from the roots
-            for parent, child in forest.walk_arcs():
+            for _, parent, child in forest.walk_arcs():
                 # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
                 X[:, child] = np.vectorize(self._maps[parent, child].__getitem__)(X[:, parent])
         else:
@@ -183,7 +183,7 @@ class QDSelectorModel(object):
 
             # walk the tree from the roots
             varnames = forest.varnames
-            for parent, child in forest.walk_arcs(return_names=False):
+            for _, parent, child in forest.walk_arcs(names=False):
                 # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
                 X.loc[:, varnames[child]] = np.vectorize(self._maps[parent, child].__getitem__)(X.loc[:, varnames[parent]])
 
@@ -268,7 +268,7 @@ class QDSSelector(SelectorMixin, BaseEstimator):
         # else:
 
         # First find the forest structure
-        forest_ = qdeterscreen(X, absolute_eps=self.absolute_eps, relative_eps=self.relative_eps)
+        forest_ = qd_screen(X, absolute_eps=self.absolute_eps, relative_eps=self.relative_eps)
 
         # Then learn the parameter maps
         self.model_ = forest_.fit_selector_model(X)
