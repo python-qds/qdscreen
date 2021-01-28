@@ -10,7 +10,7 @@
       
       
       <link rel="shortcut icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.5">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.6">
     
     
       
@@ -18,10 +18,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.15aa0b43.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.cb6bc1d0.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.75751829.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.39b8e14a.min.css">
         
       
     
@@ -192,7 +192,6 @@
       
       
 
-
   
   
     
@@ -287,7 +286,6 @@
       
       
 
-
   
   
   
@@ -302,7 +300,6 @@
       
       
       
-
 
   
   
@@ -410,10 +407,8 @@
 <p><a href="https://python-qds.github.io/qdscreen/"><img alt="Documentation" src="https://img.shields.io/badge/doc-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/qdscreen/"><img alt="PyPI" src="https://img.shields.io/pypi/v/qdscreen.svg" /></a> <a href="https://pepy.tech/project/qdscreen"><img alt="Downloads" src="https://pepy.tech/badge/qdscreen" /></a> <a href="https://pepy.tech/project/qdscreen"><img alt="Downloads per week" src="https://pepy.tech/badge/qdscreen/week" /></a> <a href="https://github.com/python-qds/qdscreen/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/python-qds/qdscreen.svg" /></a></p>
 <p><code>qdscreen</code> provides a python implementation of the Quasi-determinism screening algorithm (also known as <code>qds-BNSL</code>) from T.Rahier's PhD thesis, 2018.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code>&gt; pip install qdscreen
+<div class="highlight"><pre><span></span><code>&gt; pip install qdscreen
 </code></pre></div>
-
-
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>TODO</p>
 <h2 id="main-features-benefits">Main features / benefits<a class="headerlink" href="#main-features-benefits" title="Permanent link">&para;</a></h2>
@@ -432,10 +427,26 @@
 </ul>
 </li>
 <li>
+<p>Functional dependencies libraries in python:</p>
+<ul>
+<li><a href="https://github.com/anonexp/fd_miner"><code>fd_miner</code></a>, an algorithm that was used in <a href="https://hal.archives-ouvertes.fr/hal-01856516/document">this paper</a>. The repository contains a list of reference datasets too.</li>
+<li><a href="https://github.com/USEPA/FDTool"><code>FDTool</code></a> a python 2 algorithm to mine for functional dependencies, equivalences and candidate keys. From <a href="https://f1000research.com/articles/7-1667">this paper</a>.</li>
+<li><a href="https://github.com/amrith/functional-dependencies"><code>functional-dependencies</code></a></li>
+<li><a href="https://github.com/gustavclausen/functional-dependency-finder"><code>functional-dependency-finder</code></a> connects to a MySQL db and finds functional dependencies.</li>
+</ul>
+</li>
+<li>
 <p>Other libs for probabilistic inference:</p>
 <ul>
 <li><a href="https://github.com/michaelnowotny/pyjags"><code>pyjags</code></a> (GPLv2 license)</li>
 <li><a href="http://edwardlib.org/"><code>edward</code></a> (Apache License, Version 2.0)</li>
+</ul>
+</li>
+<li>
+<p>Stackoverflow discussions:</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/2157531/python-code-for-determining-which-normal-form-tabular-data-is-in">detecting normal forms</a></li>
+<li><a href="https://stackoverflow.com/questions/2822809/program-to-find-canonical-cover-or-minimum-number-of-functional-dependencies">canonical cover</a></li>
 </ul>
 </li>
 </ul>
@@ -495,15 +506,15 @@
       
     </div>
     
-      <script src="assets/javascripts/vendor.93c04032.min.js"></script>
-      <script src="assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.config.lang": "en", "search.config.separator": "[\\s\\-]+", "search.result.term.missing": "Missing", "search.result.placeholder": "Type to start searching", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "clipboard.copy": "Copy to clipboard", "search.result.more.other": "# more on this page", "search.config.pipeline": "trimmer, stopWordFilter", "clipboard.copied": "Copied to clipboard", "search.placeholder": "Search"}</script>
+      <script src="assets/javascripts/vendor.53cc9318.min.js"></script>
+      <script src="assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: ".",
           features: [],
           search: Object.assign({
-            worker: "assets/javascripts/worker/search.8c7e0a7e.min.js"
+            worker: "assets/javascripts/worker/search.9c0e82ba.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
