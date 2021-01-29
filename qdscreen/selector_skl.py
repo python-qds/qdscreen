@@ -1,9 +1,8 @@
 import numpy as np
 
-from sklearn.feature_selection import SelectorMixin
-from sklearn.base import BaseEstimator, check_array
 from sklearn.exceptions import NotFittedError
 
+from .compat import BaseEstimator, SelectorMixin
 from .main import qd_screen
 
 
