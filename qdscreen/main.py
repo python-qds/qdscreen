@@ -566,7 +566,7 @@ def qd_screen(X,  # type: Union[pd.DataFrame, np.ndarray]
     A_orig, X_stats = get_adjacency_matrix(X, eps_absolute=absolute_eps, eps_relative=relative_eps)
 
     # (2) identify redundancy
-    A_noredundancy = remove_redundancies(A_orig, selection_order=None if is_strict else X_stats.entropy_order_desc)
+    A_noredundancy = remove_redundancies(A_orig, selection_order=None if is_strict else X_stats.list_vars_by_entropy_order(desc=True))
 
     # (3) transform into forest: remove extra parents by keeping only the parent with lowest entropy / nb levels ?
     # if X -> Z and X -> Y and Y -> Z then Z has two parents X and Y but only Y should be kept
@@ -685,6 +685,9 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
         """ The entropy matrix (i, j) = H(Xi | Xj) as a numpy array """
         return self.H if self.is_nparray else self.H.values
 
+    entropies_ar = H_ar
+    """An alias for H_ar"""
+
     @property
     def H(self):
         """The entropies of all variables. a pandas Series if df was a pandas dataframe, else a 1D numpy array"""
@@ -699,10 +702,16 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
             assert np.all(self._H >= 0)
         return self._H
 
+    entropies = H
+    """An alias for H"""
+
     @property
     def Hcond_ar(self):
         """ The conditional entropy matrix (i, j) = H(Xi | Xj) as a numpy array """
         return self.Hcond if self.is_nparray else self.Hcond.values
+
+    conditional_entropies_ar = Hcond_ar
+    """An alias for Hcond_ar"""
 
     @property
     def Hcond(self):
@@ -730,10 +739,16 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
             assert np.all(self._Hcond >= 0)
         return self._Hcond
 
+    conditional_entropies = Hcond
+    """An alias for Hcond"""
+
     @property
     def Hcond_rel_ar(self):
         """ The relative conditional entropy matrix (i, j) = H(Xi | Xj) / H(Xi) as a numpy array """
         return self.Hcond_rel if self.is_nparray else self.Hcond_rel.values
+
+    relative_conditional_entropies_ar = Hcond_rel_ar
+    """An alias for Hcond_rel_ar"""
 
     @property
     def Hcond_rel(self):
@@ -753,12 +768,20 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
             assert np.all(self._Hcond_rel <= 1.)
         return self._Hcond_rel
 
-    @property
-    def entropy_order_desc(self):
+    relative_conditional_entropies = Hcond_rel
+    """An alias for Hcond_rel"""
+
+    def list_vars_by_entropy_order(self, desc=False):
+        """
+        Returns the indices or names of variables in ascending (resp. descending) order of entropy
+
+        :param desc: if True the order is descending, else ascending
+        :return:
+        """
         if self.is_nparray:
-            return (-self.H).argsort()
+            return (-self.H).argsort() if desc else self.H.argsort()
         else:
-            return (-self.H.values).argsort()
+            return (-self.H.values).argsort() if desc else self.H.values.argsort()
 
     @property
     def entropy_order_asc(self):
