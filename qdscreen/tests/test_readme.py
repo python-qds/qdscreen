@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # note that the above encoding declaration is needed for `get_trees_str_list`
+from __future__ import unicode_literals    # at top of module
 import numpy as np
 import pandas as pd
 import pytest
@@ -23,6 +24,14 @@ def df_mix1():
     # H(Y|X) = H(X|Y) = 0                                # Y <-> X but X selected as representant as 1st appearing
     # H(Z|Y) = H(Z|X) = 0.275 AND H(Z|Y) / H(Z) = 0.284  # X -> Z if qd threshold > 0.19 (absolute) or 0.28 (relative)
     return df
+
+
+def test_encoding(capsys):
+    """A small test to be sure we can compare the tree text characters correctly"""
+    print("└─")
+    captured = capsys.readouterr()
+    with capsys.disabled():
+        assert captured.out == "└─\n"
 
 
 def test_readme_simple(capsys):
