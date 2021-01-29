@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # note that the above encoding declaration is needed for `get_trees_str_list`
+from __future__ import unicode_literals
 import numpy as np
 import pandas as pd
 import pytest
