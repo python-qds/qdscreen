@@ -8,7 +8,7 @@ matrix:
     - name: "Python 2.7 pyitlib latest"
       python: 2.7
       # env: PYITLIB_VERSION="==0.29"
-    - name: "Python 3.5 pyitlib latest + GH Docs + GH release + PyPi"
+    - name: "Python 3.5 pyitlib latest"
       python: 3.5
       # env: PYITLIB_VERSION=""
     - name: "Python 3.6 pyitlib latest"
@@ -65,7 +65,7 @@ after_success:
   - codecov
   # - pylint qdscreen  # at the moment the report would be simply lost, we dont transform the result into anything
   # ***documentation***
-  - mkdocs build -f docs/mkdocs.yml
+  #- mkdocs build -f docs/mkdocs.yml
   - mv reports/junit docs/  # not in site/ anymore so that we do not need to use --dirty (it breaks client-side search)
   # mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
