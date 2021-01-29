@@ -50,7 +50,8 @@ def test_readme_simple(capsys):
     print(qd_forest)
     captured = capsys.readouterr()
     with capsys.disabled():
-        assert "\n" + captured.out == """
+        # note the u for unicode string in py2, see test_encoding
+        assert "\n" + captured.out == u"""
 QDForest (6 vars):
  - 3 roots (1+2*): U*, X*, Z
  - 3 other nodes: V, W, Y
