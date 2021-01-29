@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# note that the above encoding declaration is needed for `get_trees_str_list`
 import numpy as np
 import pandas as pd
 
