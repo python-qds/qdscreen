@@ -188,13 +188,3 @@ class QDSelectorModel(object):
 
         if not inplace:
             return X
-
-
-try:
-    # Try to import the Scikit-learn compliant feature selection class
-    from .selector_skl import QDSSelector
-except ImportError:
-    # Create a dummy one so that __init__.py is happy, but have it raise an error when used
-    class QDSSelector(object):
-        def __init__(self):
-            raise ImportError("Error importing scikit-learn. `QDSSelector` is not available")

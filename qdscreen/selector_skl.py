@@ -40,15 +40,18 @@ class QDSSelector(SelectorMixin, BaseEstimator):
 
     Examples
     --------
-    The following dataset has integer features, two of which are the same
-    in every sample. These are removed with the default setting for threshold::
+    TODO make this better ? see test_readme.py
+    The following dataset has integer features, two of which are constant, and all of which being 'predictable' from
+    the third one::
 
-        >>> X = [[0, 2, 0, 3], [0, 1, 4, 3], [0, 1, 1, 3]]
+        >>> X = [[0, 2, 0, 3],
+        ...      [0, 1, 4, 3],
+        ...      [0, 1, 1, 3]]
         >>> selector = QDSSelector()
         >>> selector.fit_transform(X)
-        array([[2, 0],
-               [1, 4],
-               [1, 1]])
+        array([[0],
+               [4],
+               [1]])
     """
 
     def __init__(self,

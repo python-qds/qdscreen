@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from qdscreen import qd_screen, Entropies, QDSSelector
+from qdscreen import qd_screen
 
 
 def df_mix1():
@@ -163,6 +163,7 @@ def test_readme(input_type):
     # df_stats = Entropies(data)
 
     # Sklearn use case
+    from qdscreen.selector_skl import QDSSelector
     if input_type not in ("numpy_structured", "numpy_recarray"):
         # --strict
         sel = QDSSelector()
