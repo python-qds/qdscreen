@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# note that the above encoding declaration is needed for `get_trees_str_list`
-from __future__ import unicode_literals    # at top of module
+# the above encoding declaration is needed to have non-ascii characters in this file (anywhere even in comments)
+# from __future__ import unicode_literals  # no, since we want to match the return type of str() which is bytes in py2
 import numpy as np
 import pandas as pd
 import pytest
@@ -31,7 +31,13 @@ def test_encoding(capsys):
     print("└─")
     captured = capsys.readouterr()
     with capsys.disabled():
-        assert captured.out == "└─\n"
+        # here this is unicode match
+        assert captured.out == u"└─\n"
+
+        # here this is bytes match
+        from .encoding_ref_help import Foo
+        assert "└─ab\n" == str(Foo())
+        assert "└─ab\n" == repr(Foo())
 
 
 def test_readme_simple(capsys):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# note that the above encoding declaration is needed for `get_trees_str_list`
-from __future__ import unicode_literals
+# the above encoding declaration is needed to have non-ascii characters in this file (anywhere even in comments)
+# from __future__ import unicode_literals  # no, since we want to match the return type of str() which is bytes in py2
 import numpy as np
 import pandas as pd
 import pytest

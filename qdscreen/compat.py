@@ -1,3 +1,5 @@
+import sys
+
 try:
     from sklearn.feature_selection import SelectorMixin
 except ImportError:  # older sklearn
@@ -112,3 +114,80 @@ except AttributeError:
 
     # set the missing method
     BaseEstimator._validate_data = _validate_data
+
+
+try:
+    BaseEstimator._check_n_features
+except AttributeError:
+    def _check_n_features(self, X, reset):
+        """Set the `n_features_in_` attribute, or check against it.
+
+        Parameters
+        ----------
+        X : {ndarray, sparse matrix} of shape (n_samples, n_features)
+            The input samples.
+        reset : bool
+            If True, the `n_features_in_` attribute is set to `X.shape[1]`.
+            Else, the attribute must already exist and the function checks
+            that it is equal to `X.shape[1]`.
+        """
+        n_features = X.shape[1]
+
+        if reset:
+            self.n_features_in_ = n_features
+        else:
+            if not hasattr(self, 'n_features_in_'):
+                raise RuntimeError(
+                    "The reset parameter is False but there is no "
+                    "n_features_in_ attribute. Is this estimator fitted?"
+                )
+            if n_features != self.n_features_in_:
+                raise ValueError(
+                    'X has {} features, but this {} is expecting {} features '
+                    'as input.'.format(n_features, self.__class__.__name__,
+                                       self.n_features_in_)
+                )
+
+    # set the missing method
+    BaseEstimator._check_n_features = _check_n_features
+
+
+PY2 = sys.version_info < (3, 0)
+
+
+def encode_if_py2(fun):
+    """
+    A decorator to use typically on __str__ and __repr__ methods if they return unicode literal string, so that
+    under python 2 their result is encoded into utf-8 to avoir a
+    UnicodeEncodeError: ... codec can't encode characters in position ...
+
+    :param fun:
+    :return:
+    """
+    if PY2:
+        def new_fun(*args, **kwargs):
+            return fun(*args, **kwargs).encode("utf-8")
+        return new_fun
+    else:
+        return fun
+
+
+def python_2_unicode_compatible(klass):
+    """
+    A decorator that defines __unicode__ and __str__ methods under Python 2.
+    Under Python 3 it does nothing.
+
+    To support Python 2 and 3 with a single code base, define a __str__ method
+    returning text and apply this decorator to the class.
+    """
+    if PY2:
+        if '__str__' not in klass.__dict__:
+            raise ValueError("@python_2_unicode_compatible cannot be applied "
+                             "to %s because it doesn't define __str__()." %
+                             klass.__name__)
+        klass.__unicode__ = klass.__str__
+        def __str__(self):
+            return self.__unicode__().encode('utf-8')
+
+        klass.__str__ = __str__
+    return klass

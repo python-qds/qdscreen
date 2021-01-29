@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-# note that the above encoding declaration is needed for `get_trees_str_list`
-from __future__ import unicode_literals
+# The above encoding declaration is needed because we use non-scii characters in `get_trees_str_list`.
+# The below import transforms automatically all strings in this file in unicode in python 2.
+from __future__ import unicode_literals  # See tests/encoding_ref_help.py for a detailed explanation
 import numpy as np
 import pandas as pd
 
 from pyitlib import discrete_random_variable as drv
+
+from qdscreen.compat import encode_if_py2
 
 try:
     from typing import Union, Iterable, Tuple
@@ -440,15 +443,18 @@ class QDForest(object):
         else:
             raise ValueError("Unknown mode: %r" % mode)
 
+    @encode_if_py2
     def __str__(self):
-        return repr(self)
-
-    def __repr__(self):
         """ String representation, listing all useful information when available """
         if self.nb_vars > 30:
             return self.to_str(mode="headers")
         else:
             return self.to_str(mode="full")
+
+    @encode_if_py2
+    def __repr__(self):
+        # return str(self)  # note if we use this then we'll have to comment the decorator
+        return self.to_str(mode="compact")
 
     def print_arcs(self,
                    names=None  # type: bool
