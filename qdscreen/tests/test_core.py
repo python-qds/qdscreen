@@ -237,7 +237,7 @@ def test_qd_forest_str(is_np, from_adjmat):
 
     trees_str = "\n" + "\n".join(qd1.get_trees_str_list())
     if is_np:
-        assert trees_str == """
+        assert trees_str == u"""
 3
 └─ 5
 
@@ -247,7 +247,7 @@ def test_qd_forest_str(is_np, from_adjmat):
 └─ 7
 """
     else:
-        assert trees_str == """
+        assert trees_str == u"""
 d
 └─ f
 
