@@ -11,6 +11,28 @@ try:
 except AttributeError:
     import inspect
 
+    _DEFAULT_TAGS = {
+        'non_deterministic': False,
+        'requires_positive_X': False,
+        'requires_positive_y': False,
+        'X_types': ['2darray'],
+        'poor_score': False,
+        'no_validation': False,
+        'multioutput': False,
+        "allow_nan": False,
+        'stateless': False,
+        'multilabel': False,
+        '_skip_test': False,
+        '_xfail_checks': False,
+        'multioutput_only': False,
+        'binary_only': False,
+        'requires_fit': True,
+        'requires_y': False,
+    }
+
+    def _more_tags(self):
+        return _DEFAULT_TAGS
+
     def _get_tags(self):
         collected_tags = {}
         for base_class in reversed(inspect.getmro(self.__class__)):
@@ -22,7 +44,8 @@ except AttributeError:
                 collected_tags.update(more_tags)
         return collected_tags
 
-    # set the missing method
+    # set the missing methods
+    BaseEstimator._more_tags = _more_tags
     BaseEstimator._get_tags = _get_tags
 
 try:
