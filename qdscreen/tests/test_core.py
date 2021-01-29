@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 
 from qdscreen import QDForest
+from qdscreen.compat import PY2
 from qdscreen.main import get_adjacency_matrix, remove_redundancies
 
 
@@ -237,6 +238,7 @@ def test_qd_forest_str(is_np, from_adjmat):
 
     trees_str = "\n" + "\n".join(qd1.get_trees_str_list())
     if is_np:
+        # note the u for python 2 as in main.py we use unicode literals to cope with those non-base chars
         assert trees_str == u"""
 3
 └─ 5
@@ -247,6 +249,7 @@ def test_qd_forest_str(is_np, from_adjmat):
 └─ 7
 """
     else:
+        # note the u for python 2 as in main.py we use unicode literals to cope with those non-base chars
         assert trees_str == u"""
 d
 └─ f
@@ -257,6 +260,16 @@ j
 └─ h
 """
     full_str = qd1.to_str(mode="full")
-    assert full_str == headers_str + "\n" + trees_str
+    assert full_str == headers_str + u"\n" + trees_str
     # this should be the default string representation if the nb vars is small enough
-    assert full_str == str(qd1)
+    if PY2:
+        assert full_str.encode('utf-8') == str(qd1)
+    else:
+        assert full_str == str(qd1)
+
+
+def test_sklearn_compat():
+    """Trying to make sure that this compatibility code works"""
+    from qdscreen.compat import BaseEstimator
+    assert BaseEstimator()._more_tags()['requires_y'] is False
+    assert BaseEstimator()._get_tags()['requires_y'] is False
