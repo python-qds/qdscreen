@@ -87,7 +87,9 @@ except AttributeError:
         """
 
         if y is None:
-            if self._get_tags()['requires_y']:
+            # note: for some reason our patch above does not add this tag,
+            # there is still a KeyError if we use self._get_tags()['requires_y']
+            if self._get_tags().get('requires_y', False):
                 raise ValueError(
                     "This {} estimator "
                     "requires y to be passed, but the target y is None."
