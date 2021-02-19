@@ -8,6 +8,12 @@ import pytest
 from qdscreen import qd_screen
 
 
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib2 import Path
+
+
 def df_mix1():
     """The dataset for reuse"""
     df = pd.DataFrame({
@@ -134,6 +140,78 @@ Y  0.302676  0.557299  0.996307  0.000000  0.000000  0.557299
 Z  0.489715  0.617951  0.994024  0.283731  0.283731  0.000000
 
 """
+    qd_forest2 = qd_screen(df, relative_eps=0.29)
+    print(qd_forest2)
+    captured = capsys.readouterr()
+    with capsys.disabled():
+        print(captured.out)
+        assert "\n" + captured.out == """
+QDForest (6 vars):
+ - 2 roots (0+2*): U*, X*
+ - 4 other nodes: V, W, Y, Z
+
+U
+└─ V
+   └─ W
+
+X
+└─ Y
+└─ Z
+
+"""
+    ce_df = qd_forest.get_entropies_table(from_to=False, sort_by="rel_cond_entropy")
+    print(ce_df.head(10))
+    captured = capsys.readouterr()
+    with capsys.disabled():
+        print(captured.out)
+        assert "\n" + captured.out == """
+      cond_entropy  rel_cond_entropy
+arc                                 
+U->V      0.000000          0.000000
+U->W      0.000000          0.000000
+V->W      0.000000          0.000000
+Y->X      0.000000          0.000000
+X->Y      0.000000          0.000000
+V->U      0.400000          0.202948
+Y->Z      0.275489          0.283731
+X->Z      0.275489          0.283731
+U->X      0.475489          0.302676
+U->Y      0.475489          0.302676
+"""
+    import matplotlib.pyplot as plt
+    qd_forest.plot_increasing_entropies()
+    fig = plt.gcf()
+    fig.savefig(Path(__file__).parent.parent.parent / "docs" / "imgs" / "increasing_entropies.png")
+    plt.close("all")
+
+
+@pytest.mark.parametrize("typ", ['int', 'str', 'mixed'])
+def test_readme_skl(typ):
+    from qdscreen.selector_skl import QDSSelector
+
+    if typ in ('int', 'str'):
+        X = [[0, 2, 0, 3],
+             [0, 1, 4, 3],
+             [0, 1, 1, 3]]
+        if typ == 'str':
+            X = np.array(X).astype(str)
+        if typ == 'int':
+            pytest.xfail("This test currently fails with dtype=int")  # TODO
+
+    elif typ == 'mixed':
+        # X = [['0', 2, '0', 3],
+        #      ['0', 1, '4', 3],
+        #      ['0', 1, '1', 3]]
+        # X = np.array(X)
+        # assert X.dtype == '<U1' #str
+        pytest.skip("Mixed dtypes do not exist in numpy unstructured arrays")
+    else:
+        raise ValueError()
+
+    selector = QDSSelector()
+    X2 = selector.fit_transform(X)
+    expected_res = [[0], [4], [1]] if typ == 'int' else [['0'], ['4'], ['1']]
+    np.testing.assert_array_equal(X2, np.array(expected_res))
 
 
 @pytest.mark.parametrize("input_type", ["pandas",

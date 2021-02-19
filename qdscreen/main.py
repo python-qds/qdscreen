@@ -39,7 +39,7 @@ class QDForest(object):
                  'is_nparray',      # a boolean indicating if this was built from numpy array (and not pandas dataframe)
                  '_roots_mask',     # a 1d np array or pd Series containing a boolean mask for root variables
                  '_roots_wc_mask',  # a 1d np array or pd Series containing a boolean mask for root with children
-                 'stats'           # an optional `Entropies` object stored for debug
+                 'stats'            # an optional `Entropies` object stored for debug
                  )
 
     def __init__(self,
@@ -65,6 +65,11 @@ class QDForest(object):
 
         self._roots_mask = None
         self._roots_wc_mask = None
+
+    def assert_stats_kept(self):
+        if self.stats is None:
+            raise ValueError("`stats` are not available in this QDForest instance. If you created it using `qd_screen`,"
+                             " you should use `keep_stats=True`.")
 
     def assert_pandas_capable(self):
         """Utility method to assert that "not self.is_nparray" """
@@ -519,6 +524,24 @@ class QDForest(object):
         model.fit(X)
         return model
 
+    # --------- tools for entropies analysis to find interesting thresholds
+
+    def get_entropies_table(self,
+                            from_to=True,  # type: bool
+                            sort_by="from",  # type: str
+                            drop_self_link=True,  # type: bool
+                            ):
+        """ See `Entropies.get_entropies_table` """
+
+        self.assert_stats_kept()
+        return self.stats.get_entropies_table(from_to=from_to, sort_by=sort_by, drop_self_link=drop_self_link)
+
+    def plot_increasing_entropies(self):
+        """ See `Entropies.plot_increasing_entropies` """
+
+        self.assert_stats_kept()
+        self.stats.plot_increasing_entropies()
+
 
 def qd_screen(X,  # type: Union[pd.DataFrame, np.ndarray]
               absolute_eps=None,  # type: float
@@ -790,12 +813,76 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
         else:
             return (-self.H.values).argsort() if desc else self.H.values.argsort()
 
-    @property
-    def entropy_order_asc(self):
+    # --------- tools for entropies analysis to find interesting thresholds
+
+    def get_entropies_table(self,
+                            from_to=True,    # type: bool
+                            sort_by="from",  # type: str
+                            drop_self_link=True,  # type: bool
+                            ):
+        """
+        Returns a pandas series or numpy array with four columns: from, to, cond_entropy, rel_cond_entropy.
+        The index is 'arc', a string representing the arc e.g. "X->Y".
+
+        :param from_to: a boolean flag indicating if 'from' and 'to' columns should remain in the returned dataframe
+            (True, default) or be dropped (False)
+        :param sort_by: a string indicating if the arcs should be sorted by origin ("from", default) or destination
+            ("to"), or by value "rel_cond_entropy" or "cond_entropy", in the resulting table.
+        :param drop_self_link: by default node-to-self arcs are not returned in the list. Turn this to False to include
+            them.
+        :return:
+        """
         if self.is_nparray:
-            return self.H.argsort()
+            raise NotImplementedError("TODO")
         else:
-            return self.H.values.argsort()
+            # 1. gather the data and unpivot it so that there is one row per arc
+            res_df = pd.DataFrame({
+                'cond_entropy': self.Hcond.unstack(),
+                'rel_cond_entropy': self.Hcond_rel.unstack(),
+            })
+            res_df.index.names = ['from', 'to']
+            res_df = res_df.reset_index()
+
+            # 2. filter out node-to-self if needed
+            if drop_self_link:
+                res_df = res_df.loc[res_df['from'] != res_df['to']].copy()
+
+            # 3. create the arc names column and make it the index
+            def make_arc_str(row):
+                return "%s->%s" % (row['from'], row.to)  # note that .from is a reserved python symbol !
+            res_df['arc'] = res_df.apply(make_arc_str, axis=1)
+            res_df.set_index('arc', inplace=True)
+
+            # 4. Optionally sort differently
+            all_possibilities = ("from", "to", "cond_entropy", "rel_cond_entropy")
+            if sort_by == all_possibilities[0]:
+                pass  # already done
+            elif sort_by in all_possibilities[1:]:
+                res_df.sort_values(by=sort_by, inplace=True)
+            else:
+                raise ValueError("Invalid value for `sort_by`: %r. Possible values: %r" % (sort_by, all_possibilities))
+
+            # 5. Optionally drop the from and to columns
+            if not from_to:
+                res_df.drop(['from', 'to'], axis=1, inplace=True)
+
+            return res_df
+
+    def plot_increasing_entropies(self):
+        """
+
+        :return:
+        """
+        import matplotlib.pyplot as plt
+
+        # get the dataframe
+        df = self.get_entropies_table(sort_by="rel_cond_entropy")
+
+        # plot with all ticks
+        df_sorted = df["rel_cond_entropy"]  # .sort_values()
+        df_sorted.plot(title="Relative conditional entropy H(X|Y)/H(X) for each arc X->Y, by increasing order",
+                       figsize=(15, 10))
+        plt.xticks(np.arange(len(df_sorted)), df_sorted.index, rotation=90)
 
 
 def get_adjacency_matrix(df,                 # type: Union[np.ndarray, pd.DataFrame]

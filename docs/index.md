@@ -99,7 +99,7 @@ Columns in restored_full_df: ['U', 'X', 'Z', 'V', 'W', 'Y']
 
 #### b. Quasi determinism
 
-In the above example, we used the default settings of `qd_screen`. By default only deterministic relationships are detected, which means that only variables that can perfectly be predicted (without loss of information) from others in the dataset are removed.
+In the above example, we used the default settings for `qd_screen`. By default only deterministic relationships are detected, which means that only variables that can perfectly be predicted (without loss of information) from others in the dataset are removed.
 
 In real-world datasets, some noise can occur in the data, or some very rare cases might happen, that you may wish to discard. Let's first look at the strength of the various relationships thanks to `keep_stats=True`:
 
@@ -149,12 +149,67 @@ Z  0.489715  0.617951  0.994024  0.283731  0.283731  0.000000
 
 ```
 
-With the last table for example we see that variable `Z`'s entropies decreases drastically to reach 28% of its initial entropy, if `X` or `Y` is known. So if we use quasi-determinism with relative threshold of 29% `Z` would be eliminated. Another, easier way to see this is to use the plotting functions:
+In the last row of the last table (relative conditional entropies) we see that variable `Z`'s entropies decreases drastically to reach 28% of its initial entropy, if `X` or `Y` is known. So if we use quasi-determinism with relative threshold of 29% `Z` would be eliminated. 
 
 ```python
-qd_forest.stats.plot()
+# detect quasi deterministic relationships
+qd_forest2 = qd_screen(df, relative_eps=0.29)
+print(qd_forest2)
 ```
 
+Yields:
+
+```
+QDForest (6 vars):
+ - 2 roots (0+2*): U*, X*
+ - 4 other nodes: V, W, Y, Z
+
+U
+└─ V
+   └─ W
+
+X
+└─ Y
+└─ Z
+
+```
+
+This time `Z` is correctly determined as being predictible from `X`. 
+
+!!! note "equivalent nodes"
+    `X` and `Y` are equivalent variables so each of them could be the parent of the other. To avoid cycles so that the result is still a forest (a set of trees), `X` was arbitrary selected as being the "representative" parent of all its equivalents, and `Z` is attached to this representative parent.
+
+Another, easier way to detect that setting a relative threshold to 29% would eliminate `Z` is to print the conditional entropies in increasing order:
+
+```python
+ce_df = qd_forest.get_entropies_table(from_to=False, sort_by="rel_cond_entropy") 
+print(ce_df.head(10))
+```
+
+which yields
+
+```
+      cond_entropy  rel_cond_entropy
+arc                                 
+U->V      0.000000          0.000000
+U->W      0.000000          0.000000
+V->W      0.000000          0.000000
+Y->X      0.000000          0.000000
+X->Y      0.000000          0.000000
+V->U      0.400000          0.202948
+Y->Z      0.275489          0.283731
+X->Z      0.275489          0.283731
+U->X      0.475489          0.302676
+U->Y      0.475489          0.302676
+```
+
+Or to use the helper plot function:
+
+```python
+qd_forest.plot_increasing_entropies()
+```
+
+![inc_entropies_plot](./imgs/increasing_entropies.png)
 
 #### c. Integrating with scikit-learn
 
