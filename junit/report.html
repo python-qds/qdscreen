@@ -243,7 +243,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 19-Feb-2021 at 14:14:12 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <p>Report generated on 19-Feb-2021 at 22:34:59 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -269,28 +269,28 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>main</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>217628166</td></tr>
+        <td>217687115</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>22</td></tr>
+        <td>23</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
-        <td>f46ea950d2ca383aed5ca4f3718433518ffff126</td></tr>
+        <td>0423d3f98173e801920da053b5db6321676be32e</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_MESSAGE</td>
-        <td>Completed documentation draft</td></tr>
+        <td>Modified test and doc to explain how to "see" that setting a quasi threshold would eliminate Z. Added corresponding helper functions `get_entropies_table` and `plot_increasing_entropies` in `QDForest` and `Entropies`.</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_RANGE</td>
-        <td>6777ced72047...f46ea950d2ca</td></tr>
+        <td>f46ea950d2ca...0423d3f98173</td></tr>
       <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>484548154</td></tr>
+        <td>484693741</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>22.4</td></tr>
+        <td>23.4</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -304,8 +304,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>TRAVIS_SUDO</td>
         <td>true</td></tr></table>
     <h2>Summary</h2>
-    <p>21 tests ran in 2.88 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">21 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>23 tests ran in 4.33 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">22 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">1 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -316,6 +316,24 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">qdscreen/tests/test_readme.py::test_readme_skl[int]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">typ = &#x27;int&#x27;<br/><br/>    @pytest.mark.parametrize(&quot;typ&quot;, [&#x27;int&#x27;, &#x27;str&#x27;, &#x27;mixed&#x27;])<br/>    def test_readme_skl(typ):<br/>        from qdscreen.selector_skl import QDSSelector<br/>    <br/>        if typ in (&#x27;int&#x27;, &#x27;str&#x27;):<br/>            X = [[0, 2, 0, 3],<br/>                 [0, 1, 4, 3],<br/>                 [0, 1, 1, 3]]<br/>            if typ == &#x27;str&#x27;:<br/>                X = np.array(X).astype(str)<br/>            if typ == &#x27;int&#x27;:<br/>&gt;               pytest.xfail(&quot;This test currently fails with dtype=int&quot;)  # TODO<br/><span class="error">E               _pytest.outcomes.XFailed: This test currently fails with dtype=int</span><br/><br/>qdscreen/tests/test_readme.py:199: XFailed<br/></div></td></tr></tbody>
+      <tbody class="skipped results-table-row">
+        <tr>
+          <td class="col-result">Skipped</td>
+          <td class="col-name">qdscreen/tests/test_readme.py::test_readme_skl[mixed]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">(&#x27;/home/travis/build/python-qds/qdscreen/qdscreen/tests/test_readme.py&#x27;, 207, &#x27;Skipped: Mixed dtypes do not exist in numpy unstructured arrays&#x27;)<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -365,7 +383,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">qdscreen/tests/test_core.py::test_adjacency_quasi_high_threshold[0.33-None]</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -473,7 +491,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">qdscreen/tests/test_readme.py::test_readme_simple</td>
-          <td class="col-duration">0.11</td>
+          <td class="col-duration">0.12</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -482,7 +500,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">qdscreen/tests/test_readme.py::test_readme_quasi</td>
-          <td class="col-duration">0.11</td>
+          <td class="col-duration">1.27</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">qdscreen/tests/test_readme.py::test_readme_skl[str]</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -491,7 +518,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">qdscreen/tests/test_readme.py::test_readme[pandas]</td>
-          <td class="col-duration">0.64</td>
+          <td class="col-duration">0.66</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -500,7 +527,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">qdscreen/tests/test_readme.py::test_readme[numpy_unstructured]</td>
-          <td class="col-duration">0.64</td>
+          <td class="col-duration">0.60</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
