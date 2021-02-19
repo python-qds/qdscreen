@@ -107,7 +107,7 @@ def test_readme_quasi(capsys):
 
     captured = capsys.readouterr()
     with capsys.disabled():
-        print(captured.out)
+        # print(captured.out)
         assert "\n" + captured.out == """
 Statistics computed for dataset:
    U  V  W  X  Y  Z
@@ -147,7 +147,7 @@ Z  0.489715  0.617951  0.994024  0.283731  0.283731  0.000000
     print(qd_forest2)
     captured = capsys.readouterr()
     with capsys.disabled():
-        print(captured.out)
+        # print(captured.out)
         # note the u for unicode string in py2, see test_encoding
         assert "\n" + captured.out == u"""
 QDForest (6 vars):
@@ -167,7 +167,7 @@ X
     print(ce_df.head(10))
     captured = capsys.readouterr()
     with capsys.disabled():
-        print(captured.out)
+        # print(captured.out)
         assert "\n" + captured.out == """
       cond_entropy  rel_cond_entropy
 arc                                 
