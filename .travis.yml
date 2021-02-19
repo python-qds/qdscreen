@@ -41,7 +41,7 @@ install:
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
   # mkdocs requirements: this does not work anymore on python 2 so lets only do it when needed
   - if [ "${DEPLOY_ENV}" = "true" ]; then pip install mkdocs-material mkdocs pymdown-extensions pygments; fi;
-  - if [ ! "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then pip install doit; fi;
+#  - if [ ! "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then pip install doit; fi;
   # travis-specific installs
   - pip install PyGithub  # for ci_tools/github_release.py
   - pip install codecov  # See https://github.com/codecov/example-python.
