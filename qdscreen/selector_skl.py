@@ -43,14 +43,19 @@ class QDSSelector(SelectorMixin, BaseEstimator):
     The following dataset has integer features, two of which are constant, and all of which being 'predictable' from
     the third one::
 
-        >>> X = [[0, 2, 0, 3],
-        ...      [0, 1, 4, 3],
-        ...      [0, 1, 1, 3]]
-        >>> selector = QDSSelector()
-        >>> selector.fit_transform(X)
-        array([[0],
-               [4],
-               [1]])
+    >>> X = [[0, 2, 0, 3],
+    ...      [0, 1, 4, 3],
+    ...      [0, 1, 1, 3]]
+    >>> selector = QDSSelector()
+    >>> Xsel = selector.fit_transform(X)
+    >>> Xsel
+    array([[0],
+           [4],
+           [1]])
+    >>> selector.inverse_transform(Xsel)
+    array([[0, 2, 0, 3],
+    ...    [0, 1, 4, 3],
+    ...    [0, 1, 1, 3]])
     """
 
     def __init__(self,
