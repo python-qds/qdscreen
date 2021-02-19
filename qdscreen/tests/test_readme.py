@@ -199,8 +199,6 @@ def test_readme_skl(typ):
              [0, 1, 1, 3]]
         if typ == 'str':
             X = np.array(X).astype(str)
-        if typ == 'int':
-            pytest.xfail("This test currently fails with dtype=int")  # TODO
 
     elif typ == 'mixed':
         # X = [['0', 2, '0', 3],

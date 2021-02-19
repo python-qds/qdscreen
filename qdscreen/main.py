@@ -736,7 +736,8 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
         if self._H is None:
             # Using pyitlib to compute H (hopefully efficiently)
             # Unfortunately this does not work with numpy arrays, convert to pandas TODO report
-            self._H = drv.entropy(self.dataset_df.T)
+            # note: we convert to string type to avoid a bug with ints. TODO...
+            self._H = drv.entropy(self.dataset_df.T.astype(str))
             if not self.is_nparray:
                 self._H = pd.Series(self._H, index=self.varnames)
 
@@ -771,7 +772,8 @@ Relative conditional entropies (Hcond_rel = H(row|col)/H(row)):
 
             # Using pyitlib to compute H (hopefully efficiently)
             # Unfortunately this does not work with numpy arrays, convert to pandas TODO report
-            self._Hcond = drv.entropy_conditional(self.dataset_df.T)
+            # note: we convert to string type to avoid a bug with ints. TODO...
+            self._Hcond = drv.entropy_conditional(self.dataset_df.T.astype(str))
 
             # add the row/column headers
             if not self.is_nparray:
