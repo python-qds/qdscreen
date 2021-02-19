@@ -14,6 +14,9 @@ except ImportError:
     from pathlib2 import Path
 
 
+IMGS_FOLDER = Path(__file__).parent.parent.parent / "docs" / "imgs"
+
+
 def df_mix1():
     """The dataset for reuse"""
     df = pd.DataFrame({
@@ -145,7 +148,8 @@ Z  0.489715  0.617951  0.994024  0.283731  0.283731  0.000000
     captured = capsys.readouterr()
     with capsys.disabled():
         print(captured.out)
-        assert "\n" + captured.out == """
+        # note the u for unicode string in py2, see test_encoding
+        assert "\n" + captured.out == u"""
 QDForest (6 vars):
  - 2 roots (0+2*): U*, X*
  - 4 other nodes: V, W, Y, Z
@@ -181,7 +185,7 @@ U->Y      0.475489          0.302676
     import matplotlib.pyplot as plt
     qd_forest.plot_increasing_entropies()
     fig = plt.gcf()
-    fig.savefig(Path(__file__).parent.parent.parent / "docs" / "imgs" / "increasing_entropies.png")
+    fig.savefig(str(IMGS_FOLDER / "increasing_entropies.png"))
     plt.close("all")
 
 
