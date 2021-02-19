@@ -658,7 +658,22 @@ U-&gt;Y      0.475489          0.302676
 </code></pre></div>
 <p><img alt="inc_entropies_plot" src="imgs/increasing_entropies.png" /></p>
 <h4 id="c-integrating-with-scikit-learn">c. Integrating with scikit-learn<a class="headerlink" href="#c-integrating-with-scikit-learn" title="Permanent link">&para;</a></h4>
-<p><code>scikit-learn</code> is one of the most popular machine learning frameworks in python. It comes with a concept of <code>Pipeline</code> allowing you to chain several operators to make a model. <code>qdscreen</code> provides a <code>QDSSelector</code> class for easy integration. It works exactly like other feature selection models in scikit-learn (e.g. )</p>
+<p><code>scikit-learn</code> is one of the most popular machine learning frameworks in python. It comes with a concept of <code>Pipeline</code> allowing you to chain several operators to make a model. <code>qdscreen</code> provides a <code>QDSSelector</code> class for easy integration. It works exactly like other feature selection models in scikit-learn (e.g. <a href="https://scikit-learn.org/stable/modules/feature_selection.html#variance-threshold"><code>VarianceThreshold</code></a>):</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">X</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="o">...</span>      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="o">...</span>      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">selector</span> <span class="o">=</span> <span class="n">QDSSelector</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Xsel</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Xsel</span>
+<span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">selector</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">Xsel</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="o">...</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="o">...</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+</code></pre></div>
 <h3 id="2-learn-a-bayesian-network-structure">2. Learn a Bayesian Network structure<a class="headerlink" href="#2-learn-a-bayesian-network-structure" title="Permanent link">&para;</a></h3>
 <p>TODO see <a href="https://github.com/python-qds/qdscreen/issues/6">#6</a>.</p>
 <h2 id="main-features-benefits">Main features / benefits<a class="headerlink" href="#main-features-benefits" title="Permanent link">&para;</a></h2>

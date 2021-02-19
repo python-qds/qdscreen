@@ -242,9 +242,63 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    todo
+  <a href="#main-symbols" class="md-nav__link">
+    Main symbols
   </a>
+  
+    <nav class="md-nav" aria-label="Main symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qd_screen" class="md-nav__link">
+    qd_screen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qdforest" class="md-nav__link">
+    QDForest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qdselectormodel" class="md-nav__link">
+    QDSelectorModel
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entropies" class="md-nav__link">
+    Entropies
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scikit-learn-symbols" class="md-nav__link">
+    scikit-learn symbols
+  </a>
+  
+    <nav class="md-nav" aria-label="scikit-learn symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qdsselector" class="md-nav__link">
+    QDSSelector
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -296,9 +350,63 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    todo
+  <a href="#main-symbols" class="md-nav__link">
+    Main symbols
   </a>
+  
+    <nav class="md-nav" aria-label="Main symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qd_screen" class="md-nav__link">
+    qd_screen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qdforest" class="md-nav__link">
+    QDForest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qdselectormodel" class="md-nav__link">
+    QDSelectorModel
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entropies" class="md-nav__link">
+    Entropies
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scikit-learn-symbols" class="md-nav__link">
+    scikit-learn symbols
+  </a>
+  
+    <nav class="md-nav" aria-label="scikit-learn symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qdsselector" class="md-nav__link">
+    QDSSelector
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -321,12 +429,40 @@
                 
                 <h1 id="api-reference">API reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
 <p>In general, using <code>help(symbol)</code> is the recommended way to get the latest documentation. In addition, this page provides an overview of the various elements in this package.</p>
-<h3 id="todo"><code>todo</code><a class="headerlink" href="#todo" title="Permanent link">&para;</a></h3>
-<p>TODO</p>
+<h2 id="main-symbols">Main symbols<a class="headerlink" href="#main-symbols" title="Permanent link">&para;</a></h2>
+<h3 id="qd_screen"><code>qd_screen</code><a class="headerlink" href="#qd_screen" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">qd_screen</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+              <span class="n">absolute_eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">relative_eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">keep_stats</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+              <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QDForest</span>
+</code></pre></div>
+<p>Finds the (quasi-)deterministic relationships (functional dependencies) between the variables in <code>X</code>, and returns a <code>QDForest</code> object representing the forest of (quasi-)deterministic trees. This object can then be used to fit a feature selection model or to learn a Bayesian Network structure.</p>
+<p>By default only deterministic relationships are detected. Quasi-determinism can be enabled by setting either an threshold on conditional entropies (<code>absolute_eps</code>) or on relative conditional entropies (<code>relative_eps</code>). Only one of them should be set.</p>
+<p>By default (<code>keep_stats=False</code>) the entropies tables are not preserved once the forest has been created. If you wish to keep them available, set <code>keep_stats=True</code>. The entropies tables are then available in the <code>&lt;QDForest&gt;.stats</code> attribute, and threshold analysis methods such as <code>&lt;QDForest&gt;.get_entropies_table(...)</code> and <code>&lt;QDForest&gt;.plot_increasing_entropies()</code> become available.</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><code>todo</code>: TODO</li>
+<li>
+<p><code>X</code>: the dataset as a pandas DataFrame or a numpy array. Columns represent the features to compare.</p>
+</li>
+<li>
+<p><code>absolute_eps</code>: Absolute entropy threshold. Any feature <code>Y</code> that can be predicted from another feature <code>X</code> in a quasi-deterministic way, that is, where conditional entropy <code>H(Y|X) &lt;= absolute_eps</code>, will be removed. The default value is <code>0</code> and corresponds to removing deterministic relationships only.</p>
+</li>
+<li>
+<p><code>relative_eps</code>: Relative entropy threshold. Any feature <code>Y</code> that can be predicted from another feature <code>X</code> in a quasi-deterministic way, that is, where relative conditional entropy <code>H(Y|X)/H(Y) &lt;= relative_eps</code> (a value between <code>0</code> and <code>1</code>), will be removed. Only one of <code>absolute_eps</code> or <code>relative_eps</code> should be provided.</p>
+</li>
+<li>
+<p><code>keep_stats</code>: a boolean indicating if the various entropies tables computed in the process should be kept in memory in the resulting forest object (<code>&lt;QDForest&gt;.stats</code>), for further analysis. By default this is <code>False</code>. </p>
+</li>
 </ul>
+<h3 id="qdforest"><code>QDForest</code><a class="headerlink" href="#qdforest" title="Permanent link">&para;</a></h3>
+<p>TODO</p>
+<h3 id="qdselectormodel"><code>QDSelectorModel</code><a class="headerlink" href="#qdselectormodel" title="Permanent link">&para;</a></h3>
+<p>TODO</p>
+<h3 id="entropies"><code>Entropies</code><a class="headerlink" href="#entropies" title="Permanent link">&para;</a></h3>
+<p>TODO</p>
+<h2 id="scikit-learn-symbols">scikit-learn symbols<a class="headerlink" href="#scikit-learn-symbols" title="Permanent link">&para;</a></h2>
+<h3 id="qdsselector"><code>QDSSelector</code><a class="headerlink" href="#qdsselector" title="Permanent link">&para;</a></h3>
                 
               
               
