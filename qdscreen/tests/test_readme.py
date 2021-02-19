@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # the above encoding declaration is needed to have non-ascii characters in this file (anywhere even in comments)
 # from __future__ import unicode_literals  # no, since we want to match the return type of str() which is bytes in py2
+import sys
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -14,6 +16,7 @@ except ImportError:
     from pathlib2 import Path
 
 
+PY2 = sys.version_info < (3,)
 IMGS_FOLDER = Path(__file__).parent.parent.parent / "docs" / "imgs"
 
 
@@ -182,11 +185,13 @@ X->Z      0.275489          0.283731
 U->X      0.475489          0.302676
 U->Y      0.475489          0.302676
 """
-    import matplotlib.pyplot as plt
-    qd_forest.plot_increasing_entropies()
-    fig = plt.gcf()
-    fig.savefig(str(IMGS_FOLDER / "increasing_entropies.png"))
-    plt.close("all")
+    if not PY2:
+        # we have issues on travis CI with matplotlib on PY2: skip
+        import matplotlib.pyplot as plt
+        qd_forest.plot_increasing_entropies()
+        fig = plt.gcf()
+        fig.savefig(str(IMGS_FOLDER / "increasing_entropies.png"))
+        plt.close("all")
 
 
 @pytest.mark.parametrize("typ", ['int', 'str', 'mixed'])
