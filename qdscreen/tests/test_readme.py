@@ -235,7 +235,7 @@ def test_readme(input_type):
     elif input_type == "numpy_unstructured":
         df_orig = df_mix1()
         var_names = list(df_orig.columns)
-        data = df_orig.to_numpy(copy=True)
+        data = df_orig.to_numpy(copy=True)  # to_numpy(df_orig, copy=True)
         data_ar = data
     # elif input_type == "numpy_structured":
     #     df_orig = df_mix1()
