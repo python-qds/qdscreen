@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.6.0 - sklearn api renames
+
+ - Migrated CI/CD from Travis to Github Actions + `nox`.
+
+ - `selector_skl` module renamed `sklearn` and `QDSSelector` renamed `QDScreen`. Fixes [#16](https://github.com/python-qds/qdscreen/issues/16)
+
 ### 0.5.0 - First public working release
 
 Initial release with:
