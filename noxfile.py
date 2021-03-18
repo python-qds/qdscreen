@@ -89,7 +89,7 @@ def tests(session: PowerSession, coverage, pkg_specs):
     session.run2("conda list", env={"CONDA_PREFIX": str(conda_prefix), "CONDA_DEFAULT_ENV": session.get_session_id()})
 
     # Fail if the assumed python version is not the actual one
-    session.run2("python -m check_python_version.py %s" % session.python)
+    session.run2("python ci_tools/check_python_version.py %s" % session.python)
 
     # install self so that it is recognized by pytest
     session.run2("pip install -e . --no-deps")
