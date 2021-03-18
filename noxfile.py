@@ -83,7 +83,10 @@ def tests(session: PowerSession, coverage, pkg_specs):
 
     # list all (conda list alone does not work correctly on github actions)
     session.run2("conda list")
-    session.run2("conda list", env={"CONDA_PREFIX": session.bin, "CONDA_DEFAULT_ENV": session.get_session_id()})
+    conda_prefix = Path(session.bin)
+    if conda_prefix.name == "bin":
+        conda_prefix = conda_prefix.parent
+    session.run2("conda list", env={"CONDA_PREFIX": str(conda_prefix), "CONDA_DEFAULT_ENV": session.get_session_id()})
 
     # install self so that it is recognized by pytest
     session.run2("pip install -e . --no-deps")
