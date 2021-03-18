@@ -5,10 +5,10 @@ on:
     tags:
       - '*'
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   test_publish_release:
     strategy:
@@ -76,7 +76,7 @@ jobs:
 #          EXCH_AKEY: ${{ secrets.EXCH_AKEY }}
         run: nox -s tests
 
-      # -------------- only on Ubuntu + MASTER PUSH (no pull request, no tag) -----------
+      # -------------- only on Ubuntu + MAIN PUSH (no pull request, no tag) -----------
 
       # 5) Publish the doc and test reports
       - name: \[not on TAG\] Publish documentation, tests and coverage reports
