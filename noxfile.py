@@ -81,8 +81,9 @@ def tests(session: PowerSession, coverage, pkg_specs):
     if install_keyrings_alt:
         session.install2("keyrings.alt")
 
-    # list all
+    # list all (conda list alone does not work correctly on github actions)
     session.run2("conda list")
+    session.run2("conda list", env={"CONDA_PREFIX": session.bin, "CONDA_DEFAULT_ENV": session.get_session_id()})
 
     # install self so that it is recognized by pytest
     session.run2("pip install -e . --no-deps")
