@@ -1,12 +1,30 @@
 import sys
 
-try:
-    from sklearn.feature_selection import SelectorMixin
-except ImportError:  # older sklearn
-    from sklearn.feature_selection.base import SelectorMixin
+PY2 = sys.version_info < (3,)
+if PY2:
+    # Python 2 is not happy with our package having the same name, we need dynamic import
+    import importlib
 
+    try:
+        # try old sklearn first, we are on python 2
+        sklearn_ft_base = importlib.import_module("sklearn.feature_selection.base")
+    except ImportError:
+        sklearn_ft_base = importlib.import_module("sklearn.feature_selection")
 
-from sklearn.base import BaseEstimator
+    SelectorMixin = sklearn_ft_base.SelectorMixin
+
+    sklearn_base = importlib.import_module("sklearn.base")
+    BaseEstimator = sklearn_base.BaseEstimator
+
+else:
+    # Normal imports on python 3
+    try:
+        from sklearn.feature_selection import SelectorMixin
+    except ImportError:  # older sklearn
+        from sklearn.feature_selection.base import SelectorMixin
+
+    from sklearn.base import BaseEstimator
+
 
 try:
     BaseEstimator._get_tags
@@ -53,7 +71,16 @@ except AttributeError:
 try:
     BaseEstimator._validate_data
 except AttributeError:
-    from sklearn.utils.validation import check_X_y, check_array
+    if PY2:
+        # Python 2 is not happy with our package having the same name, we need dynamic import
+        import importlib
+
+        sklearn_ut_val = importlib.import_module("sklearn.utils.validation")
+        check_X_y = sklearn_ut_val.check_X_y
+        check_array = sklearn_ut_val.check_array
+    else:
+        # normal import on python 3
+        from sklearn.utils.validation import check_X_y, check_array
 
     def _validate_data(self, X, y=None, reset=True,
                        validate_separately=False, **check_params):

@@ -1,6 +1,15 @@
+import sys
 import numpy as np
 
-from sklearn.exceptions import NotFittedError
+PY2 = sys.version_info < (3,)
+if PY2:
+    # Python 2 is not happy with our package having the same name, we need dynamic import
+    import importlib
+    sklearn_exc = importlib.import_module("sklearn.exceptions")
+    NotFittedError = sklearn_exc.NotFittedError
+else:
+    # normal imports on python 3
+    from sklearn.exceptions import NotFittedError
 
 from .compat import BaseEstimator, SelectorMixin
 from .main import qd_screen

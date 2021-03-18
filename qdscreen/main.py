@@ -7,7 +7,7 @@ import pandas as pd
 
 from pyitlib import discrete_random_variable as drv
 
-from qdscreen.compat import encode_if_py2
+from .compat import encode_if_py2
 
 try:
     from typing import Union, Iterable, Tuple
