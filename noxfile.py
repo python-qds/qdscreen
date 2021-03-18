@@ -81,6 +81,9 @@ def tests(session: PowerSession, coverage, pkg_specs):
     if install_keyrings_alt:
         session.install2("keyrings.alt")
 
+    # list all
+    session.run2("conda list")
+
     # install self so that it is recognized by pytest
     session.run2("pip install -e . --no-deps")
 
