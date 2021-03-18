@@ -213,14 +213,16 @@ qd_forest.plot_increasing_entropies()
 
 #### c. Integrating with scikit-learn
 
-`scikit-learn` is one of the most popular machine learning frameworks in python. It comes with a concept of `Pipeline` allowing you to chain several operators to make a model. `qdscreen` provides a `QDSSelector` class for easy integration. It works exactly like other feature selection models in scikit-learn (e.g. [`VarianceThreshold`](https://scikit-learn.org/stable/modules/feature_selection.html#variance-threshold)):
+`scikit-learn` is one of the most popular machine learning frameworks in python. It comes with a concept of `Pipeline` allowing you to chain several operators to make a model. `qdscreen` provides a `QDScreen` class for easy integration. It works exactly like other feature selection models in scikit-learn (e.g. [`VarianceThreshold`](https://scikit-learn.org/stable/modules/feature_selection.html#variance-threshold)):
 
 ```python
+>>> from qdscreen.sklearn import QDScreen
+
 >>> X = [[0, 2, 0, 3],
 ...      [0, 1, 4, 3],
 ...      [0, 1, 1, 3]]
 
->>> selector = QDSSelector()
+>>> selector = QDScreen()
 >>> Xsel = selector.fit_transform(X)
 >>> Xsel
 array([[0],

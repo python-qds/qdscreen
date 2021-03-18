@@ -196,7 +196,7 @@ U->Y      0.475489          0.302676
 
 @pytest.mark.parametrize("typ", ['int', 'str', 'mixed'])
 def test_readme_skl(typ):
-    from qdscreen.selector_skl import QDSSelector
+    from qdscreen.sklearn import QDScreen
 
     if typ in ('int', 'str'):
         X = [[0, 2, 0, 3],
@@ -215,7 +215,7 @@ def test_readme_skl(typ):
     else:
         raise ValueError()
 
-    selector = QDSSelector()
+    selector = QDScreen()
     X2 = selector.fit_transform(X)
     expected_res = [[0], [4], [1]] if typ == 'int' else [['0'], ['4'], ['1']]
     np.testing.assert_array_equal(X2, np.array(expected_res))
@@ -264,16 +264,16 @@ def test_readme(input_type):
     # df_stats = Entropies(data)
 
     # Sklearn use case
-    from qdscreen.selector_skl import QDSSelector
+    from qdscreen.sklearn import QDScreen
     if input_type not in ("numpy_structured", "numpy_recarray"):
         # --strict
-        sel = QDSSelector()
+        sel = QDScreen()
         sel_data = sel.fit_transform(data_ar)
         np.testing.assert_array_equal(sel_data, data_roots_ar)
         data2 = sel.inverse_transform(sel_data)
         np.testing.assert_array_equal(data2, data_ar)
         # --quasi absolute - Z should become a child of X
-        sel = QDSSelector(absolute_eps=0.28)
+        sel = QDScreen(absolute_eps=0.28)
         sel_data = sel.fit_transform(data_ar)
         np.testing.assert_array_equal(sel_data, data_roots_quasi_ar)
         data2 = sel.inverse_transform(sel_data)
@@ -283,7 +283,7 @@ def test_readme(input_type):
         np.testing.assert_array_equal(data2, data_ar)
 
         # --quasi relative - Z should become a child of X
-        sel = QDSSelector(relative_eps=0.29)
+        sel = QDScreen(relative_eps=0.29)
         sel_data = sel.fit_transform(data_ar)
         np.testing.assert_array_equal(sel_data, data_roots_quasi_ar)
         data2 = sel.inverse_transform(sel_data)

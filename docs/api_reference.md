@@ -44,4 +44,4 @@ TODO
 
 ## scikit-learn symbols
 
-### `QDSSelector`
+### `QDScreen`

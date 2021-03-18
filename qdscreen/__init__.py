@@ -14,7 +14,7 @@ except ImportError:
 __all__ = [
     '__version__',
     # submodules
-    'main', 'selector', 'selector_skl', 'compat',
+    'main', 'selector', 'sklearn', 'compat',
     # symbols
     'Entropies', 'qd_screen', 'QDForest'
 ]

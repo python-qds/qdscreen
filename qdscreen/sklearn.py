@@ -6,7 +6,7 @@ from .compat import BaseEstimator, SelectorMixin
 from .main import qd_screen
 
 
-class QDSSelector(SelectorMixin, BaseEstimator):
+class QDScreen(SelectorMixin, BaseEstimator):
     """Feature selector that removes all features that are (quasi-)deterministically predicted from others.
 
     This feature selection algorithm looks only at the features (X), not the
@@ -46,7 +46,7 @@ class QDSSelector(SelectorMixin, BaseEstimator):
     >>> X = [[0, 2, 0, 3],
     ...      [0, 1, 4, 3],
     ...      [0, 1, 1, 3]]
-    >>> selector = QDSSelector()
+    >>> selector = QDScreen()
     >>> Xsel = selector.fit_transform(X)
     >>> Xsel
     array([[0],
@@ -123,7 +123,7 @@ class QDSSelector(SelectorMixin, BaseEstimator):
             `X` with columns of zeros inserted where features would have
             been removed by :meth:`transform`.
         """
-        Xt = super(QDSSelector, self).inverse_transform(X)
+        Xt = super(QDScreen, self).inverse_transform(X)
         # use inplace = True because Xt is already prepared
         self.model_.predict_qd(Xt, inplace=True)
         return Xt
