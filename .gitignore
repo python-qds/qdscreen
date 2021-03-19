@@ -50,6 +50,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+qdscreen/_version.py
 
 # Translations
 *.mo
