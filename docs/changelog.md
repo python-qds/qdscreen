@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.6.1 In Progress - Minor project structure change
+
+ - New project layout to avoid bug with `xunitparser`. Fixes [#18](https://github.com/python-qds/qdscreen/issues/18)
+
 ### 0.6.0 - sklearn api renames
 
  - Migrated CI/CD from Travis to Github Actions + `nox`.
