@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: qdscreen/main.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="qdscreen.main.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               qdscreen/main.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  14
+               </span>
+               <strong>E501:</strong> line too long (126 > 120 characters)
+               
+                  (and 10 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Line too long (126 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l22">
+                  <tt><i>22</i> <span class="c1">#    https://stackoverflow.com/questions/20892799/using-pandas-calculate-cram%C3%A9rs-coefficient-matrix (+ corrected version)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (126 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l37">
+                  <tt><i>37</i>     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_adjmat&#39;</span><span class="p">,</span>         <span class="c1"># a square numpy array or pandas DataFrame containing the adjacency matrix (parent-&gt;child)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (126 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l38">
+                  <tt><i>38</i>                  <span class="s1">&#39;_parents&#39;</span><span class="p">,</span>        <span class="c1"># a 1d np array or a pandas Series relating each child to its parent index or -1 if a root</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (121 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l158">
+                  <tt><i>158</i>         <span class="sd">&quot;&quot;&quot;A numpy array containing the indices of all parent nodes, or a pandas DataFrame containing &#39;idx&#39; and &#39;name&#39;&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (123 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l310">
+                  <tt><i>310</i> <span class="sd">            indices (`False`). By default if the parent is identified with `parent_idx` indices will be returned (`False`),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (158 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l342">
+                  <tt><i>342</i>         <span class="c1"># type: (...) -&gt; Union[Iterable[Tuple[int, int]], Iterable[Tuple[str, str]], Tuple[Iterable[int], Iterable[int]], Tuple[Iterable[str], Iterable[str]]]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (134 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l611">
+                  <tt><i>611</i>     <span class="n">A_noredundancy</span> <span class="o">=</span> <span class="n">remove_redundancies</span><span class="p">(</span><span class="n">A_orig</span><span class="p">,</span> <span class="n">selection_order</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">is_strict</span> <span class="k">else</span> <span class="n">X_stats</span><span class="o">.</span><span class="n">list_vars_by_entropy_order</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (140 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l626">
+                  <tt><i>626</i>     <span class="c1"># forestAdjMatList &lt;- FromHToDeterForestAdjMat(H = H, criterion = criterionNlevels, removePerfectMatchingCol = removePerfectMatchingCol)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (135 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l641">
+                  <tt><i>641</i>     <span class="c1">#     print(paste(&quot;Multiple trees in the forest (&quot;, length(rootsFNames),&quot;) Root graph will be computed.&quot;, sep = &quot;&quot;, collapse = &quot;&quot;))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (156 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l649">
+                  <tt><i>649</i>     <span class="c1">#     # removePerfectlyMatchingCol useless here because either pmc are in the same trees (but only one is the root), either they were deleted earlier on</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (149 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l650">
+                  <tt><i>650</i>     <span class="c1">#     G_R &lt;- SotABNsl(data = dataRoots, method = method, score = score, hyperparamList, removePerfectMatchingCol = removePerfectMatchingCol, ...)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (124 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l808">
+                  <tt><i>808</i>                 <span class="bp">self</span><span class="o">.</span><span class="n">_Hcond_rel</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">Hrel_array</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Hcond</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Hcond</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (154 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l1084">
+                  <tt><i>1084</i>     <span class="c1"># type: (...) -&gt; Union[Iterable[Tuple[int, int]], Iterable[Tuple[str, str]], Tuple[Iterable[int], Iterable[int]], Tuple[Iterable[str], Iterable[str]]]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (154 > 120 characters):</p>
+               
+               <a href="qdscreen.main.source.html#l1118">
+                  <tt><i>1118</i>     <span class="c1"># type: (...) -&gt; Union[Iterable[Tuple[int, int]], Iterable[Tuple[str, str]], Tuple[Iterable[int], Iterable[int]], Tuple[Iterable[str], Iterable[str]]]</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E731">
+               <span class="count sev-2">
+                  4
+               </span>
+               <strong>E731:</strong> do not assign a lambda expression, use a def
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.main.source.html#l379">
+                  <tt><i>379</i>             <span class="n">get_children</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_children</span><span class="p">(</span><span class="n">parent_name</span><span class="o">=</span><span class="n">node</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.main.source.html#l381">
+                  <tt><i>381</i>             <span class="n">get_children</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_children</span><span class="p">(</span><span class="n">parent_idx</span><span class="o">=</span><span class="n">node</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.main.source.html#l499">
+                  <tt><i>499</i>             <span class="n">walk_arcs</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_arcs</span><span class="p">(</span><span class="n">parent_name</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.main.source.html#l501">
+                  <tt><i>501</i>             <span class="n">walk_arcs</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk_arcs</span><span class="p">(</span><span class="n">parent_idx</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E741">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E741:</strong> ambiguous variable name 'l'
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Ambiguous variable name 'l':</p>
+               
+               <a href="qdscreen.main.source.html#l386">
+                  <tt><i>386</i>                 <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">_walk</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Ambiguous variable name 'I':</p>
+               
+               <a href="qdscreen.main.source.html#l975">
+                  <tt><i>975</i>     <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_vars</span><span class="p">,</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E271">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E271:</strong> multiple spaces after keyword
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.main.source.html#l132">
+                  <tt><i>132</i>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjmat</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_nparray</span> <span class="k">else</span>  <span class="bp">self</span><span class="o">.</span><span class="n">adjmat</span><span class="o">.</span><span class="n">values</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="S101">
+               <span class="count sev-3">
+                  4
+               </span>
+               <strong>S101:</strong> Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.main.source.html#l745">
+                  <tt><i>745</i>             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.main.source.html#l783">
+                  <tt><i>783</i>             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Hcond</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.main.source.html#l811">
+                  <tt><i>811</i>             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Hcond_rel</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.main.source.html#l812">
+                  <tt><i>812</i>             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Hcond_rel</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="T001">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>T001:</strong> print found.
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.main.source.html#l468">
+                  <tt><i>468</i>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">)))</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

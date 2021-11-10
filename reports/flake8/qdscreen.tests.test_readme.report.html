@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: qdscreen/tests/test_readme.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="qdscreen.tests.test_readme.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               qdscreen/tests/test_readme.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="W291">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W291:</strong> trailing whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l176">
+                  <tt><i>176</i> <span class="s2">arc                                 </span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="S101">
+               <span class="count sev-3">
+                  16
+               </span>
+               <strong>S101:</strong> Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l47">
+                  <tt><i>47</i>         <span class="k">assert</span> <span class="n">captured</span><span class="o">.</span><span class="n">out</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;└─</span><span class="se">\n</span><span class="s2">&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l51">
+                  <tt><i>51</i>         <span class="k">assert</span> <span class="s2">&quot;└─ab</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">Foo</span><span class="p">())</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l52">
+                  <tt><i>52</i>         <span class="k">assert</span> <span class="s2">&quot;└─ab</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="nb">repr</span><span class="p">(</span><span class="n">Foo</span><span class="p">())</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l66">
+                  <tt><i>66</i>         <span class="k">assert</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">captured</span><span class="o">.</span><span class="n">out</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l97">
+                  <tt><i>97</i>         <span class="k">assert</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">captured</span><span class="o">.</span><span class="n">out</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l114">
+                  <tt><i>114</i>         <span class="k">assert</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">captured</span><span class="o">.</span><span class="n">out</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l155">
+                  <tt><i>155</i>         <span class="k">assert</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">captured</span><span class="o">.</span><span class="n">out</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l174">
+                  <tt><i>174</i>         <span class="k">assert</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">captured</span><span class="o">.</span><span class="n">out</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l281">
+                  <tt><i>281</i>         <span class="k">assert</span> <span class="n">data2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l291">
+                  <tt><i>291</i>         <span class="k">assert</span> <span class="n">data2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l348">
+                  <tt><i>348</i>         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qd_forest</span><span class="o">.</span><span class="n">parents</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l349">
+                  <tt><i>349</i>         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l352">
+                  <tt><i>352</i>         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qd_forest</span><span class="o">.</span><span class="n">parents</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l353">
+                  <tt><i>353</i>         <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">qd_forest</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">==</span> <span class="n">var_names</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l371">
+                  <tt><i>371</i>         <span class="k">assert</span> <span class="n">data2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l378">
+                  <tt><i>378</i>         <span class="k">assert</span> <span class="n">data2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="T001">
+               <span class="count sev-3">
+                  8
+               </span>
+               <strong>T001:</strong> print found.
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l43">
+                  <tt><i>43</i>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;└─&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l62">
+                  <tt><i>62</i>     <span class="nb">print</span><span class="p">(</span><span class="n">qd_forest</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l79">
+                  <tt><i>79</i>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columns in df: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l86">
+                  <tt><i>86</i>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columns in only_important_features: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">list</span><span class="p">(</span><span class="n">only_important_features</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l90">
+                  <tt><i>90</i>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columns in restored_full_df: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">list</span><span class="p">(</span><span class="n">restored_full_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l109">
+                  <tt><i>109</i>     <span class="nb">print</span><span class="p">(</span><span class="n">qd_forest</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l150">
+                  <tt><i>150</i>     <span class="nb">print</span><span class="p">(</span><span class="n">qd_forest2</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_readme.source.html#l170">
+                  <tt><i>170</i>     <span class="nb">print</span><span class="p">(</span><span class="n">ce_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>
