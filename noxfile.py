@@ -30,7 +30,7 @@ ENVS = {
 
 
 # set the default activated sessions, minimal for CI
-nox.options.sessions = ["tests", "flake8"]  # , "docs", "gh_pages"
+nox.options.sessions = ["tests", "flake8", "docs"]  # , "docs", "gh_pages"
 nox.options.reuse_existing_virtualenvs = True  # this can be done using -r
 # if platform.system() == "Windows":  >> always use this for better control
 nox.options.default_venv_backend = "conda"
@@ -143,8 +143,7 @@ def flake8(session: PowerSession):
     """Launch flake8 qualimetry."""
 
     session.install("-r", str(Folders.ci_tools / "flake8-requirements.txt"))
-    session.install("genbadge[flake8]")
-    session.run2("pip install -e .[flake8]")
+    session.run2("pip install .")
 
     rm_folder(Folders.flake8_reports)
     Folders.flake8_reports.mkdir(parents=True, exist_ok=True)
@@ -158,11 +157,15 @@ def flake8(session: PowerSession):
     rm_file(Folders.flake8_intermediate_file)
 
 
-@power_session(python=[PY37])
+@power_session(python=[PY39])
 def docs(session: PowerSession):
     """Generates the doc and serves it on a local http server. Pass '-- build' to build statically instead."""
 
-    session.install_reqs(phase="docs", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments"])
+    # we need to install self for the doc gallery examples to work
+    session.install_reqs(setup=True, install=True, versions_dct={"pip": ">19"})
+    session.run2("pip install .")
+    session.install_reqs(phase="docs", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments",
+                                                   "mkdocs-gallery", "pillow", "matplotlib"])
 
     if session.posargs:
         # use posargs instead of "serve"
@@ -175,7 +178,11 @@ def docs(session: PowerSession):
 def publish(session: PowerSession):
     """Deploy the docs+reports on github pages. Note: this rebuilds the docs"""
 
-    session.install_reqs(phase="mkdocs", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments"])
+    # we need to install self for the doc gallery examples to work
+    session.install_reqs(setup=True, install=True, versions_dct={"pip": ">19"})
+    session.run2("pip install .")
+    session.install_reqs(phase="mkdocs", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments",
+                                                     "mkdocs-gallery", "pillow", "matplotlib"])
 
     # possibly rebuild the docs in a static way (mkdocs serve does not build locally)
     session.run2("mkdocs build")
