@@ -17,15 +17,14 @@ gh_org = "python-qds"
 gh_repo = "qdscreen"
 
 ENVS = {
-    # python 3.10 is not available on conda yet
-    # PY310: {"coverage": False, "pkg_specs": {"pip": ">19"}},
+    PY310: {"coverage": False, "pkg_specs": {"pip": ">19"}},
     PY39: {"coverage": False, "pkg_specs": {"pip": ">19"}},
-    PY38: {"coverage": False, "pkg_specs": {"pip": ">19"}},
     PY27: {"coverage": False, "pkg_specs": {"pip": ">10"}},
     PY35: {"coverage": False, "pkg_specs": {"pip": ">10"}},
     PY36: {"coverage": False, "pkg_specs": {"pip": ">19"}},
+    PY37: {"coverage": False, "pkg_specs": {"pip": ">19"}},  # , "pytest-html": "1.9.0"
     # IMPORTANT: this should be last so that the folder docs/reports is not deleted afterwards
-    PY37: {"coverage": True, "pkg_specs": {"pip": ">19"}},  # , "pytest-html": "1.9.0"
+    PY38: {"coverage": True, "pkg_specs": {"pip": ">19"}},
 }
 
 
@@ -33,7 +32,7 @@ ENVS = {
 nox.options.sessions = ["tests", "flake8", "docs"]  # , "docs", "gh_pages"
 nox.options.reuse_existing_virtualenvs = True  # this can be done using -r
 # if platform.system() == "Windows":  >> always use this for better control
-nox.options.default_venv_backend = "conda"
+nox.options.default_venv_backend = "virtualenv"
 # os.environ["NO_COLOR"] = "True"  # nox.options.nocolor = True does not work
 # nox.options.verbose = True
 
@@ -95,10 +94,10 @@ def tests(session: PowerSession, coverage, pkg_specs):
 
     # list all (conda list alone does not work correctly on github actions)
     # session.run2("conda list")
-    conda_prefix = Path(session.bin)
-    if conda_prefix.name == "bin":
-        conda_prefix = conda_prefix.parent
-    session.run2("conda list", env={"CONDA_PREFIX": str(conda_prefix), "CONDA_DEFAULT_ENV": session.get_session_id()})
+    # conda_prefix = Path(session.bin)
+    # if conda_prefix.name == "bin":
+    #     conda_prefix = conda_prefix.parent
+    # session.run2("conda list", env={"CONDA_PREFIX": str(conda_prefix), "CONDA_DEFAULT_ENV": session.get_session_id()})
 
     # Fail if the assumed python version is not the actual one
     session.run2("python ci_tools/check_python_version.py %s" % session.python)
@@ -162,7 +161,6 @@ def docs(session: PowerSession):
     """Generates the doc and serves it on a local http server. Pass '-- build' to build statically instead."""
 
     # we need to install self for the doc gallery examples to work
-    session.install_reqs(setup=True, install=True, versions_dct={"pip": ">19"})
     session.run2("pip install .")
     session.install_reqs(phase="docs", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments",
                                                    "mkdocs-gallery", "pillow", "matplotlib"])
@@ -179,9 +177,8 @@ def publish(session: PowerSession):
     """Deploy the docs+reports on github pages. Note: this rebuilds the docs"""
 
     # we need to install self for the doc gallery examples to work
-    session.install_reqs(setup=True, install=True, versions_dct={"pip": ">19"})
     session.run2("pip install .")
-    session.install_reqs(phase="mkdocs", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments",
+    session.install_reqs(phase="publish", phase_reqs=["mkdocs-material", "mkdocs", "pymdown-extensions", "pygments",
                                                      "mkdocs-gallery", "pillow", "matplotlib"])
 
     # possibly rebuild the docs in a static way (mkdocs serve does not build locally)
