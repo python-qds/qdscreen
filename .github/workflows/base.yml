@@ -124,6 +124,11 @@ jobs:
 
       # -------------- only on Ubuntu + MAIN PUSH (no pull request, no tag) -----------
 
+      - name: Generate documentation to include the gallery
+        if: github.event_name == 'pull_request'  # startsWith(matrix.os,'ubuntu')
+        shell: bash -l {0}  # so that conda works
+        run: nox -s docs -- build
+
       # 5) Publish the doc and test reports
       - name: \[not on TAG\] Publish documentation, tests and coverage reports
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads')  # startsWith(matrix.os,'ubuntu')
