@@ -77,6 +77,33 @@ jobs:
           name: reports_dir
           path: ./docs/reports
 
+  build_doc:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v2
+
+      # Conda install
+      - name: Install conda v3.7
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          # auto-update-conda: true
+          python-version: 3.7
+          activate-environment: noxenv
+      - run: conda info
+        shell: bash -l {0}  # so that conda works
+      - run: conda list
+        shell: bash -l {0}  # so that conda works
+
+      # Nox install + run
+      - name: Install noxfile requirements
+        shell: bash -l {0}  # so that conda works
+        run: pip install -r noxfile-requirements.txt
+      - run: conda list
+        shell: bash -l {0}  # so that conda works
+      - run: nox -s docs -- build
+        shell: bash -l {0}  # so that conda works
+
   publish_release:
     needs: run_all_tests
     runs-on: ubuntu-latest
@@ -123,11 +150,6 @@ jobs:
         run: nox -s flake8
 
       # -------------- only on Ubuntu + MAIN PUSH (no pull request, no tag) -----------
-
-      - name: Generate documentation to include the gallery
-        if: github.event_name == 'pull_request'  # startsWith(matrix.os,'ubuntu')
-        shell: bash -l {0}  # so that conda works
-        run: nox -s docs -- build
 
       # 5) Publish the doc and test reports
       - name: \[not on TAG\] Publish documentation, tests and coverage reports
