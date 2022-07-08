@@ -103,7 +103,7 @@ jobs:
         run: nox -s docs -- build
 
   publish_release:
-    needs: [build_doc, run_all_tests]
+    needs: run_all_tests
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
