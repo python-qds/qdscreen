@@ -30,6 +30,7 @@ ENVS = {
 
 # set the default activated sessions, minimal for CI
 nox.options.sessions = ["tests", "flake8", "docs"]  # , "docs", "gh_pages"
+nox.options.error_on_missing_interpreters = True
 nox.options.reuse_existing_virtualenvs = True  # this can be done using -r
 # if platform.system() == "Windows":  >> always use this for better control
 nox.options.default_venv_backend = "virtualenv"
