@@ -17,7 +17,6 @@ except ImportError:
 
 
 PY2 = sys.version_info < (3,)
-IMGS_FOLDER = Path(__file__).parent.parent.parent / "docs" / "imgs"
 
 
 def df_mix1():
@@ -189,8 +188,8 @@ U->Y      0.475489          0.302676
         # we have issues on travis CI with matplotlib on PY2: skip
         import matplotlib.pyplot as plt
         qd_forest.plot_increasing_entropies()
-        fig = plt.gcf()
-        fig.savefig(str(IMGS_FOLDER / "increasing_entropies.png"))
+        # fig = plt.gcf()
+        # fig.savefig(str(IMGS_FOLDER / "increasing_entropies.png"))
         plt.close("all")
 
 
