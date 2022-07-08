@@ -90,6 +90,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install python 3.9 for nox
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+          architecture: x64
+
       - name: Install noxfile requirements
         run: pip install -r noxfile-requirements.txt
 
