@@ -105,7 +105,7 @@ jobs:
         shell: bash -l {0}  # so that conda works
 
   publish_release:
-    needs: run_all_tests
+    needs: [build_doc, run_all_tests]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
