@@ -7,6 +7,7 @@
 [![Documentation](https://img.shields.io/badge/doc-latest-blue.svg)](https://python-qds.github.io/qdscreen/) [![PyPI](https://img.shields.io/pypi/v/qdscreen.svg)](https://pypi.python.org/pypi/qdscreen/) [![Downloads](https://pepy.tech/badge/qdscreen)](https://pepy.tech/project/qdscreen) [![Downloads per week](https://pepy.tech/badge/qdscreen/week)](https://pepy.tech/project/qdscreen) [![GitHub stars](https://img.shields.io/github/stars/python-qds/qdscreen.svg)](https://github.com/python-qds/qdscreen/stargazers)
 
 `qdscreen` provides a python implementation of the Quasi-determinism screening algorithm (also known as `qds-BNSL`) from T.Rahier's PhD thesis, 2018.
+
 **This is the readme for developers.** The documentation for users is available here: [https://python-qds.github.io/qdscreen/](https://python-qds.github.io/qdscreen/)
 
 ## Want to contribute ?
