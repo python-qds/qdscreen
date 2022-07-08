@@ -2,6 +2,8 @@
 
 ### 0.6.1 In Progress - Minor project structure change
 
+ - Now filtering `UserWarning` in `fit_selector_model`. See [#20](https://github.com/python-qds/qdscreen/issues/20) 
+ - New build system: now using `virtualenv` instead of `conda` in `nox` sessions. Fixes [#23](https://github.com/python-qds/qdscreen/issues/23)
  - New project layout to avoid bug with `xunitparser`. Fixes [#18](https://github.com/python-qds/qdscreen/issues/18)
 
 ### 0.6.0 - sklearn api renames

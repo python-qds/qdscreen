@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy import sparse
+import warnings
 
 try:
     from typing import Union, Optional
@@ -80,7 +81,10 @@ class QDSelectorModel(object):
             # first get the numpy array in correct order
             varnames = forest.varnames
             X_ar = X.loc[:, varnames].values
-            self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
+            # TODO find a better workaround ? SeeGH#20
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=UserWarning)
+                self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
 
             for parent, child in forest.get_arcs(names=False):
                 # todo maybe remove this check later for efficiency
