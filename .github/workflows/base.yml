@@ -49,19 +49,18 @@ jobs:
         os: [ ubuntu-latest ]  # , macos-latest, windows-latest]
         # all nox sessions: manually > dynamically from previous job
         # nox_session: ["tests-2.7", "tests-3.7"]
-        py_version: ${{ fromJson(needs.list_nox_test_sessions.outputs.matrix)[0] }}
-        nox_session: ${{ fromJson(needs.list_nox_test_sessions.outputs.matrix)[1] }}
+        nox_session: ${{ fromJson(needs.list_nox_test_sessions.outputs.matrix) }}
 
-    name: ${{ matrix.os }} ${{ matrix.nox_session }} # ${{ matrix.name_suffix }}
+    name: ${{ matrix.os }} ${{ matrix.nox_session.python }} ${{ matrix.nox_session.session }} # ${{ matrix.name_suffix }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install python ${{ matrix.py_version }} for tests
+      - name: Install python ${{ matrix.nox_session.python }} for tests
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.py_version }}
+          python-version: ${{ matrix.nox_session.python }}
           architecture: x64
 
       - name: Install python 3.9 for nox
@@ -73,8 +72,8 @@ jobs:
       - name: Install noxfile requirements
         run: pip install -r noxfile-requirements.txt
 
-      - name: Run nox session ${{ matrix.nox_session }}
-        run: nox -s "${{ matrix.nox_session }}"
+      - name: Run nox session ${{ matrix.nox_session.session }}
+        run: nox -s "${{ matrix.nox_session.session }}"
 
       # Share ./docs/reports so that they can be deployed with doc in next job
       - name: Share reports with other jobs

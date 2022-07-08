@@ -283,12 +283,12 @@ def gha_list(session):
         session_func.parametrize
     except AttributeError:
         if additional_args.with_version:
-            sessions_list = [[py, "%s-%s" % (session_func.__name__, py)] for py in session_func.python]
+            sessions_list = [{"python": py, "session": "%s-%s" % (session_func.__name__, py)} for py in session_func.python]
         else:
             sessions_list = ["%s-%s" % (session_func.__name__, py) for py in session_func.python]
     else:
         if additional_args.with_version:
-            sessions_list = [[py, "%s-%s(%s)" % (session_func.__name__, py, param)]
+            sessions_list = [{"python": py, "session": "%s-%s(%s)" % (session_func.__name__, py, param)}
                              for py, param in product(session_func.python, session_func.parametrize)]
         else:
             sessions_list = ["%s-%s(%s)" % (session_func.__name__, py, param)
