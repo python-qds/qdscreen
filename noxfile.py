@@ -202,7 +202,7 @@ def publish(session: PowerSession):
     # session.run2('codecov -t %s -f %s' % (codecov_token, Folders.coverage_xml))
 
 
-@power_session(python=[PY37])
+@power_session(python=[PY39])
 def release(session: PowerSession):
     """Create a release on github corresponding to the latest tag"""
 
