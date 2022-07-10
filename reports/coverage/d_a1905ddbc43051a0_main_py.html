@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for qdscreen/main.py: 84%</title>
+    <title>Coverage for qdscreen/main.py: 85%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -13,49 +12,73 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>qdscreen/main.py</b>:
-            <span class="pc_cov">84%</span>
+            <span class="pc_cov">85%</span>
         </h1>
-        <div id="help_panel_wrapper">
+        <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
                 <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
-                <div>
-                    <p class="keyhelp">
+                <div class="keyhelp">
+                    <p>
                         <kbd>r</kbd>
                         <kbd>m</kbd>
                         <kbd>x</kbd>
                         <kbd>p</kbd>
                         &nbsp; toggle line displays
                     </p>
-                    <p class="keyhelp">
+                    <p>
                         <kbd>j</kbd>
-                        <kbd>k</kbd> &nbsp; next/prev highlighted chunk
+                        <kbd>k</kbd>
+                        &nbsp; next/prev highlighted chunk
                     </p>
-                    <p class="keyhelp">
+                    <p>
                         <kbd>0</kbd> &nbsp; (zero) top of page
                     </p>
-                    <p class="keyhelp">
+                    <p>
                         <kbd>1</kbd> &nbsp; (one) first highlighted chunk
+                    </p>
+                    <p>
+                        <kbd>[</kbd>
+                        <kbd>]</kbd>
+                        &nbsp; prev/next file
+                    </p>
+                    <p>
+                        <kbd>u</kbd> &nbsp; up to the index
+                    </p>
+                    <p>
+                        <kbd>?</kbd> &nbsp; show/hide this help
                     </p>
                 </div>
             </div>
-        </div>
+        </aside>
         <h2>
-            <span class="text">467 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">409<span class="text"> run</span></button>
+            <span class="text">496 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">438<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">58<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
             <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">33<span class="text"> partial</span></button>
         </h2>
-        <div style="display: none;">
-            <button type="button" class="button_next_chunk" data-shortcut="j">Next highlighted chunk</button>
-            <button type="button" class="button_prev_chunk" data-shortcut="k">Previous highlighted chunk</button>
-            <button type="button" class="button_top_of_page" data-shortcut="0">Goto top of page</button>
-            <button type="button" class="button_first_chunk" data-shortcut="1">Goto first highlighted chunk</button>
-        </div>
+        <p class="text">
+            <a id="prevFileLink" class="nav" href="d_a1905ddbc43051a0_compat_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
+            <a id="nextFileLink" class="nav" href="d_a1905ddbc43051a0_selector_py.html">&#xbb; next</a>
+            &nbsp; &nbsp; &nbsp;
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.4.1</a>,
+            created at 2022-07-10 20:13 +0000
+        </p>
+        <aside class="hidden">
+            <button type="button" class="button_next_chunk" data-shortcut="j"/>
+            <button type="button" class="button_prev_chunk" data-shortcut="k"/>
+            <button type="button" class="button_top_of_page" data-shortcut="0"/>
+            <button type="button" class="button_first_chunk" data-shortcut="1"/>
+            <button type="button" class="button_prev_file" data-shortcut="["/>
+            <button type="button" class="button_next_file" data-shortcut="]"/>
+            <button type="button" class="button_to_index" data-shortcut="u"/>
+            <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+        </aside>
     </div>
 </header>
 <main id="source">
@@ -152,11 +175,11 @@
     <p class="run"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="key">return</span> <span class="nam">names</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">    <span class="key">def</span> <span class="nam">nb_vars</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">    <span class="key">def</span> <span class="nam">nb_vars</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_parents</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_parents</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t96" href="#t96">96</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">    <span class="key">def</span> <span class="nam">varnames</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">    <span class="key">def</span> <span class="nam">varnames</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">assert_names_available</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">        <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span> <span class="key">else</span> <span class="nam">np</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">_parents</span><span class="op">.</span><span class="nam">index</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -188,12 +211,12 @@
     <p class="mis show_mis"><span class="n"><a id="t127" href="#t127">127</a></span><span class="t">            <span class="key">return</span> <span class="nam">mask</span><span class="op">[</span><span class="nam">mask</span><span class="op">]</span><span class="op">.</span><span class="nam">index</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t130" href="#t130">130</a></span><span class="t">    <span class="key">def</span> <span class="nam">adjmat_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t130" href="#t130">130</a></span><span class="t">    <span class="key">def</span> <span class="nam">adjmat_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t131" href="#t131">131</a></span><span class="t">        <span class="str">"""The adjacency matrix as a 2D numpy array"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">adjmat</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span>  <span class="nam">self</span><span class="op">.</span><span class="nam">adjmat</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t133" href="#t133">133</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t134" href="#t134">134</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">    <span class="key">def</span> <span class="nam">adjmat</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">    <span class="key">def</span> <span class="nam">adjmat</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">        <span class="str">"""The adjacency matrix as a pandas DataFrame or a 2D numpy array"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t137" href="#t137">137</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">            <span class="com"># compute adjmat from parents.</span>&nbsp;</span><span class="r"></span></p>
@@ -210,12 +233,12 @@
     <p class="run"><span class="n"><a id="t149" href="#t149">149</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">    <span class="key">def</span> <span class="nam">parents_indices_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">    <span class="key">def</span> <span class="nam">parents_indices_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t">        <span class="str">"""A numpy array containing the indices of all parent nodes"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span><span class="op">[</span><span class="str">'idx'</span><span class="op">]</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">    <span class="key">def</span> <span class="nam">parents</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">    <span class="key">def</span> <span class="nam">parents</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t">        <span class="str">"""A numpy array containing the indices of all parent nodes, or a pandas DataFrame containing 'idx' and 'name'"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_parents</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">            <span class="com"># compute parents from adjmat, whether a dataframe or an array</span>&nbsp;</span><span class="r"></span></p>
@@ -228,12 +251,12 @@
     <p class="run"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_parents</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_mask_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_mask_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t171" href="#t171">171</a></span><span class="t">        <span class="str">"""A 1D numpy mask array indicating if a node is a root node"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roots_mask</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roots_mask</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t174" href="#t174">174</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_mask</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_mask</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t176" href="#t176">176</a></span><span class="t">        <span class="str">"""A pandas Series or a 1D numpy mask array indicating if a node is a root node"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t177" href="#t177">177</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_roots_mask</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t178" href="#t178">178</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -246,12 +269,12 @@
     <p class="run"><span class="n"><a id="t185" href="#t185">185</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_roots_mask</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t186" href="#t186">186</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t187" href="#t187">187</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t188" href="#t188">188</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t188" href="#t188">188</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t189" href="#t189">189</a></span><span class="t">        <span class="str">"""A 1D numpy array of root indices"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t190" href="#t190">190</a></span><span class="t">        <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">where</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">roots_mask_ar</span><span class="op">)</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t191" href="#t191">191</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t192" href="#t192">192</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t193" href="#t193">193</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t193" href="#t193">193</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t194" href="#t194">194</a></span><span class="t">        <span class="str">"""A pandas Series of root names or 1D numpy array of root indices"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t195" href="#t195">195</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">195&#x202F;&#x219B;&#x202F;196</span><span class="annotate long">line 195 didn't jump to line 196, because the condition on line 195 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t196" href="#t196">196</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roots_ar</span>&nbsp;</span><span class="r"></span></p>
@@ -272,12 +295,12 @@
     <p class="run"><span class="n"><a id="t211" href="#t211">211</a></span><span class="t">        <span class="key">return</span> <span class="nam">list</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">roots</span><span class="op">)</span> <span class="key">if</span> <span class="nam">names</span> <span class="key">else</span> <span class="nam">list</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">roots_ar</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">    <span class="key">def</span> <span class="nam">non_roots_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">    <span class="key">def</span> <span class="nam">non_roots_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">        <span class="str">"""A 1D numpy array of non-root indices"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">        <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">where</span><span class="op">(</span><span class="op">~</span><span class="nam">self</span><span class="op">.</span><span class="nam">roots_mask_ar</span><span class="op">)</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t">    <span class="key">def</span> <span class="nam">non_roots</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t">    <span class="key">def</span> <span class="nam">non_roots</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t">        <span class="str">"""A pandas Series of non-root names or 1D numpy array of non-root indices"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">221&#x202F;&#x219B;&#x202F;222</span><span class="annotate long">line 221 didn't jump to line 222, because the condition on line 221 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">non_roots_ar</span>&nbsp;</span><span class="r"></span></p>
@@ -298,12 +321,12 @@
     <p class="run"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t">        <span class="key">return</span> <span class="nam">list</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">non_roots</span><span class="op">)</span> <span class="key">if</span> <span class="nam">names</span> <span class="key">else</span> <span class="nam">list</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">non_roots_ar</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t238" href="#t238">238</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t239" href="#t239">239</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t">    <span class="key">def</span> <span class="nam">nodes_with_children_mask_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t">    <span class="key">def</span> <span class="nam">nodes_with_children_mask_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t241" href="#t241">241</a></span><span class="t">        <span class="str">"""A 1D numpy mask array indicating nodes that have at least 1 child"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t242" href="#t242">242</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">nodes_with_children_mask</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">nodes_with_children_mask</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t243" href="#t243">243</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t244" href="#t244">244</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t245" href="#t245">245</a></span><span class="t">    <span class="key">def</span> <span class="nam">nodes_with_children_mask</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t245" href="#t245">245</a></span><span class="t">    <span class="key">def</span> <span class="nam">nodes_with_children_mask</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t246" href="#t246">246</a></span><span class="t">        <span class="str">"""A pandas Series or 1D numpy array indicating nodes that have at least 1 child"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t247" href="#t247">247</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">247&#x202F;&#x219B;&#x202F;250</span><span class="annotate long">line 247 didn't jump to line 250, because the condition on line 247 was never false</span></span></p>
     <p class="run"><span class="n"><a id="t248" href="#t248">248</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span><span class="op">.</span><span class="nam">any</span><span class="op">(</span><span class="nam">axis</span><span class="op">=</span><span class="num">1</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -312,12 +335,12 @@
     <p class="mis show_mis"><span class="n"><a id="t251" href="#t251">251</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">indices_to_mask</span><span class="op">(</span><span class="nam">nwc_idx</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t252" href="#t252">252</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t253" href="#t253">253</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t254" href="#t254">254</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children_mask_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t254" href="#t254">254</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children_mask_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t255" href="#t255">255</a></span><span class="t">        <span class="str">"""A 1D numpy mask array indicating root nodes that have at least 1 child"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t256" href="#t256">256</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roots_with_children_mask</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roots_with_children_mask</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t257" href="#t257">257</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t258" href="#t258">258</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children_mask</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children_mask</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t260" href="#t260">260</a></span><span class="t">        <span class="str">"""A pandas Series or 1D numpy mask array indicating root nodes that have at least 1 child"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t261" href="#t261">261</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_roots_wc_mask</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t262" href="#t262">262</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_adjmat</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -332,12 +355,12 @@
     <p class="run"><span class="n"><a id="t271" href="#t271">271</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_roots_wc_mask</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">        <span class="str">"""A 1D numpy array with the indices of root nodes that have at least 1 child"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">        <span class="key">return</span> <span class="nam">np</span><span class="op">.</span><span class="nam">where</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">roots_with_children_mask_ar</span><span class="op">)</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">    <span class="key">def</span> <span class="nam">roots_with_children</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">        <span class="str">"""A pandas Series or 1D numpy array with names/indices of root nodes that have at least 1 child"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">281&#x202F;&#x219B;&#x202F;282</span><span class="annotate long">line 281 didn't jump to line 282, because the condition on line 281 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">roots_with_children_ar</span>&nbsp;</span><span class="r"></span></p>
@@ -510,7 +533,7 @@
     <p class="mis show_mis"><span class="n"><a id="t449" href="#t449">449</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">"Unknown mode: %r"</span> <span class="op">%</span> <span class="nam">mode</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t450" href="#t450">450</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t451" href="#t451">451</a></span><span class="t">    <span class="op">@</span><span class="nam">encode_if_py2</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t452" href="#t452">452</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t452" href="#t452">452</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t453" href="#t453">453</a></span><span class="t">        <span class="str">""" String representation, listing all useful information when available """</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t454" href="#t454">454</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">nb_vars</span> <span class="op">></span> <span class="num">30</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">454&#x202F;&#x219B;&#x202F;455</span><span class="annotate long">line 454 didn't jump to line 455, because the condition on line 454 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t455" href="#t455">455</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">to_str</span><span class="op">(</span><span class="nam">mode</span><span class="op">=</span><span class="str">"headers"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -518,7 +541,7 @@
     <p class="run"><span class="n"><a id="t457" href="#t457">457</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">to_str</span><span class="op">(</span><span class="nam">mode</span><span class="op">=</span><span class="str">"full"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t459" href="#t459">459</a></span><span class="t">    <span class="op">@</span><span class="nam">encode_if_py2</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t">    <span class="key">def</span> <span class="nam">__repr__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t">    <span class="key">def</span> <span class="nam">__repr__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t">        <span class="com"># return str(self)  # note if we use this then we'll have to comment the decorator</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t462" href="#t462">462</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">to_str</span><span class="op">(</span><span class="nam">mode</span><span class="op">=</span><span class="str">"compact"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -759,7 +782,7 @@
     <p class="run"><span class="n"><a id="t698" href="#t698">698</a></span><span class="t">        <span class="key">return</span> <span class="nam">res</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t699" href="#t699">699</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t700" href="#t700">700</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t701" href="#t701">701</a></span><span class="t">    <span class="key">def</span> <span class="nam">dataset_df</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t701" href="#t701">701</a></span><span class="t">    <span class="key">def</span> <span class="nam">dataset_df</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t702" href="#t702">702</a></span><span class="t">        <span class="str">"""The dataset as a pandas DataFrame, if pandas is available"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t703" href="#t703">703</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t704" href="#t704">704</a></span><span class="t">            <span class="com"># see https://numpy.org/doc/stable/user/basics.rec.html#manipulating-and-displaying-structured-datatypes</span>&nbsp;</span><span class="r"></span></p>
@@ -774,17 +797,17 @@
     <p class="run"><span class="n"><a id="t713" href="#t713">713</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">dataset</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t714" href="#t714">714</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t715" href="#t715">715</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t716" href="#t716">716</a></span><span class="t">    <span class="key">def</span> <span class="nam">nb_vars</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t716" href="#t716">716</a></span><span class="t">    <span class="key">def</span> <span class="nam">nb_vars</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t717" href="#t717">717</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">dataset</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">1</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t718" href="#t718">718</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t719" href="#t719">719</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t720" href="#t720">720</a></span><span class="t">    <span class="key">def</span> <span class="nam">varnames</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t720" href="#t720">720</a></span><span class="t">    <span class="key">def</span> <span class="nam">varnames</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t721" href="#t721">721</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">721&#x202F;&#x219B;&#x202F;722</span><span class="annotate long">line 721 didn't jump to line 722, because the condition on line 721 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t722" href="#t722">722</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">"Variable names not available"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t723" href="#t723">723</a></span><span class="t">        <span class="key">return</span> <span class="nam">list</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">dataset</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t724" href="#t724">724</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t725" href="#t725">725</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t726" href="#t726">726</a></span><span class="t">    <span class="key">def</span> <span class="nam">H_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t726" href="#t726">726</a></span><span class="t">    <span class="key">def</span> <span class="nam">H_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t727" href="#t727">727</a></span><span class="t">        <span class="str">""" The entropy matrix (i, j) = H(Xi | Xj) as a numpy array """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t728" href="#t728">728</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">H</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">H</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t729" href="#t729">729</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -792,7 +815,7 @@
     <p class="pln"><span class="n"><a id="t731" href="#t731">731</a></span><span class="t">    <span class="str">"""An alias for H_ar"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t732" href="#t732">732</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t733" href="#t733">733</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t734" href="#t734">734</a></span><span class="t">    <span class="key">def</span> <span class="nam">H</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t734" href="#t734">734</a></span><span class="t">    <span class="key">def</span> <span class="nam">H</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t735" href="#t735">735</a></span><span class="t">        <span class="str">"""The entropies of all variables. a pandas Series if df was a pandas dataframe, else a 1D numpy array"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t736" href="#t736">736</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_H</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t737" href="#t737">737</a></span><span class="t">            <span class="com"># Using pyitlib to compute H (hopefully efficiently)</span>&nbsp;</span><span class="r"></span></p>
@@ -810,7 +833,7 @@
     <p class="pln"><span class="n"><a id="t749" href="#t749">749</a></span><span class="t">    <span class="str">"""An alias for H"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t750" href="#t750">750</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t751" href="#t751">751</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t752" href="#t752">752</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t752" href="#t752">752</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t753" href="#t753">753</a></span><span class="t">        <span class="str">""" The conditional entropy matrix (i, j) = H(Xi | Xj) as a numpy array """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t754" href="#t754">754</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">Hcond</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">Hcond</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t755" href="#t755">755</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -818,7 +841,7 @@
     <p class="pln"><span class="n"><a id="t757" href="#t757">757</a></span><span class="t">    <span class="str">"""An alias for Hcond_ar"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t758" href="#t758">758</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t759" href="#t759">759</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t760" href="#t760">760</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t760" href="#t760">760</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t761" href="#t761">761</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t762" href="#t762">762</a></span><span class="t"><span class="str">        The conditional entropy matrix (i, j) = H(Xi | Xj).</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t763" href="#t763">763</a></span><span class="t"><span class="str">        A pandas Dataframe or a 2D numpy array depending on dataset type</span>&nbsp;</span><span class="r"></span></p>
@@ -848,7 +871,7 @@
     <p class="pln"><span class="n"><a id="t787" href="#t787">787</a></span><span class="t">    <span class="str">"""An alias for Hcond"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t788" href="#t788">788</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t789" href="#t789">789</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t790" href="#t790">790</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond_rel_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t790" href="#t790">790</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond_rel_ar</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t791" href="#t791">791</a></span><span class="t">        <span class="str">""" The relative conditional entropy matrix (i, j) = H(Xi | Xj) / H(Xi) as a numpy array """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t792" href="#t792">792</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">Hcond_rel</span> <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">is_nparray</span> <span class="key">else</span> <span class="nam">self</span><span class="op">.</span><span class="nam">Hcond_rel</span><span class="op">.</span><span class="nam">values</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t793" href="#t793">793</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -856,7 +879,7 @@
     <p class="pln"><span class="n"><a id="t795" href="#t795">795</a></span><span class="t">    <span class="str">"""An alias for Hcond_rel_ar"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t796" href="#t796">796</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t797" href="#t797">797</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t798" href="#t798">798</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond_rel</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t798" href="#t798">798</a></span><span class="t">    <span class="key">def</span> <span class="nam">Hcond_rel</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t799" href="#t799">799</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t800" href="#t800">800</a></span><span class="t"><span class="str">        The relative conditional entropy matrix (i, j) = H(Xi | Xj) / H(Xi).</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t801" href="#t801">801</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -1253,8 +1276,12 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.1.1</a>,
-            created at 2021-11-10 14:27 +0000
+            <a id="prevFileLink" class="nav" href="d_a1905ddbc43051a0_compat_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
+            <a id="nextFileLink" class="nav" href="d_a1905ddbc43051a0_selector_py.html">&#xbb; next</a>
+            &nbsp; &nbsp; &nbsp;
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.4.1</a>,
+            created at 2022-07-10 20:13 +0000
         </p>
     </div>
 </footer>

@@ -11,31 +11,44 @@
 <header>
     <div class="content">
         <h1>Coverage report:
-            <span class="pc_cov">77%</span>
+            <span class="pc_cov">78%</span>
         </h1>
-        <div id="help_panel_wrapper">
+        <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
                 <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
-                <div>
-                    <p class="keyhelp">
+                <div class="keyhelp">
+                    <p>
                         <kbd>n</kbd>
                         <kbd>s</kbd>
                         <kbd>m</kbd>
                         <kbd>x</kbd>
                         <kbd>b</kbd>
                         <kbd>p</kbd>
-                        <kbd>c</kbd> &nbsp; change column sorting
+                        <kbd>c</kbd>
+                        &nbsp; change column sorting
+                    </p>
+                    <p>
+                        <kbd>[</kbd>
+                        <kbd>]</kbd>
+                        &nbsp; prev/next file
+                    </p>
+                    <p>
+                        <kbd>?</kbd> &nbsp; show/hide this help
                     </p>
                 </div>
             </div>
-        </div>
+        </aside>
         <form id="filter_container">
             <input id="filter" type="text" value="" placeholder="filter..." />
         </form>
+        <p class="text">
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.4.1</a>,
+            created at 2022-07-10 20:13 +0000
+        </p>
     </div>
 </header>
 <main id="index">
@@ -81,41 +94,41 @@
             </tr>
             <tr class="file">
                 <td class="name left"><a href="d_a1905ddbc43051a0_main_py.html">qdscreen/main.py</a></td>
-                <td>467</td>
+                <td>496</td>
                 <td>58</td>
                 <td>0</td>
-                <td>216</td>
+                <td>220</td>
                 <td>33</td>
-                <td class="right" data-ratio="576 683">84%</td>
+                <td class="right" data-ratio="609 716">85%</td>
             </tr>
             <tr class="file">
                 <td class="name left"><a href="d_a1905ddbc43051a0_selector_py.html">qdscreen/selector.py</a></td>
-                <td>79</td>
+                <td>82</td>
                 <td>10</td>
                 <td>0</td>
-                <td>40</td>
+                <td>42</td>
                 <td>9</td>
-                <td class="right" data-ratio="100 119">84%</td>
+                <td class="right" data-ratio="105 124">85%</td>
             </tr>
             <tr class="file">
                 <td class="name left"><a href="d_a1905ddbc43051a0_sklearn_py.html">qdscreen/sklearn.py</a></td>
                 <td>32</td>
                 <td>5</td>
                 <td>0</td>
-                <td>4</td>
+                <td>6</td>
                 <td>2</td>
-                <td class="right" data-ratio="29 36">81%</td>
+                <td class="right" data-ratio="31 38">82%</td>
             </tr>
         </tbody>
         <tfoot>
             <tr class="total">
                 <td class="name left">Total</td>
-                <td>665</td>
+                <td>697</td>
                 <td>137</td>
                 <td>8</td>
-                <td>288</td>
+                <td>296</td>
                 <td>46</td>
-                <td class="right" data-ratio="730 953">77%</td>
+                <td class="right" data-ratio="770 993">78%</td>
             </tr>
         </tfoot>
     </table>
@@ -126,10 +139,17 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.1.1</a>,
-            created at 2021-11-10 14:27 +0000
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.4.1</a>,
+            created at 2022-07-10 20:13 +0000
         </p>
     </div>
+    <aside class="hidden">
+        <a id="prevFileLink" class="nav" href="d_a1905ddbc43051a0_sklearn_py.html"/>
+        <a id="nextFileLink" class="nav" href="d_a1905ddbc43051a0___init___py.html"/>
+        <button type="button" class="button_prev_file" data-shortcut="["/>
+        <button type="button" class="button_next_file" data-shortcut="]"/>
+        <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+    </aside>
 </footer>
 </body>
 </html>
