@@ -139,7 +139,7 @@ def tests(session: PowerSession, coverage, pkg_specs):
         session.run2("genbadge coverage -i %s -o %s" % (Folders.coverage_xml, Folders.coverage_badge))
 
 
-@power_session(python=PY38, logsdir=Folders.runlogs)
+@power_session(python=PY39, logsdir=Folders.runlogs)
 def flake8(session: PowerSession):
     """Launch flake8 qualimetry."""
 
@@ -174,7 +174,7 @@ def docs(session: PowerSession):
         session.run2("mkdocs serve")
 
 
-@power_session(python=[PY37])
+@power_session(python=[PY39])
 def publish(session: PowerSession):
     """Deploy the docs+reports on github pages. Note: this rebuilds the docs"""
 
