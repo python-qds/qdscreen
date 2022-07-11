@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.6.2 - Warning filter
+
+ - Now filtering `UserWarning` in `fit_selector_model` even in the sklearn adapter. Fixes [#20](https://github.com/python-qds/qdscreen/issues/20) 
+
 ### 0.6.1 - Minor changes
 
  - Now filtering `UserWarning` in `fit_selector_model`. See [#20](https://github.com/python-qds/qdscreen/issues/20) 
