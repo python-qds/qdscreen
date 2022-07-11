@@ -52,8 +52,11 @@ class QDSelectorModel(object):
             else:
                 assert X.shape[1] == n
 
-            # self._maps = maps = sparse.coo_matrix((n, n), dtype=object)  # not convenient for incremental
-            self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
+            # TODO find a better workaround ? SeeGH#20
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=UserWarning)
+                # self._maps = maps = sparse.coo_matrix((n, n), dtype=object)  # not convenient for incremental
+                self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
 
             for parent, child in forest.get_arcs():
                 # todo maybe remove this check later for efficiency
