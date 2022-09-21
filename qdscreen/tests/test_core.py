@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from qdscreen import QDForest
+from qdscreen import QDForest, qd_screen
 from qdscreen.compat import PY2
 from qdscreen.main import get_adjacency_matrix, remove_redundancies
+from qdscreen.sklearn import QDScreen
 
 
 def df_strict1():
@@ -273,3 +274,36 @@ j
 #     from qdscreen.compat import BaseEstimator
 #     assert BaseEstimator()._more_tags()['requires_y'] is False
 #     assert BaseEstimator()._get_tags()['requires_y'] is False
+
+
+def test_nans_in_data():
+    """See https://github.com/python-qds/qdscreen/issues/28"""
+
+    df = pd.DataFrame([
+        ["A", "B"],
+        ["A", "B"],
+        ["N", np.nan],
+    ], columns=["a", "b"])
+
+    qd_forest = qd_screen(df)
+    feat_selector = qd_forest.fit_selector_model(df)
+    df_sel = feat_selector.remove_qd(df)
+    pd.testing.assert_frame_equal(df_sel, pd.DataFrame([
+        ["A"],
+        ["A"],
+        ["N"],
+    ], columns=["a"]))
+
+
+def test_nans_in_data_sklearn():
+    """See https://github.com/python-qds/qdscreen/issues/28"""
+
+    df = pd.DataFrame([
+        ["A", "B"],
+        ["A", "B"],
+        ["N", np.nan],
+    ])
+
+    selector = QDScreen()
+    Xsel = selector.fit_transform(df.to_numpy())
+    assert Xsel.tolist() == [['A'], ['A'], ['N']]

@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy import sparse
+from scipy.stats import mode as scipy_mode
 import warnings
 
 try:
@@ -9,6 +10,12 @@ except:  # noqa
     pass
 
 from .main import QDForest
+
+
+def _get_most_common_value(x):
+    # From https://stackoverflow.com/a/47778607/7262247
+    # `scipy_mode` is the most robust to the various pitfalls (nans, ...)
+    return scipy_mode(x)[0][0]
 
 
 class QDSelectorModel(object):
@@ -63,18 +70,21 @@ class QDSelectorModel(object):
                 assert (parent, child) not in maps, "Error: edge already exists"
 
                 # create a dictionary mapping each parent level to most frequent child level
+                #
                 # -- seems suboptimal with numpy...
                 # map_dct = dict()
                 # for parent_lev in np.unique(X[:, parent]):
                 #     values, counts = np.unique(X[X[:, parent] == parent_lev, child], return_counts=True)
                 #     map_dct[parent_lev] = values[np.argmax(counts)]
+                #
                 # -- same with pandas groupby
                 # if is_struct_array:
                 #     pc_df = pd.DataFrame(X[[names[parent], names[child]]])
                 #     pc_df.columns = [0, 1]  # forget the names
                 # else:
-                pc_df = pd.DataFrame(X[:, (parent, child)])
-                levels_mapping_df = pc_df.groupby(0).agg(lambda x: x.value_counts().index[0])
+                pc_df = pd.DataFrame(X[:, (parent, child)], columns=["parent", "child"])
+                levels_mapping_df = pc_df.groupby(by="parent").agg(_get_most_common_value)
+
                 maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
 
         else:
@@ -94,7 +104,9 @@ class QDSelectorModel(object):
                 assert (parent, child) not in maps, "Error: edge already exists"
                 # levels_mapping_df = X.loc[:, (parent, child)].groupby(parent).agg(lambda x: x.value_counts().index[0])
                 # maps[parent, child] = levels_mapping_df[child].to_dict()
-                levels_mapping_df = pd.DataFrame(X_ar[:, (parent, child)]).groupby(0).agg(lambda x: x.value_counts().index[0])
+                pc_df = pd.DataFrame(X_ar[:, (parent, child)], columns=["parent", "child"])
+                levels_mapping_df = pc_df.groupby("parent").agg(_get_most_common_value)
+
                 maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
 
     def remove_qd(self,
