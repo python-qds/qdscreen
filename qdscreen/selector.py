@@ -1,11 +1,9 @@
 import numpy as np
 import pandas as pd
-from scipy import sparse
 from scipy.stats import mode as scipy_mode
-import warnings
 
 try:
-    from typing import Union, Optional
+    from typing import Union, Optional, Dict, Any
 except:  # noqa
     pass
 
@@ -28,14 +26,15 @@ class QDSelectorModel(object):
 
     """
     __slots__ = ('forest', # the QDForest
-                 '_maps'   # a sparse square array (parent, child): mapping_dct with index in the order of self.varnames
+                 '_maps'   # a nested dict {parent: {child: mapping_dct with index in the order of self.varnames}}
+                           # note: scipy.sparse now raises an error with dtype=object
                  )
 
     def __init__(self,
                  qd_forest  # type: QDForest
                  ):
         self.forest = qd_forest
-        self._maps = None
+        self._maps = None  # type: Optional[Dict[Any, Dict[Any, Dict]]]
 
     def fit(self,
             X  # type: Union[np.ndarray, pd.DataFrame]
@@ -59,15 +58,10 @@ class QDSelectorModel(object):
             else:
                 assert X.shape[1] == n
 
-            # TODO find a better workaround ? SeeGH#20
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore", category=UserWarning)
-                # self._maps = maps = sparse.coo_matrix((n, n), dtype=object)  # not convenient for incremental
-                self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
+            self._maps = maps = dict()
 
             for parent, child in forest.get_arcs():
-                # todo maybe remove this check later for efficiency
-                assert (parent, child) not in maps, "Error: edge already exists"
+                # assert (parent, child) not in maps, "Error: edge already exists"
 
                 # create a dictionary mapping each parent level to most frequent child level
                 #
@@ -85,7 +79,8 @@ class QDSelectorModel(object):
                 pc_df = pd.DataFrame(X[:, (parent, child)], columns=["parent", "child"])
                 levels_mapping_df = pc_df.groupby(by="parent").agg(_get_most_common_value)
 
-                maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
+                maps.setdefault(parent, dict())
+                maps[parent][child] = levels_mapping_df.iloc[:, 0].to_dict()
 
         else:
             assert isinstance(X, pd.DataFrame)
@@ -94,20 +89,19 @@ class QDSelectorModel(object):
             # first get the numpy array in correct order
             varnames = forest.varnames
             X_ar = X.loc[:, varnames].values
-            # TODO find a better workaround ? SeeGH#20
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore", category=UserWarning)
-                self._maps = maps = sparse.dok_matrix((n, n), dtype=object)
+
+            self._maps = maps = dict()
 
             for parent, child in forest.get_arcs(names=False):
-                # todo maybe remove this check later for efficiency
-                assert (parent, child) not in maps, "Error: edge already exists"
+                # assert (parent, child) not in maps, "Error: edge already exists"
+
                 # levels_mapping_df = X.loc[:, (parent, child)].groupby(parent).agg(lambda x: x.value_counts().index[0])
                 # maps[parent, child] = levels_mapping_df[child].to_dict()
                 pc_df = pd.DataFrame(X_ar[:, (parent, child)], columns=["parent", "child"])
                 levels_mapping_df = pc_df.groupby("parent").agg(_get_most_common_value)
 
-                maps[parent, child] = levels_mapping_df.iloc[:, 0].to_dict()
+                maps.setdefault(parent, dict())
+                maps[parent][child] = levels_mapping_df.iloc[:, 0].to_dict()
 
     def remove_qd(self,
                   X,             # type: Union[np.ndarray, pd.DataFrame]
@@ -194,7 +188,7 @@ class QDSelectorModel(object):
             # walk the tree from the roots
             for _, parent, child in forest.walk_arcs():
                 # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
-                X[:, child] = np.vectorize(self._maps[parent, child].__getitem__)(X[:, parent])
+                X[:, child] = np.vectorize(self._maps[parent][child].__getitem__)(X[:, parent])
         else:
             if not inplace:
                 X = X.copy()
@@ -203,7 +197,7 @@ class QDSelectorModel(object):
             varnames = forest.varnames
             for _, parent, child in forest.walk_arcs(names=False):
                 # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
-                X.loc[:, varnames[child]] = np.vectorize(self._maps[parent, child].__getitem__)(X.loc[:, varnames[parent]])
+                X.loc[:, varnames[child]] = np.vectorize(self._maps[parent][child].__getitem__)(X.loc[:, varnames[parent]])
 
         if not inplace:
             return X
