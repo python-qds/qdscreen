@@ -1,5 +1,10 @@
 # Changelog
 
+### x.y.z - Bugfixes
+
+ - Fixed `ValueError` with recent versions of `SciPy`, due to usage of sparse arrays with object dtype. Fixes [#31](https://github.com/python-qds/qdscreen/issues/31)
+ - Fixed `IndexError` when `NaN` values are present in the dataframe. Fixes [#28](https://github.com/python-qds/qdscreen/issues/28) 
+
 ### 0.6.2 - Warning filter
 
  - Now filtering `UserWarning` in `fit_selector_model` even in the sklearn adapter. Fixes [#20](https://github.com/python-qds/qdscreen/issues/20) 
