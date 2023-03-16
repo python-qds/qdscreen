@@ -325,8 +325,11 @@ def test_issue_40_nan_then_str():
         "bar": [np.nan, "B"]
     })
     qd_forest = qd_screen(df)
+    assert list(qd_forest.roots) == ["foo"]
+
     feat_selector = qd_forest.fit_selector_model(df)
     only_important_features_df = feat_selector.remove_qd(df)
-    result = feat_selector.predict_qd(only_important_features_df)
+    assert list(only_important_features_df.columns) == ["foo"]
 
+    result = feat_selector.predict_qd(only_important_features_df)
     pd.testing.assert_frame_equal(df, result)
