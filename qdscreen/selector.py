@@ -17,7 +17,41 @@ class InvalidDataInputError(ValueError):
 def _get_most_common_value(x):
     # From https://stackoverflow.com/a/47778607/7262247
     # `scipy_mode` is the most robust to the various pitfalls (nans, ...)
-    return scipy_mode(x)[0][0]
+    # but they will deprecate it
+    # return scipy_mode(x, nan_policy=None)[0][0]
+    res = x.mode(dropna=True)
+    if len(res) == 0:
+        return np.nan
+    else:
+        return res
+
+
+class ParentChildMapping:
+    __slots__ = ('_mapping_dct', '_otypes')
+
+    def __init__(
+        self,
+        mapping_dct  # type: Dict
+    ):
+        self._mapping_dct = mapping_dct
+        # Find the correct otype to use in the vectorized operation
+        self._otypes = [np.array(mapping_dct.values()).dtype]
+
+    def predict_child_from_parent_ar(
+        self,
+        parent_values  # type: np.ndarray
+    ):
+        """For numpy"""
+        # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
+        return np.vectorize(self._mapping_dct.__getitem__, otypes=self._otypes)(parent_values)
+
+    def predict_child_from_parent(
+        self,
+        parent_values  # type: pd.DataFrame
+    ):
+        """For pandas"""
+        # See https://stackoverflow.com/questions/47930052/pandas-vectorized-lookup-of-dictionary
+        return parent_values.map(self._mapping_dct)
 
 
 class QDSelectorModel(object):
@@ -118,8 +152,11 @@ class QDSelectorModel(object):
                 pc_df = pd.DataFrame(X[:, (parent, child)], columns=["parent", "child"])
                 levels_mapping_df = pc_df.groupby(by="parent").agg(_get_most_common_value)
 
+                # Init the dict for parent if it does not exit
                 maps.setdefault(parent, dict())
-                maps[parent][child] = levels_mapping_df.iloc[:, 0].to_dict()
+
+                # Fill the parent-child item with the mapping object
+                maps[parent][child] = ParentChildMapping(levels_mapping_df.iloc[:, 0].to_dict())
 
         else:
             assert isinstance(X, pd.DataFrame)
@@ -139,8 +176,11 @@ class QDSelectorModel(object):
                 pc_df = pd.DataFrame(X_ar[:, (parent, child)], columns=["parent", "child"])
                 levels_mapping_df = pc_df.groupby("parent").agg(_get_most_common_value)
 
+                # Init the dict for parent if it does not exit
                 maps.setdefault(parent, dict())
-                maps[parent][child] = levels_mapping_df.iloc[:, 0].to_dict()
+
+                # Fill the parent-child item with the mapping object
+                maps[parent][child] = ParentChildMapping(levels_mapping_df.iloc[:, 0].to_dict())
 
     def remove_qd(self,
                   X,             # type: Union[np.ndarray, pd.DataFrame]
@@ -228,8 +268,7 @@ class QDSelectorModel(object):
 
             # walk the tree from the roots
             for _, parent, child in forest.walk_arcs():
-                # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
-                X[:, child] = np.vectorize(self._maps[parent][child].__getitem__)(X[:, parent])
+                X[:, child] = self._maps[parent][child].predict_child_from_parent_ar(X[:, parent])
         else:
             if not inplace:
                 X = X.copy()
@@ -237,8 +276,7 @@ class QDSelectorModel(object):
             # walk the tree from the roots
             varnames = forest.varnames
             for _, parent, child in forest.walk_arcs(names=False):
-                # apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247
-                X.loc[:, varnames[child]] = np.vectorize(self._maps[parent][child].__getitem__)(X.loc[:, varnames[parent]])
+                X.loc[:, varnames[child]] = self._maps[parent][child].predict_child_from_parent(X.loc[:, varnames[parent]])
 
         if not inplace:
             return X
