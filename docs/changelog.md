@@ -1,5 +1,12 @@
 # Changelog
 
+### 0.6.4 - Bugfixes
+
+ - Replaced usage of deprecated `scipy_mode`. Fixed  [#39](https://github.com/python-qds/qdscreen/issues/39)
+ - Fixed `ValueError: invalid literal for int() with base 10` in `predict_qd`. Fixed [#40](https://github.com/python-qds/qdscreen/issues/40)
+ - Added input validators to raise human-readable error messages when the input is not correct. Fixes [#37](https://github.com/python-qds/qdscreen/issues/37)
+ - Fixed `AttributeError: module 'numpy' has no attribute 'object'.`. Fixes [#38](https://github.com/python-qds/qdscreen/issues/38)
+
 ### 0.6.3 - Bugfixes
 
  - Fixed `ValueError` with recent versions of `SciPy`, due to usage of sparse arrays with object dtype. Fixes [#31](https://github.com/python-qds/qdscreen/issues/31)
