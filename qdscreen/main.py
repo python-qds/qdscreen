@@ -34,13 +34,14 @@ def _add_names_to_parents_idx_series(parents):
 
 class QDForest(object):
     """A quasi-deterministic forest returned by `qd_screen`"""
-    __slots__ = ('_adjmat',         # a square numpy array or pandas DataFrame containing the adjacency matrix (parent->child)
-                 '_parents',        # a 1d np array or a pandas Series relating each child to its parent index or -1 if a root
-                 'is_nparray',      # a boolean indicating if this was built from numpy array (and not pandas dataframe)
-                 '_roots_mask',     # a 1d np array or pd Series containing a boolean mask for root variables
-                 '_roots_wc_mask',  # a 1d np array or pd Series containing a boolean mask for root with children
-                 'stats'            # an optional `Entropies` object stored for debug
-                 )
+    __slots__ = (
+        '_adjmat',         # a square np array or pd DataFrame containing the adjacency matrix (parent->child)
+        '_parents',        # a 1d np array or a pandas Series relating each child to its parent index or -1 if a root
+        'is_nparray',      # a boolean indicating if this was built from numpy array (and not pandas dataframe)
+        '_roots_mask',     # a 1d np array or pd Series containing a boolean mask for root variables
+        '_roots_wc_mask',  # a 1d np array or pd Series containing a boolean mask for root with children
+        'stats'            # an optional `Entropies` object stored for debug
+    )
 
     def __init__(self,
                  adjmat=None,    # type: Union[np.ndarray, pd.DataFrame]
@@ -129,13 +130,13 @@ class QDForest(object):
     @property
     def adjmat_ar(self):
         """The adjacency matrix as a 2D numpy array"""
-        return self.adjmat if self.is_nparray else  self.adjmat.values
+        return self.adjmat if self.is_nparray else self.adjmat.values
 
     @property
     def adjmat(self):
         """The adjacency matrix as a pandas DataFrame or a 2D numpy array"""
         if self._adjmat is None:
-            # compute adjmat from parents.
+            # compute adjmat from parents and cache it
             n = self.nb_vars
             adjmat = np.zeros((n, n), dtype=bool)
             # from https://stackoverflow.com/a/46018613/7262247
