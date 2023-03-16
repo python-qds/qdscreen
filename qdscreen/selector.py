@@ -10,6 +10,10 @@ except:  # noqa
 from .main import QDForest
 
 
+class InvalidDataInputError(ValueError):
+    """Raised when input data is invalid"""
+
+
 def _get_most_common_value(x):
     # From https://stackoverflow.com/a/47778607/7262247
     # `scipy_mode` is the most robust to the various pitfalls (nans, ...)
@@ -36,11 +40,46 @@ class QDSelectorModel(object):
         self.forest = qd_forest
         self._maps = None  # type: Optional[Dict[Any, Dict[Any, Dict]]]
 
-    def fit(self,
-            X  # type: Union[np.ndarray, pd.DataFrame]
-            ):
+    def assert_valid_input(
+        self,
+        X,  # type: Union[np.ndarray, pd.DataFrame]
+        df_extras_allowed=False  # type: bool
+    ):
+        """Raises an InvalidDataInputError if X does not match the expectation"""
+
+        if self.forest.is_nparray:
+            if not isinstance(X, np.ndarray):
+                raise InvalidDataInputError(
+                    "Input data must be an numpy array. Found: %s" % type(X))
+
+            if X.shape[1] != self.forest.nb_vars:  # or X.shape[0] != X.shape[1]:
+                raise InvalidDataInputError(
+                    "Input numpy array must have %s columns. Found %s columns" % (self.forest.nb_vars, X.shape[1]))
+        else:
+            if not isinstance(X, pd.DataFrame):
+                raise InvalidDataInputError(
+                    "Input data must be a pandas DataFrame. Found: %s" % type(X))
+
+            actual = set(X.columns)
+            expected = set(self.forest.varnames)
+            if actual != expected:
+                missing = expected - actual
+                if missing or not df_extras_allowed:
+                    extra = actual - expected
+                    raise InvalidDataInputError(
+                        "Input pandas DataFrame must have column names matching the ones in the model. "
+                        "Missing: %s. Extra: %s " % (missing, extra)
+                    )
+
+    def fit(
+        self,
+        X  # type: Union[np.ndarray, pd.DataFrame]
+    ):
         """Fits the maps able to predict determined features from others"""
         forest = self.forest
+
+        # Validate the input
+        self.assert_valid_input(X, df_extras_allowed=False)
 
         # we will create a sparse coordinate representation of maps
         n = forest.nb_vars
@@ -117,6 +156,8 @@ class QDSelectorModel(object):
         :return:
         """
         forest = self.forest
+
+        self.assert_valid_input(X, df_extras_allowed=True)
 
         is_x_nparray = isinstance(X, np.ndarray)
         assert is_x_nparray == forest.is_nparray
