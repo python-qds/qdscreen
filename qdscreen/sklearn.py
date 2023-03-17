@@ -89,7 +89,7 @@ class QDScreen(SelectorMixin, BaseEstimator):
         self
         """
         X = self._validate_data(X, accept_sparse=False,  #('csr', 'csc'),
-                                dtype=np.object,
+                                dtype=object,
                                 force_all_finite='allow-nan')
 
         # if hasattr(X, "toarray"):   # sparse matrix

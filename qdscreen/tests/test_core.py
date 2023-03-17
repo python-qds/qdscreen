@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # the above encoding declaration is needed to have non-ascii characters in this file (anywhere even in comments)
 # from __future__ import unicode_literals  # no, since we want to match the return type of str() which is bytes in py2
+import sys
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -306,4 +308,32 @@ def test_nans_in_data_sklearn():
 
     selector = QDScreen()
     Xsel = selector.fit_transform(df.to_numpy())
+
     assert Xsel.tolist() == [['A'], ['A'], ['N']]
+
+
+def test_issue_37_non_categorical():
+    df = pd.DataFrame({
+        "nb": [1, 2],
+        "name": ["A", "B"]
+    })
+    with pytest.raises(ValueError, match="Provided dataframe columns contains non-categorical"):
+        qd_screen(df)
+
+
+@pytest.mark.skipif(sys.version_info < (3, 6),
+                    reason="This test is known to fail for 3.5 and 2.7, see GH#43")
+def test_issue_40_nan_then_str():
+    df = pd.DataFrame({
+        "foo": ["1", "2"],
+        "bar": [np.nan, "B"]
+    })
+    qd_forest = qd_screen(df)
+    assert list(qd_forest.roots) == ["foo"]
+
+    feat_selector = qd_forest.fit_selector_model(df)
+    only_important_features_df = feat_selector.remove_qd(df)
+    assert list(only_important_features_df.columns) == ["foo"]
+
+    result = feat_selector.predict_qd(only_important_features_df)
+    pd.testing.assert_frame_equal(df, result)
