@@ -6,7 +6,7 @@
       <link rel="stylesheet" href="styles.css">
    </head>
    <body>
-      <div id="masthead" class="sev-2"></div>
+      <div id="masthead" class="sev-1"></div>
       <div id="page">
          <h1>
             <a href="qdscreen.sklearn.report.html">
@@ -20,7 +20,16 @@
                class="code sev- "><tt><i>1</i> <span class="kn">import</span> <span class="nn">sys</span></tt>
             </div>
             <div id="l2"
-               class="code sev- "><tt><i>2</i> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></tt>
+               class="code sev-1  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-1">
+                        F401
+                     </span>
+                     'numpy as np' imported but unused</li>
+               
+               </ul><tt><i>2</i> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></tt>
             </div>
             <div id="l3"
                class="code sev- "><tt><i>3</i> &nbsp;</tt>
@@ -89,7 +98,7 @@
                class="code sev- "><tt><i>18</i> <span class="k">class</span> <span class="nc">QDScreen</span><span class="p">(</span><span class="n">SelectorMixin</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">):</span></tt>
             </div>
             <div id="l19"
-               class="code sev- "><tt><i>19</i>     <span class="sd">&quot;&quot;&quot;Feature selector that removes all features that are (quasi-)deterministically predicted from others.</span></tt>
+               class="code sev- "><tt><i>19</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;Feature selector that removes all features that are (quasi-)deterministically predicted from others.</span></tt>
             </div>
             <div id="l20"
                class="code sev- "><tt><i>20</i> &nbsp;</tt>
@@ -260,7 +269,7 @@
                class="code sev- "><tt><i>75</i>     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span></tt>
             </div>
             <div id="l76"
-               class="code sev- "><tt><i>76</i>         <span class="sd">&quot;&quot;&quot;Learn determinism from X.</span></tt>
+               class="code sev- "><tt><i>76</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;Learn determinism from X.</span></tt>
             </div>
             <div id="l77"
                class="code sev- "><tt><i>77</i> &nbsp;</tt>
@@ -317,7 +326,7 @@
                </ul><tt><i>91</i>         <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_data</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1">#(&#39;csr&#39;, &#39;csc&#39;),</span></tt>
             </div>
             <div id="l92"
-               class="code sev- "><tt><i>92</i>                                 <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">object</span><span class="p">,</span></tt>
+               class="code sev- "><tt><i>92</i>                                 <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span></tt>
             </div>
             <div id="l93"
                class="code sev- "><tt><i>93</i>                                 <span class="n">force_all_finite</span><span class="o">=</span><span class="s1">&#39;allow-nan&#39;</span><span class="p">)</span></tt>
@@ -404,7 +413,7 @@
                class="code sev- "><tt><i>120</i>     <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span></tt>
             </div>
             <div id="l121"
-               class="code sev- "><tt><i>121</i>         <span class="sd">&quot;&quot;&quot;</span></tt>
+               class="code sev- "><tt><i>121</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
             </div>
             <div id="l122"
                class="code sev- "><tt><i>122</i> <span class="sd">        Reverse the transformation operation</span></tt>

@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', function () {
 </script>
    </head>
    <body>
-      <div id="masthead" class="sev-2"></div>
+      <div id="masthead" class="sev-1"></div>
       <div id="page">
          <p id="srclink">
             <a title="View full annotated source"
@@ -50,6 +50,24 @@ window.addEventListener('DOMContentLoaded', function () {
          <ul id="index">
          
          <li>
+            <a data-code="F401">
+               <span class="count sev-1">
+                  1
+               </span>
+               <strong>F401:</strong> 'scipy.stats.mode as scipy_mode' imported but unused
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="qdscreen.selector.source.html#l3">
+                  <tt><i>3</i> <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mode</span> <span class="k">as</span> <span class="n">scipy_mode</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
             <a data-code="E261">
                <span class="count sev-2">
                   1
@@ -60,8 +78,8 @@ window.addEventListener('DOMContentLoaded', function () {
             <ul class="details">
             <li>
                
-               <a href="qdscreen.selector.source.html#l28">
-                  <tt><i>28</i>     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;forest&#39;</span><span class="p">,</span> <span class="c1"># the QDForest</span></tt>
+               <a href="qdscreen.selector.source.html#l66">
+                  <tt><i>66</i>     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;forest&#39;</span><span class="p">,</span> <span class="c1"># the QDForest</span></tt>
                </a>
             </li>
             </ul>
@@ -78,8 +96,8 @@ window.addEventListener('DOMContentLoaded', function () {
             <ul class="details">
             <li>
                
-               <a href="qdscreen.selector.source.html#l200">
-                  <tt><i>200</i>                 <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">child</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)(</span><span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">parent</span><span class="p">]])</span></tt>
+               <a href="qdscreen.selector.source.html#l279">
+                  <tt><i>279</i>                 <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">child</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">predict_child_from_parent</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">parent</span><span class="p">]])</span></tt>
                </a>
             </li>
             </ul>
@@ -96,28 +114,28 @@ window.addEventListener('DOMContentLoaded', function () {
             <ul class="details">
             <li>
                
-               <a href="qdscreen.selector.source.html#l49">
-                  <tt><i>49</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
-               </a>
-            </li><li>
-               
-               <a href="qdscreen.selector.source.html#l59">
-                  <tt><i>59</i>                 <span class="k">assert</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span></tt>
-               </a>
-            </li><li>
-               
-               <a href="qdscreen.selector.source.html#l86">
-                  <tt><i>86</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span></tt>
-               </a>
-            </li><li>
-               
                <a href="qdscreen.selector.source.html#l122">
-                  <tt><i>122</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+                  <tt><i>122</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.selector.source.html#l161">
-                  <tt><i>161</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+               <a href="qdscreen.selector.source.html#l132">
+                  <tt><i>132</i>                 <span class="k">assert</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.selector.source.html#l162">
+                  <tt><i>162</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.selector.source.html#l203">
+                  <tt><i>203</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.selector.source.html#l242">
+                  <tt><i>242</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
                </a>
             </li>
             </ul>

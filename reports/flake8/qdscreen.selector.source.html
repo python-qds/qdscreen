@@ -6,7 +6,7 @@
       <link rel="stylesheet" href="styles.css">
    </head>
    <body>
-      <div id="masthead" class="sev-2"></div>
+      <div id="masthead" class="sev-1"></div>
       <div id="page">
          <h1>
             <a href="qdscreen.selector.report.html">
@@ -23,7 +23,16 @@
                class="code sev- "><tt><i>2</i> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span></tt>
             </div>
             <div id="l3"
-               class="code sev- "><tt><i>3</i> <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mode</span> <span class="k">as</span> <span class="n">scipy_mode</span></tt>
+               class="code sev-1  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-1">
+                        F401
+                     </span>
+                     'scipy.stats.mode as scipy_mode' imported but unused</li>
+               
+               </ul><tt><i>3</i> <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mode</span> <span class="k">as</span> <span class="n">scipy_mode</span></tt>
             </div>
             <div id="l4"
                class="code sev- "><tt><i>4</i> &nbsp;</tt>
@@ -53,51 +62,165 @@
                class="code sev- "><tt><i>12</i> &nbsp;</tt>
             </div>
             <div id="l13"
-               class="code sev- "><tt><i>13</i> <span class="k">def</span> <span class="nf">_get_most_common_value</span><span class="p">(</span><span class="n">x</span><span class="p">):</span></tt>
+               class="code sev- "><tt><i>13</i> <span class="k">class</span> <span class="nc">InvalidDataInputError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span></tt>
             </div>
             <div id="l14"
-               class="code sev- "><tt><i>14</i>     <span class="c1"># From https://stackoverflow.com/a/47778607/7262247</span></tt>
+               class="code sev- "><tt><i>14</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when input data is invalid&quot;&quot;&quot;</span></tt>
             </div>
             <div id="l15"
-               class="code sev- "><tt><i>15</i>     <span class="c1"># `scipy_mode` is the most robust to the various pitfalls (nans, ...)</span></tt>
+               class="code sev- "><tt><i>15</i> &nbsp;</tt>
             </div>
             <div id="l16"
-               class="code sev- "><tt><i>16</i>     <span class="k">return</span> <span class="n">scipy_mode</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></tt>
+               class="code sev- "><tt><i>16</i> &nbsp;</tt>
             </div>
             <div id="l17"
-               class="code sev- "><tt><i>17</i> &nbsp;</tt>
+               class="code sev- "><tt><i>17</i> <span class="k">def</span> <span class="nf">_get_most_common_value</span><span class="p">(</span><span class="n">x</span><span class="p">):</span></tt>
             </div>
             <div id="l18"
-               class="code sev- "><tt><i>18</i> &nbsp;</tt>
+               class="code sev- "><tt><i>18</i>     <span class="c1"># From https://stackoverflow.com/a/47778607/7262247</span></tt>
             </div>
             <div id="l19"
-               class="code sev- "><tt><i>19</i> <span class="k">class</span> <span class="nc">QDSelectorModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></tt>
+               class="code sev- "><tt><i>19</i>     <span class="c1"># `scipy_mode` is the most robust to the various pitfalls (nans, ...)</span></tt>
             </div>
             <div id="l20"
-               class="code sev- "><tt><i>20</i>     <span class="sd">&quot;&quot;&quot;</span></tt>
+               class="code sev- "><tt><i>20</i>     <span class="c1"># but they will deprecate it</span></tt>
             </div>
             <div id="l21"
-               class="code sev- "><tt><i>21</i> <span class="sd">    A quasi-determinism feature selection model that can be</span></tt>
+               class="code sev- "><tt><i>21</i>     <span class="c1"># return scipy_mode(x, nan_policy=None)[0][0]</span></tt>
             </div>
             <div id="l22"
-               class="code sev- "><tt><i>22</i> &nbsp;</tt>
+               class="code sev- "><tt><i>22</i>     <span class="n">res</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></tt>
             </div>
             <div id="l23"
-               class="code sev- "><tt><i>23</i> <span class="sd">     - fit from a dataset using &lt;model&gt;.fit(X)</span></tt>
+               class="code sev- "><tt><i>23</i>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span></tt>
             </div>
             <div id="l24"
-               class="code sev- "><tt><i>24</i> <span class="sd">     - used to select only the relevant (root) features using &lt;model&gt;.remove_qd(X)</span></tt>
+               class="code sev- "><tt><i>24</i>         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></tt>
             </div>
             <div id="l25"
-               class="code sev- "><tt><i>25</i> <span class="sd">     - used to predict the other columns from the relevant (root) ones using &lt;model&gt;.predict_qd(X)</span></tt>
+               class="code sev- "><tt><i>25</i>     <span class="k">else</span><span class="p">:</span></tt>
             </div>
             <div id="l26"
-               class="code sev- "><tt><i>26</i> &nbsp;</tt>
+               class="code sev- "><tt><i>26</i>         <span class="k">return</span> <span class="n">res</span></tt>
             </div>
             <div id="l27"
-               class="code sev- "><tt><i>27</i> <span class="sd">    &quot;&quot;&quot;</span></tt>
+               class="code sev- "><tt><i>27</i> &nbsp;</tt>
             </div>
             <div id="l28"
+               class="code sev- "><tt><i>28</i> &nbsp;</tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> <span class="k">class</span> <span class="nc">ParentChildMapping</span><span class="p">:</span></tt>
+            </div>
+            <div id="l30"
+               class="code sev- "><tt><i>30</i>     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_mapping_dct&#39;</span><span class="p">,</span> <span class="s1">&#39;_otypes&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l31"
+               class="code sev- "><tt><i>31</i> &nbsp;</tt>
+            </div>
+            <div id="l32"
+               class="code sev- "><tt><i>32</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev- "><tt><i>33</i>         <span class="bp">self</span><span class="p">,</span></tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i>         <span class="n">mapping_dct</span>  <span class="c1"># type: Dict</span></tt>
+            </div>
+            <div id="l35"
+               class="code sev- "><tt><i>35</i>     <span class="p">):</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev- "><tt><i>36</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_dct</span> <span class="o">=</span> <span class="n">mapping_dct</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev- "><tt><i>37</i>         <span class="c1"># Find the correct otype to use in the vectorized operation</span></tt>
+            </div>
+            <div id="l38"
+               class="code sev- "><tt><i>38</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_otypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mapping_dct</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span></tt>
+            </div>
+            <div id="l39"
+               class="code sev- "><tt><i>39</i> &nbsp;</tt>
+            </div>
+            <div id="l40"
+               class="code sev- "><tt><i>40</i>     <span class="k">def</span> <span class="nf">predict_child_from_parent_ar</span><span class="p">(</span></tt>
+            </div>
+            <div id="l41"
+               class="code sev- "><tt><i>41</i>         <span class="bp">self</span><span class="p">,</span></tt>
+            </div>
+            <div id="l42"
+               class="code sev- "><tt><i>42</i>         <span class="n">parent_values</span>  <span class="c1"># type: np.ndarray</span></tt>
+            </div>
+            <div id="l43"
+               class="code sev- "><tt><i>43</i>     <span class="p">):</span></tt>
+            </div>
+            <div id="l44"
+               class="code sev- "><tt><i>44</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;For numpy&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l45"
+               class="code sev- "><tt><i>45</i>         <span class="c1"># apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247</span></tt>
+            </div>
+            <div id="l46"
+               class="code sev- "><tt><i>46</i>         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping_dct</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">,</span> <span class="n">otypes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_otypes</span><span class="p">)(</span><span class="n">parent_values</span><span class="p">)</span></tt>
+            </div>
+            <div id="l47"
+               class="code sev- "><tt><i>47</i> &nbsp;</tt>
+            </div>
+            <div id="l48"
+               class="code sev- "><tt><i>48</i>     <span class="k">def</span> <span class="nf">predict_child_from_parent</span><span class="p">(</span></tt>
+            </div>
+            <div id="l49"
+               class="code sev- "><tt><i>49</i>         <span class="bp">self</span><span class="p">,</span></tt>
+            </div>
+            <div id="l50"
+               class="code sev- "><tt><i>50</i>         <span class="n">parent_values</span>  <span class="c1"># type: pd.DataFrame</span></tt>
+            </div>
+            <div id="l51"
+               class="code sev- "><tt><i>51</i>     <span class="p">):</span></tt>
+            </div>
+            <div id="l52"
+               class="code sev- "><tt><i>52</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;For pandas&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l53"
+               class="code sev- "><tt><i>53</i>         <span class="c1"># See https://stackoverflow.com/questions/47930052/pandas-vectorized-lookup-of-dictionary</span></tt>
+            </div>
+            <div id="l54"
+               class="code sev- "><tt><i>54</i>         <span class="k">return</span> <span class="n">parent_values</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping_dct</span><span class="p">)</span></tt>
+            </div>
+            <div id="l55"
+               class="code sev- "><tt><i>55</i> &nbsp;</tt>
+            </div>
+            <div id="l56"
+               class="code sev- "><tt><i>56</i> &nbsp;</tt>
+            </div>
+            <div id="l57"
+               class="code sev- "><tt><i>57</i> <span class="k">class</span> <span class="nc">QDSelectorModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></tt>
+            </div>
+            <div id="l58"
+               class="code sev- "><tt><i>58</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l59"
+               class="code sev- "><tt><i>59</i> <span class="sd">    A quasi-determinism feature selection model that can be</span></tt>
+            </div>
+            <div id="l60"
+               class="code sev- "><tt><i>60</i> &nbsp;</tt>
+            </div>
+            <div id="l61"
+               class="code sev- "><tt><i>61</i> <span class="sd">     - fit from a dataset using &lt;model&gt;.fit(X)</span></tt>
+            </div>
+            <div id="l62"
+               class="code sev- "><tt><i>62</i> <span class="sd">     - used to select only the relevant (root) features using &lt;model&gt;.remove_qd(X)</span></tt>
+            </div>
+            <div id="l63"
+               class="code sev- "><tt><i>63</i> <span class="sd">     - used to predict the other columns from the relevant (root) ones using &lt;model&gt;.predict_qd(X)</span></tt>
+            </div>
+            <div id="l64"
+               class="code sev- "><tt><i>64</i> &nbsp;</tt>
+            </div>
+            <div id="l65"
+               class="code sev- "><tt><i>65</i> <span class="sd">    &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l66"
                class="code sev-2  le">
                <ul class="violations">
                
@@ -107,313 +230,172 @@
                      </span>
                      At least two spaces before inline comment</li>
                
-               </ul><tt><i>28</i>     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;forest&#39;</span><span class="p">,</span> <span class="c1"># the QDForest</span></tt>
-            </div>
-            <div id="l29"
-               class="code sev- "><tt><i>29</i>                  <span class="s1">&#39;_maps&#39;</span>   <span class="c1"># a nested dict {parent: {child: mapping_dct with index in the order of self.varnames}}</span></tt>
-            </div>
-            <div id="l30"
-               class="code sev- "><tt><i>30</i>                            <span class="c1"># note: scipy.sparse now raises an error with dtype=object</span></tt>
-            </div>
-            <div id="l31"
-               class="code sev- "><tt><i>31</i>                  <span class="p">)</span></tt>
-            </div>
-            <div id="l32"
-               class="code sev- "><tt><i>32</i> &nbsp;</tt>
-            </div>
-            <div id="l33"
-               class="code sev- "><tt><i>33</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
-            </div>
-            <div id="l34"
-               class="code sev- "><tt><i>34</i>                  <span class="n">qd_forest</span>  <span class="c1"># type: QDForest</span></tt>
-            </div>
-            <div id="l35"
-               class="code sev- "><tt><i>35</i>                  <span class="p">):</span></tt>
-            </div>
-            <div id="l36"
-               class="code sev- "><tt><i>36</i>         <span class="bp">self</span><span class="o">.</span><span class="n">forest</span> <span class="o">=</span> <span class="n">qd_forest</span></tt>
-            </div>
-            <div id="l37"
-               class="code sev- "><tt><i>37</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Dict[Any, Dict[Any, Dict]]]</span></tt>
-            </div>
-            <div id="l38"
-               class="code sev- "><tt><i>38</i> &nbsp;</tt>
-            </div>
-            <div id="l39"
-               class="code sev- "><tt><i>39</i>     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
-            </div>
-            <div id="l40"
-               class="code sev- "><tt><i>40</i>             <span class="n">X</span>  <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
-            </div>
-            <div id="l41"
-               class="code sev- "><tt><i>41</i>             <span class="p">):</span></tt>
-            </div>
-            <div id="l42"
-               class="code sev- "><tt><i>42</i>         <span class="sd">&quot;&quot;&quot;Fits the maps able to predict determined features from others&quot;&quot;&quot;</span></tt>
-            </div>
-            <div id="l43"
-               class="code sev- "><tt><i>43</i>         <span class="n">forest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span></tt>
-            </div>
-            <div id="l44"
-               class="code sev- "><tt><i>44</i> &nbsp;</tt>
-            </div>
-            <div id="l45"
-               class="code sev- "><tt><i>45</i>         <span class="c1"># we will create a sparse coordinate representation of maps</span></tt>
-            </div>
-            <div id="l46"
-               class="code sev- "><tt><i>46</i>         <span class="n">n</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">nb_vars</span></tt>
-            </div>
-            <div id="l47"
-               class="code sev- "><tt><i>47</i> &nbsp;</tt>
-            </div>
-            <div id="l48"
-               class="code sev- "><tt><i>48</i>         <span class="k">if</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span><span class="p">:</span></tt>
-            </div>
-            <div id="l49"
-               class="code sev-3  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-3">
-                        S101
-                     </span>
-                     Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
-               
-               </ul><tt><i>49</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
-            </div>
-            <div id="l50"
-               class="code sev- "><tt><i>50</i> &nbsp;</tt>
-            </div>
-            <div id="l51"
-               class="code sev- "><tt><i>51</i>             <span class="c1"># detect numpy structured arrays</span></tt>
-            </div>
-            <div id="l52"
-               class="code sev- "><tt><i>52</i>             <span class="n">is_struct_array</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></tt>
-            </div>
-            <div id="l53"
-               class="code sev- "><tt><i>53</i>             <span class="k">if</span> <span class="n">is_struct_array</span><span class="p">:</span></tt>
-            </div>
-            <div id="l54"
-               class="code sev- "><tt><i>54</i>                 <span class="c1"># names = X.dtype.names</span></tt>
-            </div>
-            <div id="l55"
-               class="code sev- "><tt><i>55</i>                 <span class="c1"># assert len(names) == n</span></tt>
-            </div>
-            <div id="l56"
-               class="code sev- "><tt><i>56</i>                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;structured numpy arrays are not supported. Please convert your array to an &quot;</span></tt>
-            </div>
-            <div id="l57"
-               class="code sev- "><tt><i>57</i>                                           <span class="s2">&quot;unstructured array&quot;</span><span class="p">)</span></tt>
-            </div>
-            <div id="l58"
-               class="code sev- "><tt><i>58</i>             <span class="k">else</span><span class="p">:</span></tt>
-            </div>
-            <div id="l59"
-               class="code sev-3  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-3">
-                        S101
-                     </span>
-                     Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
-               
-               </ul><tt><i>59</i>                 <span class="k">assert</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span></tt>
-            </div>
-            <div id="l60"
-               class="code sev- "><tt><i>60</i> &nbsp;</tt>
-            </div>
-            <div id="l61"
-               class="code sev- "><tt><i>61</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="n">maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></tt>
-            </div>
-            <div id="l62"
-               class="code sev- "><tt><i>62</i> &nbsp;</tt>
-            </div>
-            <div id="l63"
-               class="code sev- "><tt><i>63</i>             <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">get_arcs</span><span class="p">():</span></tt>
-            </div>
-            <div id="l64"
-               class="code sev- "><tt><i>64</i>                 <span class="c1"># assert (parent, child) not in maps, &quot;Error: edge already exists&quot;</span></tt>
-            </div>
-            <div id="l65"
-               class="code sev- "><tt><i>65</i> &nbsp;</tt>
-            </div>
-            <div id="l66"
-               class="code sev- "><tt><i>66</i>                 <span class="c1"># create a dictionary mapping each parent level to most frequent child level</span></tt>
+               </ul><tt><i>66</i>     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;forest&#39;</span><span class="p">,</span> <span class="c1"># the QDForest</span></tt>
             </div>
             <div id="l67"
-               class="code sev- "><tt><i>67</i>                 <span class="c1">#</span></tt>
+               class="code sev- "><tt><i>67</i>                  <span class="s1">&#39;_maps&#39;</span>   <span class="c1"># a nested dict {parent: {child: mapping_dct with index in the order of self.varnames}}</span></tt>
             </div>
             <div id="l68"
-               class="code sev- "><tt><i>68</i>                 <span class="c1"># -- seems suboptimal with numpy...</span></tt>
+               class="code sev- "><tt><i>68</i>                            <span class="c1"># note: scipy.sparse now raises an error with dtype=object</span></tt>
             </div>
             <div id="l69"
-               class="code sev- "><tt><i>69</i>                 <span class="c1"># map_dct = dict()</span></tt>
+               class="code sev- "><tt><i>69</i>                  <span class="p">)</span></tt>
             </div>
             <div id="l70"
-               class="code sev- "><tt><i>70</i>                 <span class="c1"># for parent_lev in np.unique(X[:, parent]):</span></tt>
+               class="code sev- "><tt><i>70</i> &nbsp;</tt>
             </div>
             <div id="l71"
-               class="code sev- "><tt><i>71</i>                 <span class="c1">#     values, counts = np.unique(X[X[:, parent] == parent_lev, child], return_counts=True)</span></tt>
+               class="code sev- "><tt><i>71</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
             </div>
             <div id="l72"
-               class="code sev- "><tt><i>72</i>                 <span class="c1">#     map_dct[parent_lev] = values[np.argmax(counts)]</span></tt>
+               class="code sev- "><tt><i>72</i>                  <span class="n">qd_forest</span>  <span class="c1"># type: QDForest</span></tt>
             </div>
             <div id="l73"
-               class="code sev- "><tt><i>73</i>                 <span class="c1">#</span></tt>
+               class="code sev- "><tt><i>73</i>                  <span class="p">):</span></tt>
             </div>
             <div id="l74"
-               class="code sev- "><tt><i>74</i>                 <span class="c1"># -- same with pandas groupby</span></tt>
+               class="code sev- "><tt><i>74</i>         <span class="bp">self</span><span class="o">.</span><span class="n">forest</span> <span class="o">=</span> <span class="n">qd_forest</span></tt>
             </div>
             <div id="l75"
-               class="code sev- "><tt><i>75</i>                 <span class="c1"># if is_struct_array:</span></tt>
+               class="code sev- "><tt><i>75</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Dict[Any, Dict[Any, Dict]]]</span></tt>
             </div>
             <div id="l76"
-               class="code sev- "><tt><i>76</i>                 <span class="c1">#     pc_df = pd.DataFrame(X[[names[parent], names[child]]])</span></tt>
+               class="code sev- "><tt><i>76</i> &nbsp;</tt>
             </div>
             <div id="l77"
-               class="code sev- "><tt><i>77</i>                 <span class="c1">#     pc_df.columns = [0, 1]  # forget the names</span></tt>
+               class="code sev- "><tt><i>77</i>     <span class="k">def</span> <span class="nf">assert_valid_input</span><span class="p">(</span></tt>
             </div>
             <div id="l78"
-               class="code sev- "><tt><i>78</i>                 <span class="c1"># else:</span></tt>
+               class="code sev- "><tt><i>78</i>         <span class="bp">self</span><span class="p">,</span></tt>
             </div>
             <div id="l79"
-               class="code sev- "><tt><i>79</i>                 <span class="n">pc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="s2">&quot;child&quot;</span><span class="p">])</span></tt>
+               class="code sev- "><tt><i>79</i>         <span class="n">X</span><span class="p">,</span>  <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
             </div>
             <div id="l80"
-               class="code sev- "><tt><i>80</i>                 <span class="n">levels_mapping_df</span> <span class="o">=</span> <span class="n">pc_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">_get_most_common_value</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>80</i>         <span class="n">df_extras_allowed</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># type: bool</span></tt>
             </div>
             <div id="l81"
-               class="code sev- "><tt><i>81</i> &nbsp;</tt>
+               class="code sev- "><tt><i>81</i>     <span class="p">):</span></tt>
             </div>
             <div id="l82"
-               class="code sev- "><tt><i>82</i>                 <span class="n">maps</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span></tt>
+               class="code sev- "><tt><i>82</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;Raises an InvalidDataInputError if X does not match the expectation&quot;&quot;&quot;</span></tt>
             </div>
             <div id="l83"
-               class="code sev- "><tt><i>83</i>                 <span class="n">maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">levels_mapping_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>83</i> &nbsp;</tt>
             </div>
             <div id="l84"
-               class="code sev- "><tt><i>84</i> &nbsp;</tt>
+               class="code sev- "><tt><i>84</i>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span><span class="p">:</span></tt>
             </div>
             <div id="l85"
-               class="code sev- "><tt><i>85</i>         <span class="k">else</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>85</i>             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span></tt>
             </div>
             <div id="l86"
-               class="code sev-3  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-3">
-                        S101
-                     </span>
-                     Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
-               
-               </ul><tt><i>86</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>86</i>                 <span class="k">raise</span> <span class="n">InvalidDataInputError</span><span class="p">(</span></tt>
             </div>
             <div id="l87"
-               class="code sev- "><tt><i>87</i> &nbsp;</tt>
+               class="code sev- "><tt><i>87</i>                     <span class="s2">&quot;Input data must be an numpy array. Found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span></tt>
             </div>
             <div id="l88"
-               class="code sev- "><tt><i>88</i>             <span class="c1"># unfortunately pandas dataframe sparse do not allow item assignment :( so we need to work on numpy array</span></tt>
+               class="code sev- "><tt><i>88</i> &nbsp;</tt>
             </div>
             <div id="l89"
-               class="code sev- "><tt><i>89</i>             <span class="c1"># first get the numpy array in correct order</span></tt>
+               class="code sev- "><tt><i>89</i>             <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span><span class="o">.</span><span class="n">nb_vars</span><span class="p">:</span>  <span class="c1"># or X.shape[0] != X.shape[1]:</span></tt>
             </div>
             <div id="l90"
-               class="code sev- "><tt><i>90</i>             <span class="n">varnames</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">varnames</span></tt>
+               class="code sev- "><tt><i>90</i>                 <span class="k">raise</span> <span class="n">InvalidDataInputError</span><span class="p">(</span></tt>
             </div>
             <div id="l91"
-               class="code sev- "><tt><i>91</i>             <span class="n">X_ar</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></tt>
+               class="code sev- "><tt><i>91</i>                     <span class="s2">&quot;Input numpy array must have </span><span class="si">%s</span><span class="s2"> columns. Found </span><span class="si">%s</span><span class="s2"> columns&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forest</span><span class="o">.</span><span class="n">nb_vars</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></tt>
             </div>
             <div id="l92"
-               class="code sev- "><tt><i>92</i> &nbsp;</tt>
+               class="code sev- "><tt><i>92</i>         <span class="k">else</span><span class="p">:</span></tt>
             </div>
             <div id="l93"
-               class="code sev- "><tt><i>93</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="n">maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>93</i>             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span></tt>
             </div>
             <div id="l94"
-               class="code sev- "><tt><i>94</i> &nbsp;</tt>
+               class="code sev- "><tt><i>94</i>                 <span class="k">raise</span> <span class="n">InvalidDataInputError</span><span class="p">(</span></tt>
             </div>
             <div id="l95"
-               class="code sev- "><tt><i>95</i>             <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">get_arcs</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span></tt>
+               class="code sev- "><tt><i>95</i>                     <span class="s2">&quot;Input data must be a pandas DataFrame. Found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span></tt>
             </div>
             <div id="l96"
-               class="code sev- "><tt><i>96</i>                 <span class="c1"># assert (parent, child) not in maps, &quot;Error: edge already exists&quot;</span></tt>
+               class="code sev- "><tt><i>96</i> &nbsp;</tt>
             </div>
             <div id="l97"
-               class="code sev- "><tt><i>97</i> &nbsp;</tt>
+               class="code sev- "><tt><i>97</i>             <span class="n">actual</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span></tt>
             </div>
             <div id="l98"
-               class="code sev- "><tt><i>98</i>                 <span class="c1"># levels_mapping_df = X.loc[:, (parent, child)].groupby(parent).agg(lambda x: x.value_counts().index[0])</span></tt>
+               class="code sev- "><tt><i>98</i>             <span class="n">expected</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forest</span><span class="o">.</span><span class="n">varnames</span><span class="p">)</span></tt>
             </div>
             <div id="l99"
-               class="code sev- "><tt><i>99</i>                 <span class="c1"># maps[parent, child] = levels_mapping_df[child].to_dict()</span></tt>
+               class="code sev- "><tt><i>99</i>             <span class="k">if</span> <span class="n">actual</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">:</span></tt>
             </div>
             <div id="l100"
-               class="code sev- "><tt><i>100</i>                 <span class="n">pc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_ar</span><span class="p">[:,</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="s2">&quot;child&quot;</span><span class="p">])</span></tt>
+               class="code sev- "><tt><i>100</i>                 <span class="n">missing</span> <span class="o">=</span> <span class="n">expected</span> <span class="o">-</span> <span class="n">actual</span></tt>
             </div>
             <div id="l101"
-               class="code sev- "><tt><i>101</i>                 <span class="n">levels_mapping_df</span> <span class="o">=</span> <span class="n">pc_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">_get_most_common_value</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>101</i>                 <span class="k">if</span> <span class="n">missing</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">df_extras_allowed</span><span class="p">:</span></tt>
             </div>
             <div id="l102"
-               class="code sev- "><tt><i>102</i> &nbsp;</tt>
+               class="code sev- "><tt><i>102</i>                     <span class="n">extra</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">-</span> <span class="n">expected</span></tt>
             </div>
             <div id="l103"
-               class="code sev- "><tt><i>103</i>                 <span class="n">maps</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span></tt>
+               class="code sev- "><tt><i>103</i>                     <span class="k">raise</span> <span class="n">InvalidDataInputError</span><span class="p">(</span></tt>
             </div>
             <div id="l104"
-               class="code sev- "><tt><i>104</i>                 <span class="n">maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">levels_mapping_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>104</i>                         <span class="s2">&quot;Input pandas DataFrame must have column names matching the ones in the model. &quot;</span></tt>
             </div>
             <div id="l105"
-               class="code sev- "><tt><i>105</i> &nbsp;</tt>
+               class="code sev- "><tt><i>105</i>                         <span class="s2">&quot;Missing: </span><span class="si">%s</span><span class="s2">. Extra: </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="n">extra</span><span class="p">)</span></tt>
             </div>
             <div id="l106"
-               class="code sev- "><tt><i>106</i>     <span class="k">def</span> <span class="nf">remove_qd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
+               class="code sev- "><tt><i>106</i>                     <span class="p">)</span></tt>
             </div>
             <div id="l107"
-               class="code sev- "><tt><i>107</i>                   <span class="n">X</span><span class="p">,</span>             <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
+               class="code sev- "><tt><i>107</i> &nbsp;</tt>
             </div>
             <div id="l108"
-               class="code sev- "><tt><i>108</i>                   <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># type: bool</span></tt>
+               class="code sev- "><tt><i>108</i>     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span></tt>
             </div>
             <div id="l109"
-               class="code sev- "><tt><i>109</i>                   <span class="p">):</span></tt>
+               class="code sev- "><tt><i>109</i>         <span class="bp">self</span><span class="p">,</span></tt>
             </div>
             <div id="l110"
-               class="code sev- "><tt><i>110</i>         <span class="c1"># type: (...) -&gt; Optional[Union[np.ndarray, pd.DataFrame]]</span></tt>
+               class="code sev- "><tt><i>110</i>         <span class="n">X</span>  <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
             </div>
             <div id="l111"
-               class="code sev- "><tt><i>111</i>         <span class="sd">&quot;&quot;&quot;</span></tt>
+               class="code sev- "><tt><i>111</i>     <span class="p">):</span></tt>
             </div>
             <div id="l112"
-               class="code sev- "><tt><i>112</i> <span class="sd">        Removes from X the features that can be (quasi-)determined from the others</span></tt>
+               class="code sev- "><tt><i>112</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fits the maps able to predict determined features from others&quot;&quot;&quot;</span></tt>
             </div>
             <div id="l113"
-               class="code sev- "><tt><i>113</i> <span class="sd">        This returns a copy by default, except if `inplace=True`</span></tt>
+               class="code sev- "><tt><i>113</i>         <span class="n">forest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span></tt>
             </div>
             <div id="l114"
                class="code sev- "><tt><i>114</i> &nbsp;</tt>
             </div>
             <div id="l115"
-               class="code sev- "><tt><i>115</i> <span class="sd">        :param X:</span></tt>
+               class="code sev- "><tt><i>115</i>         <span class="c1"># Validate the input</span></tt>
             </div>
             <div id="l116"
-               class="code sev- "><tt><i>116</i> <span class="sd">        :param inplace: if this is set to True,</span></tt>
+               class="code sev- "><tt><i>116</i>         <span class="bp">self</span><span class="o">.</span><span class="n">assert_valid_input</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">df_extras_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></tt>
             </div>
             <div id="l117"
-               class="code sev- "><tt><i>117</i> <span class="sd">        :return:</span></tt>
+               class="code sev- "><tt><i>117</i> &nbsp;</tt>
             </div>
             <div id="l118"
-               class="code sev- "><tt><i>118</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
+               class="code sev- "><tt><i>118</i>         <span class="c1"># we will create a sparse coordinate representation of maps</span></tt>
             </div>
             <div id="l119"
-               class="code sev- "><tt><i>119</i>         <span class="n">forest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span></tt>
+               class="code sev- "><tt><i>119</i>         <span class="n">n</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">nb_vars</span></tt>
             </div>
             <div id="l120"
                class="code sev- "><tt><i>120</i> &nbsp;</tt>
             </div>
             <div id="l121"
-               class="code sev- "><tt><i>121</i>         <span class="n">is_x_nparray</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>121</i>         <span class="k">if</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span><span class="p">:</span></tt>
             </div>
             <div id="l122"
                class="code sev-3  le">
@@ -425,123 +407,36 @@
                      </span>
                      Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
                
-               </ul><tt><i>122</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+               </ul><tt><i>122</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
             </div>
             <div id="l123"
                class="code sev- "><tt><i>123</i> &nbsp;</tt>
             </div>
             <div id="l124"
-               class="code sev- "><tt><i>124</i>         <span class="k">if</span> <span class="n">is_x_nparray</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>124</i>             <span class="c1"># detect numpy structured arrays</span></tt>
             </div>
             <div id="l125"
-               class="code sev- "><tt><i>125</i>             <span class="n">is_structured</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></tt>
+               class="code sev- "><tt><i>125</i>             <span class="n">is_struct_array</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></tt>
             </div>
             <div id="l126"
-               class="code sev- "><tt><i>126</i>             <span class="k">if</span> <span class="n">is_structured</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>126</i>             <span class="k">if</span> <span class="n">is_struct_array</span><span class="p">:</span></tt>
             </div>
             <div id="l127"
-               class="code sev- "><tt><i>127</i>                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;structured numpy arrays are not supported. Please convert your array to an &quot;</span></tt>
+               class="code sev- "><tt><i>127</i>                 <span class="c1"># names = X.dtype.names</span></tt>
             </div>
             <div id="l128"
-               class="code sev- "><tt><i>128</i>                                           <span class="s2">&quot;unstructured array&quot;</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>128</i>                 <span class="c1"># assert len(names) == n</span></tt>
             </div>
             <div id="l129"
-               class="code sev- "><tt><i>129</i>             <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>129</i>                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;structured numpy arrays are not supported. Please convert your array to an &quot;</span></tt>
             </div>
             <div id="l130"
-               class="code sev- "><tt><i>130</i>                 <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask_ar</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>130</i>                                           <span class="s2">&quot;unstructured array&quot;</span><span class="p">)</span></tt>
             </div>
             <div id="l131"
                class="code sev- "><tt><i>131</i>             <span class="k">else</span><span class="p">:</span></tt>
             </div>
             <div id="l132"
-               class="code sev- "><tt><i>132</i>                 <span class="c1"># for structured: return X[np.array(X.dtype.names)[forest.roots_mask_ar]]</span></tt>
-            </div>
-            <div id="l133"
-               class="code sev- "><tt><i>133</i>                 <span class="k">return</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask_ar</span><span class="p">]</span></tt>
-            </div>
-            <div id="l134"
-               class="code sev- "><tt><i>134</i>         <span class="k">else</span><span class="p">:</span></tt>
-            </div>
-            <div id="l135"
-               class="code sev- "><tt><i>135</i>             <span class="c1"># pandas dataframe</span></tt>
-            </div>
-            <div id="l136"
-               class="code sev- "><tt><i>136</i>             <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span></tt>
-            </div>
-            <div id="l137"
-               class="code sev- "><tt><i>137</i>                 <span class="k">del</span> <span class="n">X</span><span class="p">[</span><span class="n">forest</span><span class="o">.</span><span class="n">roots</span><span class="p">]</span></tt>
-            </div>
-            <div id="l138"
-               class="code sev- "><tt><i>138</i>             <span class="k">else</span><span class="p">:</span></tt>
-            </div>
-            <div id="l139"
-               class="code sev- "><tt><i>139</i>                 <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask</span><span class="p">]</span></tt>
-            </div>
-            <div id="l140"
-               class="code sev- "><tt><i>140</i> &nbsp;</tt>
-            </div>
-            <div id="l141"
-               class="code sev- "><tt><i>141</i>     <span class="k">def</span> <span class="nf">predict_qd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
-            </div>
-            <div id="l142"
-               class="code sev- "><tt><i>142</i>                    <span class="n">X</span><span class="p">,</span>             <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
-            </div>
-            <div id="l143"
-               class="code sev- "><tt><i>143</i>                    <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># type: bool</span></tt>
-            </div>
-            <div id="l144"
-               class="code sev- "><tt><i>144</i>                    <span class="p">):</span></tt>
-            </div>
-            <div id="l145"
-               class="code sev- "><tt><i>145</i>         <span class="c1"># type: (...) -&gt; Optional[Union[np.ndarray, pd.DataFrame]]</span></tt>
-            </div>
-            <div id="l146"
-               class="code sev- "><tt><i>146</i>         <span class="sd">&quot;&quot;&quot;</span></tt>
-            </div>
-            <div id="l147"
-               class="code sev- "><tt><i>147</i> <span class="sd">        Adds columns to X corresponding to the features that can be determined from the roots.</span></tt>
-            </div>
-            <div id="l148"
-               class="code sev- "><tt><i>148</i> <span class="sd">        By default,</span></tt>
-            </div>
-            <div id="l149"
-               class="code sev- "><tt><i>149</i> &nbsp;</tt>
-            </div>
-            <div id="l150"
-               class="code sev- "><tt><i>150</i> <span class="sd">        :param X:</span></tt>
-            </div>
-            <div id="l151"
-               class="code sev- "><tt><i>151</i> <span class="sd">        :param inplace: if `True` and X is a dataframe, predicted columns will be added inplace. Note that the order</span></tt>
-            </div>
-            <div id="l152"
-               class="code sev- "><tt><i>152</i> <span class="sd">            may differ from the initial trainin</span></tt>
-            </div>
-            <div id="l153"
-               class="code sev- "><tt><i>153</i> <span class="sd">        :return:</span></tt>
-            </div>
-            <div id="l154"
-               class="code sev- "><tt><i>154</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
-            </div>
-            <div id="l155"
-               class="code sev- "><tt><i>155</i>         <span class="n">forest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span></tt>
-            </div>
-            <div id="l156"
-               class="code sev- "><tt><i>156</i> &nbsp;</tt>
-            </div>
-            <div id="l157"
-               class="code sev- "><tt><i>157</i>         <span class="c1"># if inplace is None:</span></tt>
-            </div>
-            <div id="l158"
-               class="code sev- "><tt><i>158</i>         <span class="c1">#     inplace = not self.is_nparray</span></tt>
-            </div>
-            <div id="l159"
-               class="code sev- "><tt><i>159</i> &nbsp;</tt>
-            </div>
-            <div id="l160"
-               class="code sev- "><tt><i>160</i>         <span class="n">is_x_nparray</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
-            </div>
-            <div id="l161"
                class="code sev-3  le">
                <ul class="violations">
                
@@ -551,123 +446,474 @@
                      </span>
                      Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
                
-               </ul><tt><i>161</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+               </ul><tt><i>132</i>                 <span class="k">assert</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span></tt>
+            </div>
+            <div id="l133"
+               class="code sev- "><tt><i>133</i> &nbsp;</tt>
+            </div>
+            <div id="l134"
+               class="code sev- "><tt><i>134</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="n">maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></tt>
+            </div>
+            <div id="l135"
+               class="code sev- "><tt><i>135</i> &nbsp;</tt>
+            </div>
+            <div id="l136"
+               class="code sev- "><tt><i>136</i>             <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">get_arcs</span><span class="p">():</span></tt>
+            </div>
+            <div id="l137"
+               class="code sev- "><tt><i>137</i>                 <span class="c1"># assert (parent, child) not in maps, &quot;Error: edge already exists&quot;</span></tt>
+            </div>
+            <div id="l138"
+               class="code sev- "><tt><i>138</i> &nbsp;</tt>
+            </div>
+            <div id="l139"
+               class="code sev- "><tt><i>139</i>                 <span class="c1"># create a dictionary mapping each parent level to most frequent child level</span></tt>
+            </div>
+            <div id="l140"
+               class="code sev- "><tt><i>140</i>                 <span class="c1">#</span></tt>
+            </div>
+            <div id="l141"
+               class="code sev- "><tt><i>141</i>                 <span class="c1"># -- seems suboptimal with numpy...</span></tt>
+            </div>
+            <div id="l142"
+               class="code sev- "><tt><i>142</i>                 <span class="c1"># map_dct = dict()</span></tt>
+            </div>
+            <div id="l143"
+               class="code sev- "><tt><i>143</i>                 <span class="c1"># for parent_lev in np.unique(X[:, parent]):</span></tt>
+            </div>
+            <div id="l144"
+               class="code sev- "><tt><i>144</i>                 <span class="c1">#     values, counts = np.unique(X[X[:, parent] == parent_lev, child], return_counts=True)</span></tt>
+            </div>
+            <div id="l145"
+               class="code sev- "><tt><i>145</i>                 <span class="c1">#     map_dct[parent_lev] = values[np.argmax(counts)]</span></tt>
+            </div>
+            <div id="l146"
+               class="code sev- "><tt><i>146</i>                 <span class="c1">#</span></tt>
+            </div>
+            <div id="l147"
+               class="code sev- "><tt><i>147</i>                 <span class="c1"># -- same with pandas groupby</span></tt>
+            </div>
+            <div id="l148"
+               class="code sev- "><tt><i>148</i>                 <span class="c1"># if is_struct_array:</span></tt>
+            </div>
+            <div id="l149"
+               class="code sev- "><tt><i>149</i>                 <span class="c1">#     pc_df = pd.DataFrame(X[[names[parent], names[child]]])</span></tt>
+            </div>
+            <div id="l150"
+               class="code sev- "><tt><i>150</i>                 <span class="c1">#     pc_df.columns = [0, 1]  # forget the names</span></tt>
+            </div>
+            <div id="l151"
+               class="code sev- "><tt><i>151</i>                 <span class="c1"># else:</span></tt>
+            </div>
+            <div id="l152"
+               class="code sev- "><tt><i>152</i>                 <span class="n">pc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="s2">&quot;child&quot;</span><span class="p">])</span></tt>
+            </div>
+            <div id="l153"
+               class="code sev- "><tt><i>153</i>                 <span class="n">levels_mapping_df</span> <span class="o">=</span> <span class="n">pc_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">_get_most_common_value</span><span class="p">)</span></tt>
+            </div>
+            <div id="l154"
+               class="code sev- "><tt><i>154</i> &nbsp;</tt>
+            </div>
+            <div id="l155"
+               class="code sev- "><tt><i>155</i>                 <span class="c1"># Init the dict for parent if it does not exit</span></tt>
+            </div>
+            <div id="l156"
+               class="code sev- "><tt><i>156</i>                 <span class="n">maps</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span></tt>
+            </div>
+            <div id="l157"
+               class="code sev- "><tt><i>157</i> &nbsp;</tt>
+            </div>
+            <div id="l158"
+               class="code sev- "><tt><i>158</i>                 <span class="c1"># Fill the parent-child item with the mapping object</span></tt>
+            </div>
+            <div id="l159"
+               class="code sev- "><tt><i>159</i>                 <span class="n">maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">ParentChildMapping</span><span class="p">(</span><span class="n">levels_mapping_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></tt>
+            </div>
+            <div id="l160"
+               class="code sev- "><tt><i>160</i> &nbsp;</tt>
+            </div>
+            <div id="l161"
+               class="code sev- "><tt><i>161</i>         <span class="k">else</span><span class="p">:</span></tt>
             </div>
             <div id="l162"
-               class="code sev- "><tt><i>162</i> &nbsp;</tt>
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        S101
+                     </span>
+                     Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
+               
+               </ul><tt><i>162</i>             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span></tt>
             </div>
             <div id="l163"
-               class="code sev- "><tt><i>163</i>         <span class="k">if</span> <span class="n">is_x_nparray</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>163</i> &nbsp;</tt>
             </div>
             <div id="l164"
-               class="code sev- "><tt><i>164</i>             <span class="n">is_structured</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></tt>
+               class="code sev- "><tt><i>164</i>             <span class="c1"># unfortunately pandas dataframe sparse do not allow item assignment :( so we need to work on numpy array</span></tt>
             </div>
             <div id="l165"
-               class="code sev- "><tt><i>165</i>             <span class="k">if</span> <span class="n">is_structured</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>165</i>             <span class="c1"># first get the numpy array in correct order</span></tt>
             </div>
             <div id="l166"
-               class="code sev- "><tt><i>166</i>                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;structured numpy arrays are not supported. Please convert your array to an &quot;</span></tt>
+               class="code sev- "><tt><i>166</i>             <span class="n">varnames</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">varnames</span></tt>
             </div>
             <div id="l167"
-               class="code sev- "><tt><i>167</i>                                           <span class="s2">&quot;unstructured array&quot;</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>167</i>             <span class="n">X_ar</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></tt>
             </div>
             <div id="l168"
-               class="code sev- "><tt><i>168</i>             <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>168</i> &nbsp;</tt>
             </div>
             <div id="l169"
-               class="code sev- "><tt><i>169</i>                 <span class="c1"># Same as in sklearn inverse_transform: create the missing columns in X first</span></tt>
+               class="code sev- "><tt><i>169</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="n">maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></tt>
             </div>
             <div id="l170"
-               class="code sev- "><tt><i>170</i>                 <span class="n">X_in</span> <span class="o">=</span> <span class="n">X</span></tt>
+               class="code sev- "><tt><i>170</i> &nbsp;</tt>
             </div>
             <div id="l171"
-               class="code sev- "><tt><i>171</i>                 <span class="n">support</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask_ar</span></tt>
+               class="code sev- "><tt><i>171</i>             <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">get_arcs</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span></tt>
             </div>
             <div id="l172"
-               class="code sev- "><tt><i>172</i>                 <span class="c1"># X = check_array(X, dtype=None)</span></tt>
+               class="code sev- "><tt><i>172</i>                 <span class="c1"># assert (parent, child) not in maps, &quot;Error: edge already exists&quot;</span></tt>
             </div>
             <div id="l173"
-               class="code sev- "><tt><i>173</i>                 <span class="n">nbcols_received</span> <span class="o">=</span> <span class="n">X_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></tt>
+               class="code sev- "><tt><i>173</i> &nbsp;</tt>
             </div>
             <div id="l174"
-               class="code sev- "><tt><i>174</i>                 <span class="k">if</span> <span class="n">support</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">!=</span> <span class="n">nbcols_received</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>174</i>                 <span class="c1"># levels_mapping_df = X.loc[:, (parent, child)].groupby(parent).agg(lambda x: x.value_counts().index[0])</span></tt>
             </div>
             <div id="l175"
-               class="code sev- "><tt><i>175</i>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X has a different nb columns than the number of roots found during fitting.&quot;</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>175</i>                 <span class="c1"># maps[parent, child] = levels_mapping_df[child].to_dict()</span></tt>
             </div>
             <div id="l176"
-               class="code sev- "><tt><i>176</i>                 <span class="c1"># if a single column, make sure this is 2d</span></tt>
+               class="code sev- "><tt><i>176</i>                 <span class="n">pc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_ar</span><span class="p">[:,</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="s2">&quot;child&quot;</span><span class="p">])</span></tt>
             </div>
             <div id="l177"
-               class="code sev- "><tt><i>177</i>                 <span class="k">if</span> <span class="n">X_in</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>177</i>                 <span class="n">levels_mapping_df</span> <span class="o">=</span> <span class="n">pc_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">_get_most_common_value</span><span class="p">)</span></tt>
             </div>
             <div id="l178"
-               class="code sev- "><tt><i>178</i>                     <span class="n">X_in</span> <span class="o">=</span> <span class="n">X_in</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span></tt>
+               class="code sev- "><tt><i>178</i> &nbsp;</tt>
             </div>
             <div id="l179"
-               class="code sev- "><tt><i>179</i>                 <span class="c1"># create a copy with the extra columns</span></tt>
+               class="code sev- "><tt><i>179</i>                 <span class="c1"># Init the dict for parent if it does not exit</span></tt>
             </div>
             <div id="l180"
-               class="code sev- "><tt><i>180</i>                 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">X_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">support</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">X_in</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>180</i>                 <span class="n">maps</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span></tt>
             </div>
             <div id="l181"
-               class="code sev- "><tt><i>181</i>                 <span class="n">X</span><span class="p">[:,</span> <span class="n">support</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_in</span></tt>
+               class="code sev- "><tt><i>181</i> &nbsp;</tt>
             </div>
             <div id="l182"
-               class="code sev- "><tt><i>182</i>             <span class="k">else</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>182</i>                 <span class="c1"># Fill the parent-child item with the mapping object</span></tt>
             </div>
             <div id="l183"
-               class="code sev- "><tt><i>183</i>                 <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">forest</span><span class="o">.</span><span class="n">nb_vars</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>183</i>                 <span class="n">maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">ParentChildMapping</span><span class="p">(</span><span class="n">levels_mapping_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></tt>
             </div>
             <div id="l184"
-               class="code sev- "><tt><i>184</i>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If `inplace=True`, `predict` expects an X input with the correct number of &quot;</span></tt>
+               class="code sev- "><tt><i>184</i> &nbsp;</tt>
             </div>
             <div id="l185"
-               class="code sev- "><tt><i>185</i>                                      <span class="s2">&quot;columns. Use `inplace=False` to pass only the array of roots. Note that this&quot;</span></tt>
+               class="code sev- "><tt><i>185</i>     <span class="k">def</span> <span class="nf">remove_qd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
             </div>
             <div id="l186"
-               class="code sev- "><tt><i>186</i>                                      <span class="s2">&quot;is the default behaviour of inplace.&quot;</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>186</i>                   <span class="n">X</span><span class="p">,</span>             <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
             </div>
             <div id="l187"
-               class="code sev- "><tt><i>187</i> &nbsp;</tt>
+               class="code sev- "><tt><i>187</i>                   <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># type: bool</span></tt>
             </div>
             <div id="l188"
-               class="code sev- "><tt><i>188</i>             <span class="c1"># walk the tree from the roots</span></tt>
+               class="code sev- "><tt><i>188</i>                   <span class="p">):</span></tt>
             </div>
             <div id="l189"
-               class="code sev- "><tt><i>189</i>             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">walk_arcs</span><span class="p">():</span></tt>
+               class="code sev- "><tt><i>189</i>         <span class="c1"># type: (...) -&gt; Optional[Union[np.ndarray, pd.DataFrame]]</span></tt>
             </div>
             <div id="l190"
-               class="code sev- "><tt><i>190</i>                 <span class="c1"># apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247</span></tt>
+               class="code sev- "><tt><i>190</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
             </div>
             <div id="l191"
-               class="code sev- "><tt><i>191</i>                 <span class="n">X</span><span class="p">[:,</span> <span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">parent</span><span class="p">])</span></tt>
+               class="code sev- "><tt><i>191</i> <span class="sd">        Removes from X the features that can be (quasi-)determined from the others</span></tt>
             </div>
             <div id="l192"
-               class="code sev- "><tt><i>192</i>         <span class="k">else</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>192</i> <span class="sd">        This returns a copy by default, except if `inplace=True`</span></tt>
             </div>
             <div id="l193"
-               class="code sev- "><tt><i>193</i>             <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>193</i> &nbsp;</tt>
             </div>
             <div id="l194"
-               class="code sev- "><tt><i>194</i>                 <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>194</i> <span class="sd">        :param X:</span></tt>
             </div>
             <div id="l195"
-               class="code sev- "><tt><i>195</i> &nbsp;</tt>
+               class="code sev- "><tt><i>195</i> <span class="sd">        :param inplace: if this is set to True,</span></tt>
             </div>
             <div id="l196"
-               class="code sev- "><tt><i>196</i>             <span class="c1"># walk the tree from the roots</span></tt>
+               class="code sev- "><tt><i>196</i> <span class="sd">        :return:</span></tt>
             </div>
             <div id="l197"
-               class="code sev- "><tt><i>197</i>             <span class="n">varnames</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">varnames</span></tt>
+               class="code sev- "><tt><i>197</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
             </div>
             <div id="l198"
-               class="code sev- "><tt><i>198</i>             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">walk_arcs</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span></tt>
+               class="code sev- "><tt><i>198</i>         <span class="n">forest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span></tt>
             </div>
             <div id="l199"
-               class="code sev- "><tt><i>199</i>                 <span class="c1"># apply the learned map efficienty https://stackoverflow.com/q/16992713/7262247</span></tt>
+               class="code sev- "><tt><i>199</i> &nbsp;</tt>
             </div>
             <div id="l200"
+               class="code sev- "><tt><i>200</i>         <span class="bp">self</span><span class="o">.</span><span class="n">assert_valid_input</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">df_extras_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></tt>
+            </div>
+            <div id="l201"
+               class="code sev- "><tt><i>201</i> &nbsp;</tt>
+            </div>
+            <div id="l202"
+               class="code sev- "><tt><i>202</i>         <span class="n">is_x_nparray</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
+            </div>
+            <div id="l203"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        S101
+                     </span>
+                     Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
+               
+               </ul><tt><i>203</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+            </div>
+            <div id="l204"
+               class="code sev- "><tt><i>204</i> &nbsp;</tt>
+            </div>
+            <div id="l205"
+               class="code sev- "><tt><i>205</i>         <span class="k">if</span> <span class="n">is_x_nparray</span><span class="p">:</span></tt>
+            </div>
+            <div id="l206"
+               class="code sev- "><tt><i>206</i>             <span class="n">is_structured</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></tt>
+            </div>
+            <div id="l207"
+               class="code sev- "><tt><i>207</i>             <span class="k">if</span> <span class="n">is_structured</span><span class="p">:</span></tt>
+            </div>
+            <div id="l208"
+               class="code sev- "><tt><i>208</i>                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;structured numpy arrays are not supported. Please convert your array to an &quot;</span></tt>
+            </div>
+            <div id="l209"
+               class="code sev- "><tt><i>209</i>                                           <span class="s2">&quot;unstructured array&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l210"
+               class="code sev- "><tt><i>210</i>             <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span></tt>
+            </div>
+            <div id="l211"
+               class="code sev- "><tt><i>211</i>                 <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask_ar</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></tt>
+            </div>
+            <div id="l212"
+               class="code sev- "><tt><i>212</i>             <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l213"
+               class="code sev- "><tt><i>213</i>                 <span class="c1"># for structured: return X[np.array(X.dtype.names)[forest.roots_mask_ar]]</span></tt>
+            </div>
+            <div id="l214"
+               class="code sev- "><tt><i>214</i>                 <span class="k">return</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask_ar</span><span class="p">]</span></tt>
+            </div>
+            <div id="l215"
+               class="code sev- "><tt><i>215</i>         <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l216"
+               class="code sev- "><tt><i>216</i>             <span class="c1"># pandas dataframe</span></tt>
+            </div>
+            <div id="l217"
+               class="code sev- "><tt><i>217</i>             <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span></tt>
+            </div>
+            <div id="l218"
+               class="code sev- "><tt><i>218</i>                 <span class="k">del</span> <span class="n">X</span><span class="p">[</span><span class="n">forest</span><span class="o">.</span><span class="n">roots</span><span class="p">]</span></tt>
+            </div>
+            <div id="l219"
+               class="code sev- "><tt><i>219</i>             <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l220"
+               class="code sev- "><tt><i>220</i>                 <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask</span><span class="p">]</span></tt>
+            </div>
+            <div id="l221"
+               class="code sev- "><tt><i>221</i> &nbsp;</tt>
+            </div>
+            <div id="l222"
+               class="code sev- "><tt><i>222</i>     <span class="k">def</span> <span class="nf">predict_qd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span></tt>
+            </div>
+            <div id="l223"
+               class="code sev- "><tt><i>223</i>                    <span class="n">X</span><span class="p">,</span>             <span class="c1"># type: Union[np.ndarray, pd.DataFrame]</span></tt>
+            </div>
+            <div id="l224"
+               class="code sev- "><tt><i>224</i>                    <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># type: bool</span></tt>
+            </div>
+            <div id="l225"
+               class="code sev- "><tt><i>225</i>                    <span class="p">):</span></tt>
+            </div>
+            <div id="l226"
+               class="code sev- "><tt><i>226</i>         <span class="c1"># type: (...) -&gt; Optional[Union[np.ndarray, pd.DataFrame]]</span></tt>
+            </div>
+            <div id="l227"
+               class="code sev- "><tt><i>227</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l228"
+               class="code sev- "><tt><i>228</i> <span class="sd">        Adds columns to X corresponding to the features that can be determined from the roots.</span></tt>
+            </div>
+            <div id="l229"
+               class="code sev- "><tt><i>229</i> <span class="sd">        By default,</span></tt>
+            </div>
+            <div id="l230"
+               class="code sev- "><tt><i>230</i> &nbsp;</tt>
+            </div>
+            <div id="l231"
+               class="code sev- "><tt><i>231</i> <span class="sd">        :param X:</span></tt>
+            </div>
+            <div id="l232"
+               class="code sev- "><tt><i>232</i> <span class="sd">        :param inplace: if `True` and X is a dataframe, predicted columns will be added inplace. Note that the order</span></tt>
+            </div>
+            <div id="l233"
+               class="code sev- "><tt><i>233</i> <span class="sd">            may differ from the initial trainin</span></tt>
+            </div>
+            <div id="l234"
+               class="code sev- "><tt><i>234</i> <span class="sd">        :return:</span></tt>
+            </div>
+            <div id="l235"
+               class="code sev- "><tt><i>235</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l236"
+               class="code sev- "><tt><i>236</i>         <span class="n">forest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forest</span></tt>
+            </div>
+            <div id="l237"
+               class="code sev- "><tt><i>237</i> &nbsp;</tt>
+            </div>
+            <div id="l238"
+               class="code sev- "><tt><i>238</i>         <span class="c1"># if inplace is None:</span></tt>
+            </div>
+            <div id="l239"
+               class="code sev- "><tt><i>239</i>         <span class="c1">#     inplace = not self.is_nparray</span></tt>
+            </div>
+            <div id="l240"
+               class="code sev- "><tt><i>240</i> &nbsp;</tt>
+            </div>
+            <div id="l241"
+               class="code sev- "><tt><i>241</i>         <span class="n">is_x_nparray</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span></tt>
+            </div>
+            <div id="l242"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        S101
+                     </span>
+                     Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</li>
+               
+               </ul><tt><i>242</i>         <span class="k">assert</span> <span class="n">is_x_nparray</span> <span class="o">==</span> <span class="n">forest</span><span class="o">.</span><span class="n">is_nparray</span></tt>
+            </div>
+            <div id="l243"
+               class="code sev- "><tt><i>243</i> &nbsp;</tt>
+            </div>
+            <div id="l244"
+               class="code sev- "><tt><i>244</i>         <span class="k">if</span> <span class="n">is_x_nparray</span><span class="p">:</span></tt>
+            </div>
+            <div id="l245"
+               class="code sev- "><tt><i>245</i>             <span class="n">is_structured</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></tt>
+            </div>
+            <div id="l246"
+               class="code sev- "><tt><i>246</i>             <span class="k">if</span> <span class="n">is_structured</span><span class="p">:</span></tt>
+            </div>
+            <div id="l247"
+               class="code sev- "><tt><i>247</i>                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;structured numpy arrays are not supported. Please convert your array to an &quot;</span></tt>
+            </div>
+            <div id="l248"
+               class="code sev- "><tt><i>248</i>                                           <span class="s2">&quot;unstructured array&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l249"
+               class="code sev- "><tt><i>249</i>             <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span></tt>
+            </div>
+            <div id="l250"
+               class="code sev- "><tt><i>250</i>                 <span class="c1"># Same as in sklearn inverse_transform: create the missing columns in X first</span></tt>
+            </div>
+            <div id="l251"
+               class="code sev- "><tt><i>251</i>                 <span class="n">X_in</span> <span class="o">=</span> <span class="n">X</span></tt>
+            </div>
+            <div id="l252"
+               class="code sev- "><tt><i>252</i>                 <span class="n">support</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">roots_mask_ar</span></tt>
+            </div>
+            <div id="l253"
+               class="code sev- "><tt><i>253</i>                 <span class="c1"># X = check_array(X, dtype=None)</span></tt>
+            </div>
+            <div id="l254"
+               class="code sev- "><tt><i>254</i>                 <span class="n">nbcols_received</span> <span class="o">=</span> <span class="n">X_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></tt>
+            </div>
+            <div id="l255"
+               class="code sev- "><tt><i>255</i>                 <span class="k">if</span> <span class="n">support</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">!=</span> <span class="n">nbcols_received</span><span class="p">:</span></tt>
+            </div>
+            <div id="l256"
+               class="code sev- "><tt><i>256</i>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X has a different nb columns than the number of roots found during fitting.&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l257"
+               class="code sev- "><tt><i>257</i>                 <span class="c1"># if a single column, make sure this is 2d</span></tt>
+            </div>
+            <div id="l258"
+               class="code sev- "><tt><i>258</i>                 <span class="k">if</span> <span class="n">X_in</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span></tt>
+            </div>
+            <div id="l259"
+               class="code sev- "><tt><i>259</i>                     <span class="n">X_in</span> <span class="o">=</span> <span class="n">X_in</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span></tt>
+            </div>
+            <div id="l260"
+               class="code sev- "><tt><i>260</i>                 <span class="c1"># create a copy with the extra columns</span></tt>
+            </div>
+            <div id="l261"
+               class="code sev- "><tt><i>261</i>                 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">X_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">support</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">X_in</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></tt>
+            </div>
+            <div id="l262"
+               class="code sev- "><tt><i>262</i>                 <span class="n">X</span><span class="p">[:,</span> <span class="n">support</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_in</span></tt>
+            </div>
+            <div id="l263"
+               class="code sev- "><tt><i>263</i>             <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l264"
+               class="code sev- "><tt><i>264</i>                 <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">forest</span><span class="o">.</span><span class="n">nb_vars</span><span class="p">:</span></tt>
+            </div>
+            <div id="l265"
+               class="code sev- "><tt><i>265</i>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If `inplace=True`, `predict` expects an X input with the correct number of &quot;</span></tt>
+            </div>
+            <div id="l266"
+               class="code sev- "><tt><i>266</i>                                      <span class="s2">&quot;columns. Use `inplace=False` to pass only the array of roots. Note that this&quot;</span></tt>
+            </div>
+            <div id="l267"
+               class="code sev- "><tt><i>267</i>                                      <span class="s2">&quot;is the default behaviour of inplace.&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l268"
+               class="code sev- "><tt><i>268</i> &nbsp;</tt>
+            </div>
+            <div id="l269"
+               class="code sev- "><tt><i>269</i>             <span class="c1"># walk the tree from the roots</span></tt>
+            </div>
+            <div id="l270"
+               class="code sev- "><tt><i>270</i>             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">walk_arcs</span><span class="p">():</span></tt>
+            </div>
+            <div id="l271"
+               class="code sev- "><tt><i>271</i>                 <span class="n">X</span><span class="p">[:,</span> <span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">predict_child_from_parent_ar</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">parent</span><span class="p">])</span></tt>
+            </div>
+            <div id="l272"
+               class="code sev- "><tt><i>272</i>         <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l273"
+               class="code sev- "><tt><i>273</i>             <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span></tt>
+            </div>
+            <div id="l274"
+               class="code sev- "><tt><i>274</i>                 <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></tt>
+            </div>
+            <div id="l275"
+               class="code sev- "><tt><i>275</i> &nbsp;</tt>
+            </div>
+            <div id="l276"
+               class="code sev- "><tt><i>276</i>             <span class="c1"># walk the tree from the roots</span></tt>
+            </div>
+            <div id="l277"
+               class="code sev- "><tt><i>277</i>             <span class="n">varnames</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">varnames</span></tt>
+            </div>
+            <div id="l278"
+               class="code sev- "><tt><i>278</i>             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">forest</span><span class="o">.</span><span class="n">walk_arcs</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span></tt>
+            </div>
+            <div id="l279"
                class="code sev-2  le">
                <ul class="violations">
                
@@ -677,16 +923,16 @@
                      </span>
                      Line too long (123 > 120 characters)</li>
                
-               </ul><tt><i>200</i>                 <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">child</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)(</span><span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">parent</span><span class="p">]])</span></tt>
+               </ul><tt><i>279</i>                 <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">child</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">predict_child_from_parent</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">parent</span><span class="p">]])</span></tt>
             </div>
-            <div id="l201"
-               class="code sev- "><tt><i>201</i> &nbsp;</tt>
+            <div id="l280"
+               class="code sev- "><tt><i>280</i> &nbsp;</tt>
             </div>
-            <div id="l202"
-               class="code sev- "><tt><i>202</i>         <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span></tt>
+            <div id="l281"
+               class="code sev- "><tt><i>281</i>         <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span></tt>
             </div>
-            <div id="l203"
-               class="code sev- "><tt><i>203</i>             <span class="k">return</span> <span class="n">X</span></tt>
+            <div id="l282"
+               class="code sev- "><tt><i>282</i>             <span class="k">return</span> <span class="n">X</span></tt>
             </div>
             
          </div>

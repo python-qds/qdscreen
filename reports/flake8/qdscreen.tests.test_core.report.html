@@ -60,8 +60,8 @@ window.addEventListener('DOMContentLoaded', function () {
             <ul class="details">
             <li>
                
-               <a href="qdscreen.tests.test_core.source.html#l131">
-                  <tt><i>131</i>                                     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>  <span class="c1"># indeed computing parents from adjmat with np.where returns this dtype</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l133">
+                  <tt><i>133</i>                                     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>  <span class="c1"># indeed computing parents from adjmat with np.where returns this dtype</span></tt>
                </a>
             </li>
             </ul>
@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', function () {
          <li>
             <a data-code="S101">
                <span class="count sev-3">
-                  22
+                  24
                </span>
                <strong>S101:</strong> Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
                
@@ -78,113 +78,123 @@ window.addEventListener('DOMContentLoaded', function () {
             <ul class="details">
             <li>
                
-               <a href="qdscreen.tests.test_core.source.html#l164">
-                  <tt><i>164</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots_ar</span><span class="p">)</span></tt>
-               </a>
-            </li><li>
-               
                <a href="qdscreen.tests.test_core.source.html#l166">
-                  <tt><i>166</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots_wc_ar</span><span class="p">)</span></tt>
+                  <tt><i>166</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots_ar</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l169">
-                  <tt><i>169</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots</span><span class="p">)</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l168">
+                  <tt><i>168</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots_wc_ar</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l170">
-                  <tt><i>170</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots_wc</span><span class="p">)</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l171">
+                  <tt><i>171</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l177">
-                  <tt><i>177</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">()</span> <span class="o">==</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="ow">not</span> <span class="n">is_np</span><span class="p">)</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l172">
+                  <tt><i>172</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">roots_wc</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l178">
-                  <tt><i>178</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">()</span> <span class="o">==</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="ow">not</span> <span class="n">is_np</span><span class="p">)</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l179">
+                  <tt><i>179</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">()</span> <span class="o">==</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="ow">not</span> <span class="n">is_np</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l183">
-                  <tt><i>183</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;1 -&gt; 8&#39;</span><span class="p">,</span> <span class="s1">&#39;3 -&gt; 5&#39;</span><span class="p">,</span> <span class="s1">&#39;9 -&gt; 1&#39;</span><span class="p">,</span> <span class="s1">&#39;9 -&gt; 7&#39;</span><span class="p">]</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l180">
+                  <tt><i>180</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">()</span> <span class="o">==</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_roots_with_children</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="ow">not</span> <span class="n">is_np</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l186">
-                  <tt><i>186</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">_adjmat</span> <span class="ow">is</span> <span class="kc">None</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l185">
+                  <tt><i>185</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;1 -&gt; 8&#39;</span><span class="p">,</span> <span class="s1">&#39;3 -&gt; 5&#39;</span><span class="p">,</span> <span class="s1">&#39;9 -&gt; 1&#39;</span><span class="p">,</span> <span class="s1">&#39;9 -&gt; 7&#39;</span><span class="p">]</span></tt>
                </a>
             </li><li>
                
                <a href="qdscreen.tests.test_core.source.html#l188">
-                  <tt><i>188</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;9 -&gt; 1&#39;</span><span class="p">,</span> <span class="s1">&#39;3 -&gt; 5&#39;</span><span class="p">,</span> <span class="s1">&#39;9 -&gt; 7&#39;</span><span class="p">,</span> <span class="s1">&#39;1 -&gt; 8&#39;</span><span class="p">]</span></tt>
+                  <tt><i>188</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">_adjmat</span> <span class="ow">is</span> <span class="kc">None</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l192">
-                  <tt><i>192</i>             <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;b -&gt; i&#39;</span><span class="p">,</span> <span class="s1">&#39;d -&gt; f&#39;</span><span class="p">,</span> <span class="s1">&#39;j -&gt; b&#39;</span><span class="p">,</span> <span class="s1">&#39;j -&gt; h&#39;</span><span class="p">]</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l190">
+                  <tt><i>190</i>         <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;9 -&gt; 1&#39;</span><span class="p">,</span> <span class="s1">&#39;3 -&gt; 5&#39;</span><span class="p">,</span> <span class="s1">&#39;9 -&gt; 7&#39;</span><span class="p">,</span> <span class="s1">&#39;1 -&gt; 8&#39;</span><span class="p">]</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l195">
-                  <tt><i>195</i>             <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">_adjmat</span> <span class="ow">is</span> <span class="kc">None</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l194">
+                  <tt><i>194</i>             <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;b -&gt; i&#39;</span><span class="p">,</span> <span class="s1">&#39;d -&gt; f&#39;</span><span class="p">,</span> <span class="s1">&#39;j -&gt; b&#39;</span><span class="p">,</span> <span class="s1">&#39;j -&gt; h&#39;</span><span class="p">]</span></tt>
                </a>
             </li><li>
                
                <a href="qdscreen.tests.test_core.source.html#l197">
-                  <tt><i>197</i>             <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;j -&gt; b&#39;</span><span class="p">,</span> <span class="s1">&#39;d -&gt; f&#39;</span><span class="p">,</span> <span class="s1">&#39;j -&gt; h&#39;</span><span class="p">,</span> <span class="s1">&#39;b -&gt; i&#39;</span><span class="p">]</span></tt>
+                  <tt><i>197</i>             <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">_adjmat</span> <span class="ow">is</span> <span class="kc">None</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l202">
-                  <tt><i>202</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">()</span> <span class="o">==</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="ow">not</span> <span class="n">is_np</span><span class="p">)</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l199">
+                  <tt><i>199</i>             <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;j -&gt; b&#39;</span><span class="p">,</span> <span class="s1">&#39;d -&gt; f&#39;</span><span class="p">,</span> <span class="s1">&#39;j -&gt; h&#39;</span><span class="p">,</span> <span class="s1">&#39;b -&gt; i&#39;</span><span class="p">]</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l229">
-                  <tt><i>229</i>     <span class="k">assert</span> <span class="n">compact_str</span> <span class="o">==</span> <span class="s2">&quot;QDForest (10 vars = 6 roots + 4 determined by 2 of the roots)&quot;</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l204">
+                  <tt><i>204</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">()</span> <span class="o">==</span> <span class="n">qd1</span><span class="o">.</span><span class="n">get_arcs_str_list</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="ow">not</span> <span class="n">is_np</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l234">
-                  <tt><i>234</i>     <span class="k">assert</span> <span class="n">headers_str</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;QDForest (10 vars):</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l231">
+                  <tt><i>231</i>     <span class="k">assert</span> <span class="n">compact_str</span> <span class="o">==</span> <span class="s2">&quot;QDForest (10 vars = 6 roots + 4 determined by 2 of the roots)&quot;</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l238">
-                  <tt><i>238</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">to_str</span><span class="p">()</span> <span class="o">==</span> <span class="n">headers_str</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l236">
+                  <tt><i>236</i>     <span class="k">assert</span> <span class="n">headers_str</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;QDForest (10 vars):</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l243">
-                  <tt><i>243</i>         <span class="k">assert</span> <span class="n">trees_str</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l240">
+                  <tt><i>240</i>     <span class="k">assert</span> <span class="n">qd1</span><span class="o">.</span><span class="n">to_str</span><span class="p">()</span> <span class="o">==</span> <span class="n">headers_str</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l254">
-                  <tt><i>254</i>         <span class="k">assert</span> <span class="n">trees_str</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l245">
+                  <tt><i>245</i>         <span class="k">assert</span> <span class="n">trees_str</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l264">
-                  <tt><i>264</i>     <span class="k">assert</span> <span class="n">full_str</span> <span class="o">==</span> <span class="n">headers_str</span> <span class="o">+</span> <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">trees_str</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l256">
+                  <tt><i>256</i>         <span class="k">assert</span> <span class="n">trees_str</span> <span class="o">==</span> <span class="sa">u</span><span class="s2">&quot;&quot;&quot;</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l267">
-                  <tt><i>267</i>         <span class="k">assert</span> <span class="n">full_str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">qd1</span><span class="p">)</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l266">
+                  <tt><i>266</i>     <span class="k">assert</span> <span class="n">full_str</span> <span class="o">==</span> <span class="n">headers_str</span> <span class="o">+</span> <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">trees_str</span></tt>
                </a>
             </li><li>
                
                <a href="qdscreen.tests.test_core.source.html#l269">
-                  <tt><i>269</i>         <span class="k">assert</span> <span class="n">full_str</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">qd1</span><span class="p">)</span></tt>
+                  <tt><i>269</i>         <span class="k">assert</span> <span class="n">full_str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">qd1</span><span class="p">)</span></tt>
                </a>
             </li><li>
                
-               <a href="qdscreen.tests.test_core.source.html#l309">
-                  <tt><i>309</i>     <span class="k">assert</span> <span class="n">Xsel</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">==</span> <span class="p">[[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">]]</span></tt>
+               <a href="qdscreen.tests.test_core.source.html#l271">
+                  <tt><i>271</i>         <span class="k">assert</span> <span class="n">full_str</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">qd1</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_core.source.html#l312">
+                  <tt><i>312</i>     <span class="k">assert</span> <span class="n">Xsel</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">==</span> <span class="p">[[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">]]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_core.source.html#l332">
+                  <tt><i>332</i>     <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">qd_forest</span><span class="o">.</span><span class="n">roots</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="qdscreen.tests.test_core.source.html#l336">
+                  <tt><i>336</i>     <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">only_important_features_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span></tt>
                </a>
             </li>
             </ul>
