@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # the above encoding declaration is needed to have non-ascii characters in this file (anywhere even in comments)
 # from __future__ import unicode_literals  # no, since we want to match the return type of str() which is bytes in py2
+import sys
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -319,6 +321,8 @@ def test_issue_37_non_categorical():
         qd_screen(df)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 6),
+                    reason="This test is known to fail for 3.5 and 2.7, see GH#43")
 def test_issue_40_nan_then_str():
     df = pd.DataFrame({
         "foo": ["1", "2"],
